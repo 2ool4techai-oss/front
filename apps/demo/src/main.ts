@@ -45,9 +45,11 @@ function buildApp(): void {
   layout.appendChild(mainSection);
   app.appendChild(layout);
 
-  processor = new EmotionProcessor(app);
-  const unsub = processor.state.subscribe(state => emotionState.set(state));
-  void unsub;
+  // Start emotion tracking after first paint — scoped to layout container only
+  requestAnimationFrame(() => {
+    processor = new EmotionProcessor(layout);
+    processor.state.subscribe(state => emotionState.set(state));
+  });
 }
 
 function buildHeader(emotion: ReturnType<typeof signal<EmotionState>>): HTMLElement {

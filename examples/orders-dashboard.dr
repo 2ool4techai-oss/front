@@ -1,0 +1,30 @@
+# orders-dashboard.dr
+# This is the DRISHTI declarative version of real-world-usage.ts
+# The compiler converts this to the TypeScript above automatically.
+
+surface: OrdersDashboard
+  intent: show and manage customer orders
+  secure: role(manager)
+
+  unit: RevenueHeader
+    data: connect(api.orders)
+    adapt: user.history
+
+  unit: SearchBar
+    feel: guide if confused
+    heal: auto
+
+  unit: OrderGrid
+    data: connect(api.orders, realtime)
+    columns: [customer, amount, status, date]
+    feel: celebrate if new-order-arrived
+    feel: calm-alert if payment-failed
+    heal: retry(3) then empty-state
+    layout: grid(3)
+    predict: likely-next-action
+
+  unit: OrderDetail
+    data: connect(api.order-detail, realtime)
+    secure: role(manager, finance)
+    heal: auto
+    on: order-status-change → notify-team
