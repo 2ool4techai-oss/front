@@ -5,3 +5,9 @@ dist/
 .env
 .env.local
 coverage/
+
+# Prevent tsc artifacts leaking into src directories
+packages/*/src/*.js
+packages/*/src/*.d.ts
+packages/*/src/*.js.map
+packages/*/src/*.d.ts.map
