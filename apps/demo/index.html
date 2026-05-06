@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="DRISHTI — AI-native frontend runtime. Sees. Feels. Heals. Protects." />
+  <title>DRISHTI — AI-Native Frontend</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dr-color-primary: #2D6BE4;
+      --dr-color-secondary: #1A1A2E;
+      --dr-color-accent: #E94560;
+      --dr-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      --dr-font-size-base: 16px;
+      --dr-spacing-unit: 8px;
+      --dr-border-radius: 8px;
+      --dr-shadow: 0 2px 8px rgba(0,0,0,.10);
+      --dr-transition-speed: 220ms;
+      --dr-transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+      --dr-anim-speed: 1;
+      --dr-anim-scale: 1;
+      --dr-font-scale: 1;
+      --dr-tooltip-opacity: 0;
+      --dr-contrast-boost: 0;
+    }
+    body {
+      font-family: var(--dr-font-family);
+      font-size: var(--dr-font-size-base);
+      background: #f8fafc;
+      color: #0f172a;
+      line-height: 1.5;
+    }
+    @keyframes dr-shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    @keyframes dr-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .85; transform: scale(1.02); }
+    }
+    @keyframes dr-celebrate {
+      0% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.15) rotate(-3deg); }
+      50% { transform: scale(1.1) rotate(3deg); }
+      75% { transform: scale(1.05) rotate(-1deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    .dr-emotion-celebrating { animation: dr-celebrate 0.6s ease; }
+    .dr-emotion-frustrated { filter: contrast(calc(1 + var(--dr-contrast-boost) * 0.1)); }
+    .dr-emotion-confused { font-size: calc(1rem * var(--dr-font-scale)); }
+    #app { min-height: 100vh; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
