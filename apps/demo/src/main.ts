@@ -1,9 +1,8 @@
-import { loadGenome, EmotionProcessor, signal, effect, h, computed } from '@drishti/runtime';
-import { MetricCard, SentientForm, ReactiveTable, EmotionBadge, HealingCard } from '@drishti/components';
-import type { GenomeConfig } from '@drishti/runtime';
-import type { EmotionState } from '@drishti/runtime';
+import { loadGenome, signal, effect, h } from '@drishti/runtime';
+import type { GenomeConfig, EmotionState } from '@drishti/runtime';
 
-const genome: GenomeConfig = {
+// ─── Brand DNA loaded once ────────────────────────────────────────────────
+loadGenome({
   primaryColor:    '#2D6BE4',
   secondaryColor:  '#1A1A2E',
   accentColor:     '#E94560',
@@ -14,553 +13,515 @@ const genome: GenomeConfig = {
   shadowElevation: '0 2px 8px rgba(0,0,0,.10)',
   transitionSpeed: '220ms',
   transitionEasing:'cubic-bezier(0.4, 0, 0.2, 1)',
-};
+} satisfies GenomeConfig);
 
-loadGenome(genome);
+// ─── Global state ─────────────────────────────────────────────────────────
+const activeTab = signal<string>('signals');
 
-const app = document.getElementById('app')!;
+// ─── Tab definitions ──────────────────────────────────────────────────────
+const TABS = [
+  { id: 'signals',   label: '① Signals',   },
+  { id: 'emotion',   label: '② Emotion',   },
+  { id: 'healing',   label: '③ Healing',   },
+  { id: 'security',  label: '④ Security',  },
+  { id: 'compiler',  label: '⑤ .dr Syntax',},
+];
 
+// ─── App shell ────────────────────────────────────────────────────────────
 function buildApp(): void {
-  const emotionState = signal<EmotionState>('calm');
-  let processor: EmotionProcessor | null = null;
+  const app = document.getElementById('app')!;
 
-  const layout = h('div', {
-    style: {
-      maxWidth: '1100px',
-      margin: '0 auto',
-      padding: '0 24px 64px',
-    },
+  const shell = h('div', { style: 'max-width:900px;margin:0 auto;padding:32px 24px;font-family:var(--dr-font-family);' });
+
+  // Header
+  const header = h('div', { style: 'margin-bottom:32px;' });
+  header.innerHTML = `
+    <h1 style="font-size:2rem;font-weight:900;color:#1A1A2E;letter-spacing:-0.03em;margin:0 0 6px;">
+      <span style="color:#2D6BE4">DRISHTI</span>
+      <span style="font-weight:300;font-size:1.1rem;color:#64748b;margin-left:8px;">v0.1 — AI-Native Frontend Runtime</span>
+    </h1>
+    <p style="color:#64748b;margin:0;font-size:.9375rem;">
+      A new frontend technology. Write <code style="background:#f1f5f9;padding:1px 6px;border-radius:4px;">.dr</code> files.
+      The compiler + runtime handles everything else.
+    </p>
+  `;
+  shell.appendChild(header);
+
+  // Tab bar
+  const tabBar = h('div', { style: 'display:flex;gap:4px;border-bottom:2px solid #e2e8f0;margin-bottom:28px;flex-wrap:wrap;' });
+  for (const tab of TABS) {
+    const btn = document.createElement('button');
+    btn.textContent = tab.label;
+    btn.style.cssText = 'padding:8px 16px;border:none;background:none;cursor:pointer;font-size:.875rem;font-family:inherit;border-bottom:2px solid transparent;margin-bottom:-2px;color:#64748b;transition:all 200ms;white-space:nowrap;';
+    btn.addEventListener('click', () => activeTab.set(tab.id));
+    effect(() => {
+      const active = activeTab() === tab.id;
+      btn.style.borderBottomColor = active ? '#2D6BE4' : 'transparent';
+      btn.style.color             = active ? '#2D6BE4' : '#64748b';
+      btn.style.fontWeight        = active ? '600' : '400';
+    });
+    tabBar.appendChild(btn);
+  }
+  shell.appendChild(tabBar);
+
+  // Content pane — only one tab rendered at a time
+  const pane = h('div');
+  effect(() => {
+    pane.innerHTML = '';
+    switch (activeTab()) {
+      case 'signals':  pane.appendChild(tabSignals());  break;
+      case 'emotion':  pane.appendChild(tabEmotion());  break;
+      case 'healing':  pane.appendChild(tabHealing());  break;
+      case 'security': pane.appendChild(tabSecurity()); break;
+      case 'compiler': pane.appendChild(tabCompiler()); break;
+    }
   });
+  shell.appendChild(pane);
 
-  layout.appendChild(buildHeader(emotionState));
-
-  const mainSection = h('main', { style: { display: 'flex', flexDirection: 'column', gap: '48px' } });
-  mainSection.appendChild(buildEmotionSection(emotionState));
-  mainSection.appendChild(buildMetricsSection(emotionState));
-  mainSection.appendChild(buildHealingSection());
-  mainSection.appendChild(buildTableSection());
-  mainSection.appendChild(buildFormSection(emotionState));
-  mainSection.appendChild(buildCompilerSection());
-
-  layout.appendChild(mainSection);
-  app.appendChild(layout);
-
-  // Start emotion tracking after first paint — scoped to layout container only
-  requestAnimationFrame(() => {
-    processor = new EmotionProcessor(layout);
-    processor.state.subscribe(state => emotionState.set(state));
-  });
+  app.appendChild(shell);
 }
 
-function buildHeader(emotion: ReturnType<typeof signal<EmotionState>>): HTMLElement {
-  const header = h('header', {
-    style: {
-      padding: '32px 0 40px',
-      borderBottom: '1px solid #e2e8f0',
-      marginBottom: '48px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      flexWrap: 'wrap',
-      gap: '16px',
-    },
+// ─── Tab: Signals ─────────────────────────────────────────────────────────
+function tabSignals(): HTMLElement {
+  const wrap = h('div');
+  wrap.appendChild(sectionHead(
+    'Fine-Grained Signals — No VDOM',
+    'Only the exact DOM node that depends on a signal updates. Nothing else re-renders.',
+  ));
+
+  // Counter demo
+  const count    = signal(0);
+  const doubled  = signal(0); // manual for demo clarity
+  const history  = signal<number[]>([]);
+
+  effect(() => { doubled.set(count() * 2); });
+
+  const box = card();
+
+  const row = h('div', { style: 'display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px;' });
+
+  const countEl = h('div', { style: 'font-size:3rem;font-weight:900;color:#2D6BE4;min-width:80px;text-align:center;font-variant-numeric:tabular-nums;' });
+  const doubEl  = h('div', { style: 'font-size:1.25rem;color:#64748b;' });
+  const histEl  = h('div', { style: 'font-size:.8rem;color:#94a3b8;margin-top:8px;font-family:monospace;' });
+
+  effect(() => { countEl.textContent = String(count()); });
+  effect(() => { doubEl.textContent  = `× 2 = ${doubled()}`; });
+  effect(() => { histEl.textContent  = `history: [${history().slice(-8).join(', ')}]`; });
+
+  const btnStyle = 'padding:8px 20px;border:none;border-radius:6px;font-size:1rem;cursor:pointer;font-family:inherit;font-weight:600;transition:opacity 150ms;';
+
+  const inc = h('button', { style: btnStyle + 'background:#2D6BE4;color:#fff;' });
+  inc.textContent = '+ Increment';
+  inc.addEventListener('click', () => {
+    const n = count.peek() + 1;
+    count.set(n);
+    history.set([...history.peek(), n]);
   });
 
-  const brand = h('div');
-  const logo = h('h1', {
-    style: {
-      fontSize: '1.75rem',
-      fontWeight: '800',
-      color: 'var(--dr-color-secondary)',
-      letterSpacing: '-0.03em',
-    },
+  const dec = h('button', { style: btnStyle + 'background:#f1f5f9;color:#374151;' });
+  dec.textContent = '− Decrement';
+  dec.addEventListener('click', () => {
+    const n = count.peek() - 1;
+    count.set(n);
+    history.set([...history.peek(), n]);
   });
-  logo.innerHTML = '<span style="color:var(--dr-color-primary)">DRISHTI</span> <span style="font-weight:300;font-size:1.1rem;color:#64748b">v0.1</span>';
 
-  const tagline = h('p', {
-    style: { color: '#64748b', fontSize: '0.875rem', marginTop: '4px' },
-  });
-  tagline.textContent = 'AI-Native Frontend Runtime · Sees · Feels · Heals · Protects';
+  const rst = h('button', { style: btnStyle + 'background:#fee2e2;color:#991b1b;' });
+  rst.textContent = 'Reset';
+  rst.addEventListener('click', () => { count.set(0); history.set([]); });
 
-  brand.appendChild(logo);
-  brand.appendChild(tagline);
+  row.appendChild(countEl);
+  row.appendChild(doubEl);
 
-  const badge = EmotionBadge({ emotion: () => emotion(), size: 'lg' });
+  const btns = h('div', { style: 'display:flex;gap:8px;flex-wrap:wrap;' });
+  btns.appendChild(inc); btns.appendChild(dec); btns.appendChild(rst);
 
-  header.appendChild(brand);
-  header.appendChild(badge);
-  return header;
-}
+  box.appendChild(codeSnip(`// DRISHTI — signal-based reactivity
+const count   = signal(0);
+const doubled = computed(() => count() * 2);
 
-function sectionHeader(title: string, desc: string): HTMLElement {
-  const wrap = h('div', { style: { marginBottom: '20px' } });
-  const h2 = document.createElement('h2');
-  h2.textContent = title;
-  h2.style.cssText = 'font-size:1.25rem;font-weight:700;color:#0f172a;margin-bottom:4px;';
-  const p = document.createElement('p');
-  p.textContent = desc;
-  p.style.cssText = 'color:#64748b;font-size:.875rem;';
-  wrap.appendChild(h2);
-  wrap.appendChild(p);
+// Only this text node updates — nothing else re-renders
+effect(() => { el.textContent = \`\${count()} × 2 = \${doubled()}\`; });`));
+  box.appendChild(row);
+  box.appendChild(btns);
+  box.appendChild(histEl);
+
+  wrap.appendChild(box);
   return wrap;
 }
 
-function section(children: HTMLElement[]): HTMLElement {
-  const s = h('section');
-  for (const c of children) s.appendChild(c);
-  return s;
-}
+// ─── Tab: Emotion ─────────────────────────────────────────────────────────
+function tabEmotion(): HTMLElement {
+  const wrap = h('div');
+  wrap.appendChild(sectionHead(
+    'Emotion Intelligence',
+    'DRISHTI reads mouse velocity, click rhythm, and scroll hesitation — then adapts the UI.',
+  ));
 
-function buildEmotionSection(emotionState: ReturnType<typeof signal<EmotionState>>): HTMLElement {
-  const states: EmotionState[] = ['calm', 'engaged', 'frustrated', 'confused', 'celebrating'];
+  const emotion = signal<EmotionState>('calm');
 
-  const header = sectionHeader(
-    '1 · Emotion Intelligence',
-    'Move your mouse fast (frustrated), pause hesitantly (confused), click steadily (engaged). The badge updates live.',
-  );
+  const STATES: { state: EmotionState; emoji: string; color: string; bg: string; desc: string }[] = [
+    { state: 'calm',        emoji: '😌', color: '#065f46', bg: '#ecfdf5', desc: 'Normal browsing — default UI' },
+    { state: 'engaged',     emoji: '🎯', color: '#1e40af', bg: '#eff6ff', desc: 'Actively interacting — speed up' },
+    { state: 'frustrated',  emoji: '😤', color: '#92400e', bg: '#fffbeb', desc: 'Rapid clicks — larger text, slower animations' },
+    { state: 'confused',    emoji: '🤔', color: '#5b21b6', bg: '#f5f3ff', desc: 'Long pauses — show tooltips, simplify layout' },
+    { state: 'celebrating', emoji: '🎉', color: '#be185d', bg: '#fdf2f8', desc: 'Success event — burst animation' },
+  ];
 
-  const grid = h('div', {
-    style: { display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' },
+  const box = card();
+
+  // Live badge
+  const badge = h('div', { style: 'display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:9999px;font-weight:700;font-size:1rem;margin-bottom:20px;transition:all 300ms;' });
+  effect(() => {
+    const s = STATES.find(x => x.state === emotion())!;
+    badge.textContent = `${s.emoji}  ${s.state.charAt(0).toUpperCase() + s.state.slice(1)}`;
+    badge.style.color      = s.color;
+    badge.style.background = s.bg;
   });
 
-  for (const state of states) {
-    const wrap = h('div', { style: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' } });
+  // Adaptive UI preview
+  const preview = h('div', { style: 'padding:16px;border:1.5px solid #e2e8f0;border-radius:8px;margin-bottom:20px;transition:all 300ms;' });
+  const previewText = h('p', { style: 'margin:0;transition:all 300ms;' });
+  effect(() => {
+    const s = emotion();
+    previewText.style.fontSize   = s === 'frustrated' ? '1.2rem' : '1rem';
+    previewText.style.fontWeight = s === 'frustrated' ? '600' : '400';
+    previewText.style.color      = s === 'confused' ? '#5b21b6' : '#374151';
+    preview.style.background     = s === 'celebrating' ? '#fdf2f8' : '#fff';
+    preview.style.borderColor    = s === 'engaged' ? '#2D6BE4' : '#e2e8f0';
+    previewText.textContent      = STATES.find(x => x.state === s)!.desc;
+  });
+  preview.appendChild(previewText);
 
-    const badge = EmotionBadge({
-      emotion: () => state,
-      showLabel: true,
-    });
-
-    const trigger = h('button', {
-      style: {
-        padding: '6px 14px',
-        fontSize: '.75rem',
-        border: '1.5px solid #e2e8f0',
-        borderRadius: '6px',
-        cursor: 'pointer',
-        background: '#fff',
-        color: '#374151',
-        fontFamily: 'inherit',
-        transition: 'all 200ms',
-      },
-    });
-    trigger.textContent = `Simulate`;
-    trigger.addEventListener('click', () => emotionState.set(state));
-    trigger.addEventListener('mouseenter', () => {
-      trigger.style.borderColor = 'var(--dr-color-primary)';
-      trigger.style.color = 'var(--dr-color-primary)';
-    });
-    trigger.addEventListener('mouseleave', () => {
-      trigger.style.borderColor = '#e2e8f0';
-      trigger.style.color = '#374151';
-    });
-
-    wrap.appendChild(badge);
-    wrap.appendChild(trigger);
-    grid.appendChild(wrap);
+  // Simulate buttons
+  const btns = h('div', { style: 'display:flex;gap:8px;flex-wrap:wrap;' });
+  for (const s of STATES) {
+    const btn = document.createElement('button');
+    btn.style.cssText = `padding:6px 14px;border:1.5px solid ${s.color}33;border-radius:6px;cursor:pointer;background:${s.bg};color:${s.color};font-size:.8rem;font-family:inherit;font-weight:600;`;
+    btn.textContent = `${s.emoji} ${s.state}`;
+    btn.addEventListener('click', () => emotion.set(s.state));
+    btns.appendChild(btn);
   }
 
-  const liveWrap = h('div', {
-    style: {
-      marginTop: '16px',
-      padding: '12px 16px',
-      background: '#f8fafc',
-      borderRadius: '8px',
-      border: '1px solid #e2e8f0',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '10px',
-      fontSize: '.875rem',
-      color: '#374151',
-    },
-  });
+  box.appendChild(codeSnip(`// DRISHTI — emotion adapts UI automatically
+const processor = new EmotionProcessor(container);
 
-  const liveLabel = document.createElement('span');
-  liveLabel.textContent = 'Live detection: ';
-  liveLabel.style.cssText = 'font-weight:500;';
+effect(() => {
+  if (processor.state() === 'frustrated') {
+    el.style.fontSize = '1.2rem'; // larger text
+  }
+  if (processor.state() === 'confused') {
+    tooltip.style.opacity = '1';  // show help
+  }
+});`));
+  box.appendChild(badge);
+  box.appendChild(preview);
+  box.appendChild(btns);
 
-  const liveBadge = EmotionBadge({ emotion: () => emotionState(), size: 'md', showLabel: true });
-  liveWrap.appendChild(liveLabel);
-  liveWrap.appendChild(liveBadge);
-
-  return section([header, grid, liveWrap]);
+  wrap.appendChild(box);
+  return wrap;
 }
 
-function buildMetricsSection(emotionState: ReturnType<typeof signal<EmotionState>>): HTMLElement {
-  const header = sectionHeader(
-    '2 · Intelligence Units — MetricCard',
-    'Signal-reactive metrics. Trend triggers a shimmer animation. Frustrated emotion shifts colors.',
-  );
+// ─── Tab: Healing ─────────────────────────────────────────────────────────
+function tabHealing(): HTMLElement {
+  const wrap = h('div');
+  wrap.appendChild(sectionHead(
+    'Self-Healing Components',
+    'Components detect failures and recover automatically — no try/catch in your app code.',
+  ));
 
-  const revenue = signal(142830);
-  const revenueT = signal(8.4);
-  const users = signal(24817);
-  const usersT = signal(-2.1);
-  const nps = signal(72);
-  const npsT = signal(0);
+  const box = card();
 
-  const grid = h('div', {
-    style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px' },
-  });
+  const status   = signal<'idle' | 'loading' | 'healing' | 'ready' | 'failed'>('idle');
+  const attempt  = signal(0);
+  const log      = signal<string[]>([]);
 
-  grid.appendChild(MetricCard({
-    label: 'Monthly Revenue',
-    value: () => revenue(),
-    unit: '₹',
-    trend: () => revenueT(),
-    format: v => `${(Number(v) / 1000).toFixed(1)}K`,
-    emotion: () => emotionState(),
-  }));
-
-  grid.appendChild(MetricCard({
-    label: 'Active Users',
-    value: () => users(),
-    trend: () => usersT(),
-    format: v => Number(v).toLocaleString(),
-    emotion: () => emotionState(),
-  }));
-
-  grid.appendChild(MetricCard({
-    label: 'NPS Score',
-    value: () => nps(),
-    trend: () => npsT(),
-    emotion: () => emotionState(),
-  }));
-
-  const controls = h('div', {
-    style: { marginTop: '12px', display: 'flex', gap: '10px', flexWrap: 'wrap' },
-  });
-
-  const makeBtn = (label: string, cb: () => void) => {
-    const btn = document.createElement('button');
-    btn.textContent = label;
-    btn.style.cssText = 'padding:6px 14px;background:var(--dr-color-primary);color:#fff;border:none;border-radius:6px;font-size:.8rem;cursor:pointer;font-family:inherit;transition:opacity 150ms;';
-    btn.addEventListener('mouseenter', () => { btn.style.opacity = '0.85'; });
-    btn.addEventListener('mouseleave', () => { btn.style.opacity = '1'; });
-    btn.addEventListener('click', cb);
-    return btn;
-  };
-
-  controls.appendChild(makeBtn('Revenue +10%', () => {
-    revenue.set(Math.round(revenue.peek() * 1.1));
-    revenueT.set(+(revenueT.peek() + 2).toFixed(1));
-  }));
-  controls.appendChild(makeBtn('Revenue −5%', () => {
-    revenue.set(Math.round(revenue.peek() * 0.95));
-    revenueT.set(+(-3.2).toFixed(1));
-  }));
-  controls.appendChild(makeBtn('Add 1K Users', () => {
-    users.set(users.peek() + 1000);
-    usersT.set(+(usersT.peek() + 1.5).toFixed(1));
-  }));
-
-  return section([header, grid, controls]);
-}
-
-function buildHealingSection(): HTMLElement {
-  const header = sectionHeader(
-    '3 · Self-Healing Components',
-    'Cards that automatically retry failed loads. Watch the status badge cycle: Loading → Healing → Ready.',
-  );
-
-  const grid = h('div', {
-    style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' },
-  });
+  const addLog = (msg: string) => log.set([...log.peek(), `${new Date().toLocaleTimeString()} — ${msg}`]);
 
   let failCount = 0;
-  grid.appendChild(HealingCard({
-    title: 'Unreliable Data Source',
-    heal: { mode: 'retry', retries: 3 },
-    load: async () => {
-      await new Promise(r => setTimeout(r, 600));
+
+  const runHeal = async () => {
+    status.set('loading');
+    attempt.set(0);
+    log.set([]);
+    addLog('Starting data fetch…');
+    failCount = 0;
+
+    const maxRetries = 3;
+    for (let i = 1; i <= maxRetries; i++) {
+      attempt.set(i);
+      await sleep(600);
       failCount++;
-      if (failCount < 3) throw new Error('Network error (simulated)');
-      failCount = 0;
-      return 'Data loaded successfully after retries! Self-healing in action.';
-    },
-  }));
 
-  grid.appendChild(HealingCard({
-    title: 'Stable Data Source',
-    heal: { mode: 'auto' },
-    load: async () => {
-      await new Promise(r => setTimeout(r, 400));
-      const el = h('div');
-      el.innerHTML = '<p style="color:#374151;margin:0;line-height:1.6">✓ Loaded instantly with no errors. <br><small style="color:#64748b">This component will auto-recover if something breaks later.</small></p>';
-      return el;
-    },
-  }));
+      if (failCount < 3) {
+        status.set('healing');
+        addLog(`Attempt ${i} failed — retrying in ${600 * i}ms…`);
+        await sleep(600 * i);
+      } else {
+        status.set('ready');
+        addLog('✓ Recovered! Data loaded successfully.');
+        return;
+      }
+    }
+    status.set('failed');
+    addLog('✗ All retries exhausted — showing fallback UI');
+  };
 
-  grid.appendChild(HealingCard({
-    title: 'Always Fails',
-    heal: { mode: 'retry', retries: 2 },
-    load: async () => {
-      await new Promise(r => setTimeout(r, 300));
-      throw new Error('Permanent failure — shows graceful fallback UI');
-    },
-  }));
+  const statusColors: Record<string, string> = {
+    idle: '#6b7280', loading: '#2563eb', healing: '#d97706', ready: '#16a34a', failed: '#dc2626',
+  };
 
-  return section([header, grid]);
-}
+  const statusBadge = h('div', { style: 'display:inline-block;padding:4px 12px;border-radius:9999px;font-size:.8rem;font-weight:700;margin-bottom:12px;transition:all 300ms;background:#f1f5f9;' });
+  const attemptEl   = h('div', { style: 'font-size:.875rem;color:#64748b;margin-bottom:12px;' });
+  const logEl       = h('div', { style: 'background:#0f172a;border-radius:6px;padding:12px;font-family:monospace;font-size:.75rem;color:#94a3b8;min-height:80px;max-height:140px;overflow-y:auto;' });
 
-interface UserRow extends Record<string, unknown> {
-  id: number;
-  name: string;
-  email: string;
-  plan: string;
-  mrr: number;
-  status: string;
-}
-
-function buildTableSection(): HTMLElement {
-  const header = sectionHeader(
-    '4 · Reactive Data Table',
-    'Fine-grained signals: only changed cells update. Search, sort, paginate — no framework overhead.',
-  );
-
-  const rows: UserRow[] = Array.from({ length: 47 }, (_, i) => ({
-    id: i + 1,
-    name: ['Priya Sharma','Arjun Mehta','Naveen Kumar','Anita Patel','Rahul Singh','Sneha Gupta','Vikram Das','Pooja Nair','Amit Verma','Kavya Reddy'][i % 10]!,
-    email: `user${i + 1}@example.com`,
-    plan: ['Starter','Growth','Enterprise'][i % 3]!,
-    mrr: [999, 4999, 24999][i % 3]!,
-    status: i % 7 === 0 ? 'Churned' : 'Active',
-  }));
-
-  const data = signal(rows);
-
-  const table = ReactiveTable<UserRow>({
-    data: () => data(),
-    searchable: true,
-    pageSize: 8,
-    columns: [
-      { key: 'name', label: 'Name', width: '180px' },
-      { key: 'email', label: 'Email', width: '220px' },
-      { key: 'plan', label: 'Plan', width: '100px' },
-      {
-        key: 'mrr',
-        label: 'MRR (₹)',
-        width: '120px',
-        format: v => `₹${Number(v).toLocaleString()}`,
-      },
-      {
-        key: 'status',
-        label: 'Status',
-        width: '100px',
-        format: v => v === 'Active' ? '● Active' : '○ Churned',
-        sortable: false,
-      },
-    ],
-    onRowClick: (row) => {
-      const msg = `Clicked: ${row.name} (${row.plan})`;
-      const toast = buildToast(msg);
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    },
+  effect(() => {
+    const s = status();
+    statusBadge.textContent      = s.toUpperCase();
+    statusBadge.style.color      = statusColors[s] ?? '#6b7280';
+    statusBadge.style.background = (statusColors[s] ?? '#6b7280') + '18';
+  });
+  effect(() => { attemptEl.textContent = attempt() > 0 ? `Attempt ${attempt()} of 3` : ''; });
+  effect(() => {
+    logEl.innerHTML = log().map(l => `<div>${l}</div>`).join('');
+    logEl.scrollTop = logEl.scrollHeight;
   });
 
-  return section([header, table]);
+  const btn = h('button', {
+    style: 'padding:8px 20px;background:#2D6BE4;color:#fff;border:none;border-radius:6px;font-size:.875rem;font-family:inherit;font-weight:600;cursor:pointer;margin-bottom:16px;',
+  });
+  btn.textContent = '▶ Simulate Failure & Auto-Heal';
+  btn.addEventListener('click', () => { void runHeal(); });
+
+  box.appendChild(codeSnip(`// DRISHTI — healing declared, not coded
+unit: DataCard
+  data: connect(api.orders)
+  heal: retry(3) then empty-state
+
+// No try/catch. No error state. No loading state.
+// DRISHTI runtime handles it.`));
+  box.appendChild(statusBadge);
+  box.appendChild(attemptEl);
+  box.appendChild(btn);
+  box.appendChild(logEl);
+
+  wrap.appendChild(box);
+  return wrap;
 }
 
-function buildFormSection(emotionState: ReturnType<typeof signal<EmotionState>>): HTMLElement {
-  const header = sectionHeader(
-    '5 · Sentient Form',
-    'Self-validates, zero unsafe input reaches the DOM. Emotion-aware: confused/frustrated mode makes labels larger.',
-  );
+// ─── Tab: Security ────────────────────────────────────────────────────────
+function tabSecurity(): HTMLElement {
+  const wrap = h('div');
+  wrap.appendChild(sectionHead(
+    'Zero-Trust Security — Built In',
+    'Every input is sanitized at the boundary. XSS attempts are blocked before they reach the DOM.',
+  ));
 
-  const wrap = h('div', {
-    style: {
-      maxWidth: '480px',
-      background: '#fff',
-      padding: '24px',
-      borderRadius: 'var(--dr-border-radius)',
-      boxShadow: 'var(--dr-shadow)',
-    },
+  const box = card();
+  const input = signal('');
+  const sanitized = signal('');
+
+  const TESTS = [
+    { label: 'Normal text',  value: 'Hello Naveen, welcome back!' },
+    { label: 'XSS attempt',  value: '<img src=x onerror="alert(\'hacked\')">' },
+    { label: 'Script inject',value: '<script>document.cookie</script>' },
+    { label: 'SQL inject',   value: "'; DROP TABLE users; --" },
+    { label: 'Link inject',  value: '<a href="javascript:void(0)">Click</a>' },
+  ];
+
+  effect(() => {
+    const raw = input();
+    const div = document.createElement('div');
+    div.textContent = raw;
+    sanitized.set(div.innerHTML);
   });
 
-  wrap.appendChild(SentientForm({
-    fields: [
-      { name: 'name', label: 'Full Name', required: true, placeholder: 'Naveen Kumar' },
-      {
-        name: 'email',
-        label: 'Email Address',
-        type: 'email',
-        required: true,
-        placeholder: 'naveen@example.com',
-        validate: (v) => v.includes('@') ? null : 'Enter a valid email address',
-      },
-      {
-        name: 'message',
-        label: 'Message',
-        type: 'textarea',
-        placeholder: 'Tell us about your use case…',
-        validate: (v) => v.length > 10 ? null : 'Message must be at least 10 characters',
-      },
-    ],
-    submitLabel: 'Send Message',
-    emotion: () => emotionState(),
-    onSubmit: async (data) => {
-      await new Promise(r => setTimeout(r, 1000));
-      console.info('[DRISHTI demo] Form submitted (sanitized):', data);
-    },
-  }));
+  const inputEl = document.createElement('textarea');
+  inputEl.placeholder = 'Type anything or use test buttons below…';
+  inputEl.style.cssText = 'width:100%;padding:10px;border:1.5px solid #e2e8f0;border-radius:6px;font-family:monospace;font-size:.8rem;resize:vertical;min-height:60px;box-sizing:border-box;outline:none;';
+  inputEl.addEventListener('input', () => input.set(inputEl.value));
 
-  return section([header, wrap]);
+  const outputEl = h('div', { style: 'margin-top:12px;padding:10px;background:#f8fafc;border-radius:6px;font-family:monospace;font-size:.8rem;color:#374151;word-break:break-all;min-height:40px;border:1.5px solid #e2e8f0;' });
+  const label    = h('p', { style: 'font-size:.75rem;color:#64748b;margin:8px 0 4px;font-weight:500;' });
+  label.textContent = 'Sanitized output (safe to render):';
+
+  effect(() => {
+    const safe = sanitized();
+    const raw  = input();
+    const blocked = raw !== safe && raw.length > 0;
+    outputEl.textContent      = safe || '—';
+    outputEl.style.color      = blocked ? '#16a34a' : '#374151';
+    outputEl.style.borderColor = blocked ? '#86efac' : '#e2e8f0';
+    outputEl.style.background = blocked ? '#f0fdf4' : '#f8fafc';
+    if (blocked) {
+      label.textContent = '✓ Attack neutralised — safe to render:';
+      label.style.color = '#16a34a';
+    } else {
+      label.textContent = 'Sanitized output (safe to render):';
+      label.style.color = '#64748b';
+    }
+  });
+
+  const testBtns = h('div', { style: 'display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;' });
+  for (const t of TESTS) {
+    const btn = document.createElement('button');
+    btn.textContent = t.label;
+    btn.style.cssText = 'padding:4px 10px;border:1px solid #e2e8f0;border-radius:4px;font-size:.75rem;cursor:pointer;background:#fff;font-family:inherit;';
+    btn.addEventListener('click', () => { inputEl.value = t.value; input.set(t.value); });
+    testBtns.appendChild(btn);
+  }
+
+  box.appendChild(codeSnip(`// DRISHTI — security enforced at compile time
+unit: CommentBox
+  data: connect(api.comments)
+  trust: sanitized          // compiler injects sanitize()
+
+// Any innerHTML without trust: sanitized
+// → compile error, not runtime bug`));
+  box.appendChild(inputEl);
+  box.appendChild(testBtns);
+  box.appendChild(label);
+  box.appendChild(outputEl);
+
+  wrap.appendChild(box);
+  return wrap;
 }
 
-function buildCompilerSection(): HTMLElement {
-  const header = sectionHeader(
-    '6 · DRISHTI Compiler — Live',
-    'Write .dr syntax and see it compile to TypeScript in real time.',
-  );
+// ─── Tab: Compiler ────────────────────────────────────────────────────────
+function tabCompiler(): HTMLElement {
+  const wrap = h('div');
+  wrap.appendChild(sectionHead(
+    '.dr Language — Live Compiler',
+    'This is the new language. Write intent. The compiler writes the code.',
+  ));
 
-  const DEFAULT_DR = `surface: Dashboard
-  intent: show revenue analytics
-  secure: authenticated
+  const DEFAULT = `surface: OrdersDashboard
+  intent: show customer orders
+  secure: role(manager)
 
   unit: RevenueCard
-    data: connect(api.metrics, realtime)
+    data: connect(api.revenue, realtime)
     feel: celebrate if trending.positive
     feel: calm-alert if trending.negative
     heal: retry(3) then empty-state
-    secure: role(manager)
+    secure: role(manager, finance)
 
-  unit: UserTable
-    data: connect(api.users)
-    columns: [name, email, plan, mrr]
+  unit: OrderTable
+    data: connect(api.orders)
+    columns: [customer, amount, status]
     heal: auto
     layout: grid(2)`;
 
   const container = h('div', {
-    style: {
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gap: '16px',
-    },
+    style: 'display:grid;grid-template-columns:1fr 1fr;gap:16px;',
   });
 
-  const panelStyle = 'border-radius:8px;overflow:hidden;box-shadow:var(--dr-shadow);';
-
-  const inputPanel = h('div', { style: panelStyle });
-  const inputHeader = h('div', { style: 'background:#1e1e2e;padding:10px 16px;display:flex;align-items:center;gap:8px;' });
-  const dot = (c: string) => { const d = document.createElement('span'); d.style.cssText = `width:10px;height:10px;border-radius:50%;background:${c};display:inline-block;`; return d; };
-  inputHeader.appendChild(dot('#ff5f57'));
-  inputHeader.appendChild(dot('#febc2e'));
-  inputHeader.appendChild(dot('#28c840'));
+  // Input panel
+  const inputPanel = h('div', { style: 'border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1);' });
+  const inputHead  = h('div', { style: 'background:#1e1e2e;padding:10px 16px;display:flex;align-items:center;gap:6px;' });
+  ['#ff5f57','#febc2e','#28c840'].forEach(c => {
+    const dot = document.createElement('span');
+    dot.style.cssText = `width:10px;height:10px;border-radius:50%;background:${c};display:inline-block;`;
+    inputHead.appendChild(dot);
+  });
   const inputTitle = document.createElement('span');
-  inputTitle.textContent = 'dashboard.dr';
-  inputTitle.style.cssText = 'color:#a6b3cc;font-size:.75rem;margin-left:4px;font-family:monospace;';
-  inputHeader.appendChild(inputTitle);
+  inputTitle.textContent = 'orders.dr';
+  inputTitle.style.cssText = 'color:#a6b3cc;font-size:.75rem;margin-left:6px;font-family:monospace;';
+  inputHead.appendChild(inputTitle);
 
   const textarea = document.createElement('textarea');
-  textarea.value = DEFAULT_DR;
-  textarea.style.cssText = `
-    width: 100%;
-    min-height: 320px;
-    padding: 16px;
-    background: #1e1e2e;
-    color: #cdd6f4;
-    border: none;
-    outline: none;
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    font-size: .8rem;
-    line-height: 1.6;
-    resize: vertical;
-    tab-size: 2;
-  `;
-
-  inputPanel.appendChild(inputHeader);
+  textarea.value = DEFAULT;
+  textarea.style.cssText = 'width:100%;min-height:340px;padding:16px;background:#1e1e2e;color:#cdd6f4;border:none;outline:none;font-family:monospace;font-size:.8rem;line-height:1.7;resize:vertical;tab-size:2;box-sizing:border-box;';
+  inputPanel.appendChild(inputHead);
   inputPanel.appendChild(textarea);
 
-  const outputPanel = h('div', { style: panelStyle });
-  const outputHeader = h('div', { style: 'background:#0d1117;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;' });
+  // Output panel
+  const outputPanel = h('div', { style: 'border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1);' });
+  const outputHead  = h('div', { style: 'background:#0d1117;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;' });
   const outputTitle = document.createElement('span');
   outputTitle.textContent = 'Generated TypeScript';
   outputTitle.style.cssText = 'color:#8b949e;font-size:.75rem;font-family:monospace;';
-  const compileTime = document.createElement('span');
-  compileTime.style.cssText = 'color:#3fb950;font-size:.7rem;font-family:monospace;';
-  outputHeader.appendChild(outputTitle);
-  outputHeader.appendChild(compileTime);
+  const timing = document.createElement('span');
+  timing.style.cssText = 'color:#3fb950;font-size:.7rem;font-family:monospace;';
+  outputHead.appendChild(outputTitle);
+  outputHead.appendChild(timing);
 
   const output = document.createElement('pre');
-  output.style.cssText = `
-    width: 100%;
-    min-height: 320px;
-    padding: 16px;
-    background: #0d1117;
-    color: #e6edf3;
-    border: none;
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    font-size: .8rem;
-    line-height: 1.6;
-    overflow: auto;
-    margin: 0;
-  `;
+  output.style.cssText = 'margin:0;min-height:340px;padding:16px;background:#0d1117;color:#e6edf3;font-family:monospace;font-size:.8rem;line-height:1.7;overflow:auto;';
 
-  outputPanel.appendChild(outputHeader);
+  const errEl = h('div', { style: 'display:none;background:#2d1b1e;border-top:1px solid #f85149;padding:10px 14px;color:#f85149;font-size:.75rem;font-family:monospace;white-space:pre-wrap;' });
+
+  outputPanel.appendChild(outputHead);
   outputPanel.appendChild(output);
-
-  const errPanel = h('div', {
-    style: 'display:none;background:#2d1b1e;border:1px solid #f85149;border-radius:6px;padding:10px 14px;color:#f85149;font-size:.8rem;font-family:monospace;margin-top:8px;white-space:pre-wrap;',
-  });
-
-  const recompile = () => {
-    const t0 = performance.now();
-    try {
-      import('@drishti/compiler').then(({ compile }) => {
-        const result = compile(textarea.value);
-        const dt = (performance.now() - t0).toFixed(1);
-
-        if (result.errors.length) {
-          errPanel.style.display = 'block';
-          errPanel.textContent = result.errors.join('\n');
-          output.textContent = '';
-        } else {
-          errPanel.style.display = 'none';
-          output.textContent = result.code;
-          compileTime.textContent = `✓ ${dt}ms`;
-        }
-      });
-    } catch (e) {
-      errPanel.style.display = 'block';
-      errPanel.textContent = String(e);
-    }
-  };
-
-  let debounceTimer: ReturnType<typeof setTimeout>;
-  textarea.addEventListener('input', () => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(recompile, 300);
-  });
-
-  setTimeout(recompile, 100);
+  outputPanel.appendChild(errEl);
 
   container.appendChild(inputPanel);
   container.appendChild(outputPanel);
 
-  return section([header, container, errPanel]);
+  // Lazy-load compiler only once, on first use
+  let compilerLoaded = false;
+  let compileFn: ((src: string) => { code: string; errors: string[] }) | null = null;
+
+  const compile = (src: string) => {
+    if (compileFn) {
+      const t0 = performance.now();
+      const r  = compileFn(src);
+      timing.textContent = `✓ ${(performance.now() - t0).toFixed(1)}ms`;
+      if (r.errors.length) {
+        errEl.style.display = 'block';
+        errEl.textContent   = r.errors.join('\n');
+        output.textContent  = '';
+      } else {
+        errEl.style.display = 'none';
+        output.textContent  = r.code;
+      }
+    }
+  };
+
+  if (!compilerLoaded) {
+    compilerLoaded = true;
+    timing.textContent = 'loading compiler…';
+    import('@drishti/compiler').then(m => {
+      compileFn = m.compile;
+      compile(textarea.value);
+    });
+  }
+
+  let debounce: ReturnType<typeof setTimeout>;
+  textarea.addEventListener('input', () => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => compile(textarea.value), 400);
+  });
+
+  wrap.appendChild(container);
+  return wrap;
 }
 
-function buildToast(msg: string): HTMLElement {
-  const toast = h('div', {
-    style: {
-      position: 'fixed',
-      bottom: '24px',
-      right: '24px',
-      background: 'var(--dr-color-secondary)',
-      color: '#fff',
-      padding: '10px 18px',
-      borderRadius: '8px',
-      fontSize: '.875rem',
-      fontFamily: 'var(--dr-font-family)',
-      boxShadow: '0 4px 16px rgba(0,0,0,.2)',
-      zIndex: '9999',
-      animation: 'dr-pulse 0.3s ease',
-      maxWidth: '320px',
-    },
+// ─── Helpers ──────────────────────────────────────────────────────────────
+function sectionHead(title: string, desc: string): HTMLElement {
+  const el = h('div', { style: 'margin-bottom:20px;' });
+  el.innerHTML = `
+    <h2 style="font-size:1.2rem;font-weight:700;color:#0f172a;margin:0 0 4px;">${title}</h2>
+    <p style="color:#64748b;font-size:.875rem;margin:0;">${desc}</p>
+  `;
+  return el;
+}
+
+function card(): HTMLElement {
+  return h('div', {
+    style: 'background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.08);border:1px solid #f1f5f9;',
   });
-  toast.textContent = msg;
-  return toast;
+}
+
+function codeSnip(code: string): HTMLElement {
+  const pre = document.createElement('pre');
+  pre.textContent = code;
+  pre.style.cssText = 'background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px 14px;font-size:.75rem;line-height:1.6;color:#374151;margin:0 0 16px;overflow-x:auto;font-family:monospace;';
+  return pre;
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise(r => setTimeout(r, ms));
 }
 
 buildApp();
