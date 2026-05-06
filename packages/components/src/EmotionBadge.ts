@@ -2,11 +2,13 @@ import { effect } from '@drishti/runtime';
 import type { EmotionState } from '@drishti/runtime';
 
 const EMOTION_CONFIG: Record<EmotionState, { label: string; color: string; bg: string; emoji: string }> = {
-  calm:        { label: 'Calm',        color: '#065f46', bg: '#ecfdf5', emoji: '😌' },
-  engaged:     { label: 'Engaged',     color: '#1e40af', bg: '#eff6ff', emoji: '🎯' },
-  frustrated:  { label: 'Frustrated',  color: '#92400e', bg: '#fffbeb', emoji: '😤' },
-  confused:    { label: 'Confused',    color: '#5b21b6', bg: '#f5f3ff', emoji: '🤔' },
-  celebrating: { label: 'Celebrating', color: '#be185d', bg: '#fdf2f8', emoji: '🎉' },
+  calm:        { label: 'Calm',        color: '#065f46', bg: '#ecfdf5',         emoji: '😌' },
+  engaged:     { label: 'Engaged',     color: '#1e40af', bg: '#eff6ff',         emoji: '🎯' },
+  focused:     { label: 'Focused',     color: '#1e3a5f', bg: '#e0f2fe',         emoji: '🔍' },
+  frustrated:  { label: 'Frustrated',  color: '#92400e', bg: '#fffbeb',         emoji: '😤' },
+  confused:    { label: 'Confused',    color: '#5b21b6', bg: '#f5f3ff',         emoji: '🤔' },
+  bored:       { label: 'Bored',       color: '#374151', bg: '#f9fafb',         emoji: '😑' },
+  celebrating: { label: 'Celebrating', color: '#be185d', bg: '#fdf2f8',         emoji: '🎉' },
 };
 
 export interface EmotionBadgeProps {

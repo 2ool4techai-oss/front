@@ -1,6 +1,14 @@
-export type EmotionState = 'calm' | 'engaged' | 'frustrated' | 'confused' | 'celebrating';
+export type EmotionState =
+  | 'calm'
+  | 'engaged'
+  | 'focused'
+  | 'frustrated'
+  | 'confused'
+  | 'bored'
+  | 'celebrating';
 
 export type HealMode = 'auto' | 'retry' | 'fallback';
+export type CircuitState = 'closed' | 'open' | 'half-open';
 
 export interface HealConfig {
   mode: HealMode;
@@ -93,4 +101,55 @@ export interface ComputedSignal<T> {
   peek(): T;
   set(_: T): void;
   subscribe(fn: SignalSubscriber<T>): Unsubscribe;
+}
+
+// ── Store ──────────────────────────────────────────────────────────────
+export interface Store<T extends Record<string, unknown>> {
+  get(): T;
+  set(patch: Partial<T>): void;
+  select<K extends keyof T>(key: K): ComputedSignal<T[K]>;
+  readonly signal: Signal<T>;
+  reset(): void;
+}
+
+// ── Spring / Tween ─────────────────────────────────────────────────────
+export interface SpringConfig {
+  stiffness?: number;
+  damping?: number;
+  precision?: number;
+}
+
+export interface TweenConfig {
+  duration?: number;
+  easing?: (t: number) => number;
+}
+
+export interface SpringSignal {
+  (): number;
+  to(target: number): void;
+  set(value: number): void;
+  peek(): number;
+  subscribe(fn: SignalSubscriber<number>): Unsubscribe;
+  stop(): void;
+  destroy(): void;
+}
+
+export interface TweenSignal {
+  (): number;
+  to(target: number): void;
+  set(value: number): void;
+  peek(): number;
+  subscribe(fn: SignalSubscriber<number>): Unsubscribe;
+  stop(): void;
+  destroy(): void;
+}
+
+// ── Genome adaptation ──────────────────────────────────────────────────
+export interface EmotionAdaptation {
+  animationSpeed: number;
+  borderRadius: number;
+  shadowIntensity: number;
+  saturation: number;
+  blurStrength: number;
+  spacingScale: number;
 }

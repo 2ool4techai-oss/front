@@ -1,10 +1,30 @@
-import type { Signal, ComputedSignal, SignalSubscriber, Unsubscribe } from './types.js';
+import type { Signal, ComputedSignal, SignalSubscriber, Unsubscribe, Store } from './types.js';
 
 type EffectFn = () => void;
 
 let currentEffect: EffectFn | null = null;
 const effectDeps = new WeakMap<EffectFn, Set<Set<EffectFn>>>();
 
+// ── Batching ───────────────────────────────────────────────────────────
+let batchDepth = 0;
+const pendingEffects = new Set<EffectFn>();
+
+function scheduleEffect(fn: EffectFn): void {
+  if (batchDepth > 0) {
+    pendingEffects.add(fn);
+  } else {
+    fn();
+  }
+}
+
+function flushBatch(): void {
+  // Snapshot so effects scheduled during flush run next microtask, not infinite-loop here
+  const toRun = [...pendingEffects];
+  pendingEffects.clear();
+  for (const fn of toRun) fn();
+}
+
+// ── Tracking ───────────────────────────────────────────────────────────
 function trackAccess(subs: Set<EffectFn>): void {
   if (currentEffect) {
     subs.add(currentEffect);
@@ -13,13 +33,14 @@ function trackAccess(subs: Set<EffectFn>): void {
   }
 }
 
+// ── signal ─────────────────────────────────────────────────────────────
 export function signal<T>(initial: T): Signal<T> {
   let value = initial;
   const subs = new Set<EffectFn>();
   const listeners = new Set<SignalSubscriber<T>>();
 
   const notify = () => {
-    for (const fn of subs) fn();
+    for (const fn of [...subs]) scheduleEffect(fn);
     for (const fn of listeners) fn(value);
   };
 
@@ -46,6 +67,7 @@ export function signal<T>(initial: T): Signal<T> {
   return sig;
 }
 
+// ── computed ───────────────────────────────────────────────────────────
 export function computed<T>(fn: () => T): ComputedSignal<T> {
   let value: T;
   let dirty = true;
@@ -55,7 +77,7 @@ export function computed<T>(fn: () => T): ComputedSignal<T> {
 
   const recompute: EffectFn = () => {
     dirty = true;
-    for (const fn2 of subs) fn2();
+    for (const fn2 of [...subs]) scheduleEffect(fn2);
     if (listeners.size > 0) {
       const next = get();
       for (const fn2 of listeners) fn2(next);
@@ -98,6 +120,7 @@ export function computed<T>(fn: () => T): ComputedSignal<T> {
   return sig;
 }
 
+// ── effect ─────────────────────────────────────────────────────────────
 export function effect(fn: () => void | (() => void)): Unsubscribe {
   let cleanup: (() => void) | void;
   const trackedDeps = new Set<Set<EffectFn>>();
@@ -130,6 +153,41 @@ export function effect(fn: () => void | (() => void)): Unsubscribe {
   };
 }
 
+// ── batch ──────────────────────────────────────────────────────────────
 export function batch(fn: () => void): void {
-  fn();
+  batchDepth++;
+  try {
+    fn();
+  } finally {
+    batchDepth--;
+    if (batchDepth === 0) flushBatch();
+  }
+}
+
+// ── untrack ────────────────────────────────────────────────────────────
+export function untrack<T>(fn: () => T): T {
+  const prev = currentEffect;
+  currentEffect = null;
+  try {
+    return fn();
+  } finally {
+    currentEffect = prev;
+  }
+}
+
+// ── createStore ────────────────────────────────────────────────────────
+export function createStore<T extends Record<string, unknown>>(initial: T): Store<T> {
+  const _initial = { ...initial };
+  const _sig = signal<T>({ ..._initial });
+
+  return {
+    get: () => _sig(),
+    set: (patch: Partial<T>): void => {
+      batch(() => _sig.set({ ..._sig.peek(), ...patch }));
+    },
+    select: <K extends keyof T>(key: K): ComputedSignal<T[K]> =>
+      computed(() => _sig()[key]),
+    signal: _sig,
+    reset: (): void => _sig.set({ ..._initial }),
+  };
 }
