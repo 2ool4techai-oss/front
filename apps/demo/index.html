@@ -3,56 +3,311 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="DRISHTI — AI-native frontend runtime. Sees. Feels. Heals. Protects." />
-  <title>DRISHTI — AI-Native Frontend</title>
+  <title>DRISHTI — AI-Native Frontend Runtime</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --dr-color-primary: #2D6BE4;
-      --dr-color-secondary: #1A1A2E;
-      --dr-color-accent: #E94560;
-      --dr-font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      --dr-font-size-base: 16px;
-      --dr-spacing-unit: 8px;
-      --dr-border-radius: 8px;
-      --dr-shadow: 0 2px 8px rgba(0,0,0,.10);
-      --dr-transition-speed: 220ms;
-      --dr-transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
-      --dr-anim-speed: 1;
-      --dr-anim-scale: 1;
-      --dr-font-scale: 1;
-      --dr-tooltip-opacity: 0;
-      --dr-contrast-boost: 0;
+      --emotion-hue:        230;
+      --emotion-sat:        70%;
+      --emotion-anim:       600ms;
+      --emotion-blur:       20px;
+      --emotion-scale:      1;
+      --emotion-brightness: 1;
+
+      --c-bg:       #07070f;
+      --c-surface:  rgba(255,255,255,0.04);
+      --c-border:   rgba(255,255,255,0.08);
+      --c-text:     #e2e8f0;
+      --c-muted:    #64748b;
+      --c-primary:  #3b82f6;
+      --c-accent:   #8b5cf6;
+      --c-success:  #10b981;
+      --c-warning:  #f59e0b;
+      --c-danger:   #f43f5e;
+
+      --font-sans:  'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+
+      --radius-sm:  6px;
+      --radius-md:  10px;
+      --radius-lg:  16px;
+      --radius-xl:  24px;
+
+      --shadow-glow: 0 0 40px rgba(59,130,246,0.15);
+      --shadow-card: 0 4px 24px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.3);
     }
-    body {
-      font-family: var(--dr-font-family);
-      font-size: var(--dr-font-size-base);
-      background: #f8fafc;
-      color: #0f172a;
-      line-height: 1.5;
+
+    html, body {
+      height: 100%;
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
-    @keyframes dr-shimmer {
-      0% { background-position: 200% 0; }
+
+    /* ── Aurora background ─────────────────────────────────────────── */
+    #aurora {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      transition: opacity 1.2s ease;
+      background:
+        radial-gradient(ellipse 90% 60% at 10% 40%,
+          hsl(var(--emotion-hue) var(--emotion-sat) 18% / 0.35) 0%, transparent 65%),
+        radial-gradient(ellipse 70% 50% at 85% 15%,
+          hsl(calc(var(--emotion-hue) + 55) var(--emotion-sat) 14% / 0.28) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 70% at 50% 90%,
+          hsl(calc(var(--emotion-hue) - 25) var(--emotion-sat) 12% / 0.22) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 40% at 70% 55%,
+          hsl(calc(var(--emotion-hue) + 30) 60% 20% / 0.12) 0%, transparent 50%);
+      transition: background var(--emotion-anim) ease, filter var(--emotion-anim) ease;
+      filter: brightness(var(--emotion-brightness));
+      animation: aurora-breathe 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes aurora-breathe {
+      0%   { transform: scale(1)    rotate(0deg);   opacity: 0.9; }
+      33%  { transform: scale(1.04) rotate(0.5deg); opacity: 1;   }
+      66%  { transform: scale(0.98) rotate(-0.3deg);opacity: 0.85;}
+      100% { transform: scale(1.02) rotate(0.2deg); opacity: 0.95;}
+    }
+
+    /* ── Grid overlay ──────────────────────────────────────────────── */
+    #grid-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+    }
+
+    /* ── Particle canvas ───────────────────────────────────────────── */
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ── App root ──────────────────────────────────────────────────── */
+    #app {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+    }
+
+    /* ── Glass card ────────────────────────────────────────────────── */
+    .glass {
+      background: var(--c-surface);
+      backdrop-filter: blur(var(--emotion-blur)) saturate(180%);
+      -webkit-backdrop-filter: blur(var(--emotion-blur)) saturate(180%);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      transition:
+        transform var(--emotion-anim) cubic-bezier(0.34,1.56,0.64,1),
+        box-shadow var(--emotion-anim) ease,
+        border-color var(--emotion-anim) ease;
+    }
+
+    .glass:hover {
+      border-color: rgba(255,255,255,0.14);
+      box-shadow: var(--shadow-card), var(--shadow-glow);
+      transform: translateY(-2px) scale(var(--emotion-scale));
+    }
+
+    /* ── Code block ────────────────────────────────────────────────── */
+    .code-block {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      line-height: 1.7;
+      color: #94a3b8;
+      overflow-x: auto;
+      white-space: pre;
+      transition: all var(--emotion-anim) ease;
+    }
+
+    .code-block .kw  { color: #c084fc; }
+    .code-block .str { color: #86efac; }
+    .code-block .fn  { color: #60a5fa; }
+    .code-block .cmt { color: #475569; font-style: italic; }
+    .code-block .num { color: #fb923c; }
+
+    /* ── Buttons ───────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 20px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font-sans);
+      font-size: .875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition:
+        transform 120ms cubic-bezier(0.34,1.56,0.64,1),
+        opacity 150ms ease,
+        box-shadow 150ms ease;
+      user-select: none;
+    }
+
+    .btn:active { transform: scale(0.95) !important; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(59,130,246,0.3);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 30px rgba(59,130,246,0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.06);
+      color: var(--c-text);
+      border: 1px solid var(--c-border);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+
+    .btn-danger {
+      background: rgba(244,63,94,0.15);
+      color: #f43f5e;
+      border: 1px solid rgba(244,63,94,0.3);
+    }
+
+    /* ── Badge ─────────────────────────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      transition: all var(--emotion-anim) ease;
+    }
+
+    .badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: pulse-dot 2s ease infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.75); }
+    }
+
+    /* ── Glow text ─────────────────────────────────────────────────── */
+    .glow {
+      text-shadow:
+        0 0 20px hsl(var(--emotion-hue) 80% 60% / 0.6),
+        0 0 40px hsl(var(--emotion-hue) 80% 60% / 0.3);
+      transition: text-shadow var(--emotion-anim) ease;
+    }
+
+    /* ── Number counter animation ──────────────────────────────────── */
+    @keyframes num-pop {
+      0%   { transform: scale(1.4); color: #60a5fa; }
+      100% { transform: scale(1);   color: inherit; }
+    }
+    .num-pop { animation: num-pop 400ms cubic-bezier(0.34,1.56,0.64,1) forwards; }
+
+    /* ── Tab slide ─────────────────────────────────────────────────── */
+    @keyframes tab-in {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+    .tab-enter { animation: tab-in 360ms cubic-bezier(0.34,1.56,0.64,1) forwards; }
+
+    /* ── Shimmer skeleton ──────────────────────────────────────────── */
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
       100% { background-position: -200% 0; }
     }
-    @keyframes dr-pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: .85; transform: scale(1.02); }
+
+    /* ── Celebrate burst ───────────────────────────────────────────── */
+    @keyframes celebrate-scale {
+      0%   { transform: scale(1)    rotate(0deg); }
+      20%  { transform: scale(1.12) rotate(-2deg); }
+      40%  { transform: scale(1.08) rotate(2deg); }
+      60%  { transform: scale(1.04) rotate(-1deg); }
+      100% { transform: scale(1)    rotate(0deg); }
     }
-    @keyframes dr-celebrate {
-      0% { transform: scale(1) rotate(0deg); }
-      25% { transform: scale(1.15) rotate(-3deg); }
-      50% { transform: scale(1.1) rotate(3deg); }
-      75% { transform: scale(1.05) rotate(-1deg); }
-      100% { transform: scale(1) rotate(0deg); }
+
+    /* ── Scrollbar ─────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+    /* ── Selection ─────────────────────────────────────────────────── */
+    ::selection { background: rgba(59,130,246,0.3); color: #fff; }
+
+    /* ── Input ─────────────────────────────────────────────────────── */
+    .dr-input {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-md);
+      color: var(--c-text);
+      font-family: var(--font-sans);
+      font-size: .875rem;
+      outline: none;
+      transition: border-color 200ms, box-shadow 200ms;
+      box-sizing: border-box;
     }
-    .dr-emotion-celebrating { animation: dr-celebrate 0.6s ease; }
-    .dr-emotion-frustrated { filter: contrast(calc(1 + var(--dr-contrast-boost) * 0.1)); }
-    .dr-emotion-confused { font-size: calc(1rem * var(--dr-font-scale)); }
-    #app { min-height: 100vh; }
+    .dr-input:focus {
+      border-color: var(--c-primary);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+
+    /* ── Terminal / output ─────────────────────────────────────────── */
+    .terminal {
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      line-height: 1.8;
+      color: #94a3b8;
+      overflow-y: auto;
+    }
+
+    .terminal .log-ok   { color: #10b981; }
+    .terminal .log-warn { color: #f59e0b; }
+    .terminal .log-err  { color: #f43f5e; }
   </style>
 </head>
 <body>
+  <div id="aurora"></div>
+  <div id="grid-overlay"></div>
+  <canvas id="particles"></canvas>
   <div id="app"></div>
   <script type="module" src="/src/main.ts"></script>
 </body>
