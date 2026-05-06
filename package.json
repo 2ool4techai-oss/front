@@ -4,8 +4,10 @@
   "private": true,
   "description": "DRISHTI — AI-native frontend runtime. Sees. Feels. Heals. Protects.",
   "scripts": {
-    "build": "pnpm -r build",
-    "dev": "pnpm --filter demo dev",
+    "setup": "pnpm install && pnpm build:packages",
+    "build:packages": "pnpm --filter @drishti/runtime exec tsc -p tsconfig.json && pnpm --filter @drishti/compiler exec tsc -p tsconfig.json && pnpm --filter @drishti/components exec tsc -p tsconfig.json",
+    "build": "pnpm build:packages && pnpm --filter drishti-demo exec vite build",
+    "dev": "pnpm --filter drishti-demo exec vite",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
     "lint": "pnpm -r lint"
