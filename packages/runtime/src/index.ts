@@ -2,8 +2,12 @@
 export { signal, computed, effect, batch, untrack, createStore, label } from './signal.js';
 
 // ── Dev / SSR mode (internal — prefixed with _) ────────────────────────
-export { _enableDevMode, _getDevSignals, _totalEffectRuns, _setSSRMode } from './signal.js';
+export { _enableDevMode, _getDevSignals, _totalEffectRuns, _setSSRMode, _setSignalWriteHook } from './signal.js';
 export type { _DevSignalEntry } from './signal.js';
+
+// ── Time Travel ────────────────────────────────────────────────────────
+export { enableTimeTravel, _ttState } from './timetravel.js';
+export type { TimeTravelHandle, TimeTravelEntry, TimeTravelOptions } from './timetravel.js';
 
 // ── Animation ──────────────────────────────────────────────────────────
 export { spring, tween, stagger, interpolate, Easing } from './spring.js';

@@ -1,8 +1,9 @@
 import { _enableDevMode } from '@drishti/runtime';
 import { createPanel } from './panel.js';
 import type { DevToolsOptions, DevToolsHandle } from './panel.js';
+import type { TimeTravelHandle } from '@drishti/runtime';
 
-export type { DevToolsOptions, DevToolsHandle };
+export type { DevToolsOptions, DevToolsHandle, TimeTravelHandle };
 export { createPanel };
 
 // ── installDevtools ────────────────────────────────────────────────────

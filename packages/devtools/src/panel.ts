@@ -1,10 +1,11 @@
 import { _getDevSignals, _totalEffectRuns } from '@drishti/runtime';
-import type { EmotionProcessor, Cache, Router } from '@drishti/runtime';
+import type { EmotionProcessor, Cache, Router, TimeTravelHandle } from '@drishti/runtime';
 
 export interface DevToolsOptions {
-  emotion?: EmotionProcessor;
-  cache?:   Cache;
-  router?:  Router;
+  emotion?:    EmotionProcessor;
+  cache?:      Cache;
+  router?:     Router;
+  timeTravel?: TimeTravelHandle;
   shortcut?: string; // default 'ctrl+shift+d'
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
 }
@@ -221,6 +222,48 @@ const CSS = `
   0%,100% { opacity: 1; }
   50% { opacity: .4; }
 }
+.dr-dt-tt-controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.dr-dt-tt-btn {
+  padding: 4px 10px;
+  background: var(--dt-bg2);
+  border: 1px solid var(--dt-border);
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: inherit;
+}
+.dr-dt-tt-btn:hover { background: var(--dt-bg3); }
+.dr-dt-tt-btn:disabled { opacity: .4; cursor: default; }
+.dr-dt-tt-scrubber {
+  flex: 1;
+  accent-color: var(--dt-accent);
+  cursor: pointer;
+}
+.dr-dt-tt-entry {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr 1fr;
+  gap: 6px;
+  align-items: center;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  margin-bottom: 2px;
+  cursor: pointer;
+}
+.dr-dt-tt-entry:hover { background: var(--dt-bg2); }
+.dr-dt-tt-entry.active { background: #1e3a5f; border-left: 2px solid var(--dt-accent); }
+.dr-dt-tt-entry-idx { color: var(--dt-muted); text-align: right; }
+.dr-dt-tt-entry-label { color: var(--dt-accent); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dr-dt-tt-entry-prev { color: var(--dt-red); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dr-dt-tt-entry-next { color: var(--dt-green); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dr-dt-tt-badge-rec { display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--dt-red);margin-right:4px; animation: dr-dt-pulse .8s infinite; }
+.dr-dt-tt-badge-paused { display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--dt-muted);margin-right:4px; }
 `;
 
 // ── Emotion colors ─────────────────────────────────────────────────────
@@ -272,10 +315,11 @@ export function createPanel(opts: DevToolsOptions): DevToolsHandle {
   // Tabs
   const tabBar = el('div', 'dr-dt-tabs');
   const TABS = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'signals',  label: 'Signals'  },
-    { id: 'emotion',  label: 'Emotion'  },
-    { id: 'data',     label: 'Data'     },
+    { id: 'overview',    label: 'Overview'      },
+    { id: 'signals',     label: 'Signals'       },
+    { id: 'emotion',     label: 'Emotion'       },
+    { id: 'data',        label: 'Data'          },
+    { id: 'timetravel',  label: '⏱ Time Travel' },
   ];
   const tabEls: Record<string, HTMLElement> = {};
   for (const t of TABS) {
@@ -332,10 +376,11 @@ export function createPanel(opts: DevToolsOptions): DevToolsHandle {
 
   const renderTab = () => {
     body.innerHTML = '';
-    if (activeTab === 'overview') renderOverview();
-    else if (activeTab === 'signals') renderSignals();
-    else if (activeTab === 'emotion') renderEmotion();
-    else if (activeTab === 'data')    renderData();
+    if (activeTab === 'overview')       renderOverview();
+    else if (activeTab === 'signals')   renderSignals();
+    else if (activeTab === 'emotion')   renderEmotion();
+    else if (activeTab === 'data')      renderData();
+    else if (activeTab === 'timetravel') renderTimeTravel();
   };
 
   // ── Overview tab ──────────────────────────────────────────────────
@@ -496,6 +541,115 @@ export function createPanel(opts: DevToolsOptions): DevToolsHandle {
     refetchAllBtn.addEventListener('click', () => opts.cache?.invalidateAll());
     sizeRow.appendChild(refetchAllBtn);
     body.appendChild(sizeRow);
+  };
+
+  // ── Time Travel tab ───────────────────────────────────────────────
+  const renderTimeTravel = () => {
+    if (!opts.timeTravel) {
+      const empty = el('div', '');
+      empty.style.cssText = 'color:var(--dt-muted);text-align:center;padding:20px';
+      empty.textContent = 'Pass timeTravel: TimeTravelHandle to installDevtools()';
+      body.appendChild(empty);
+      return;
+    }
+
+    const tt = opts.timeTravel;
+    const history = tt.history;
+    const cursor  = tt.cursor;
+
+    // Controls row
+    const controls = el('div', 'dr-dt-tt-controls');
+
+    const undoBtn = document.createElement('button');
+    undoBtn.className = 'dr-dt-tt-btn';
+    undoBtn.textContent = '← Undo';
+    undoBtn.disabled = !tt.canUndo;
+    undoBtn.addEventListener('click', () => { tt.undo(); renderTab(); });
+
+    const redoBtn = document.createElement('button');
+    redoBtn.className = 'dr-dt-tt-btn';
+    redoBtn.textContent = '→ Redo';
+    redoBtn.disabled = !tt.canRedo;
+    redoBtn.addEventListener('click', () => { tt.redo(); renderTab(); });
+
+    const pauseBtn = document.createElement('button');
+    pauseBtn.className = 'dr-dt-tt-btn';
+    pauseBtn.textContent = tt.recording ? '⏸ Pause' : '▶ Resume';
+    pauseBtn.addEventListener('click', () => {
+      if (tt.recording) { tt.pause(); } else { tt.resume(); }
+      renderTab();
+    });
+
+    const clearBtn = document.createElement('button');
+    clearBtn.className = 'dr-dt-tt-btn';
+    clearBtn.textContent = '🗑 Clear';
+    clearBtn.addEventListener('click', () => { tt.clear(); renderTab(); });
+
+    controls.append(undoBtn, redoBtn, pauseBtn, clearBtn);
+    body.appendChild(controls);
+
+    // Scrubber
+    if (history.length > 0) {
+      const scrubRow = el('div', 'dr-dt-tt-controls');
+      const scrubber = document.createElement('input');
+      scrubber.type = 'range';
+      scrubber.className = 'dr-dt-tt-scrubber';
+      scrubber.min = '0';
+      scrubber.max = String(history.length - 1);
+      scrubber.value = String(cursor);
+      scrubber.addEventListener('change', (e) => {
+        tt.goto(Number((e.target as HTMLInputElement).value));
+        renderTab();
+      });
+      scrubRow.appendChild(scrubber);
+      body.appendChild(scrubRow);
+    }
+
+    // Status line
+    const statusRow = el('div', '');
+    statusRow.style.cssText = 'display:flex;align-items:center;margin-bottom:8px;font-size:10px;color:var(--dt-muted)';
+    const badge = el('span', tt.recording ? 'dr-dt-tt-badge-rec' : 'dr-dt-tt-badge-paused');
+    const statusText = document.createElement('span');
+    statusText.textContent = `${tt.recording ? 'Recording' : 'Paused'} — ${cursor + 1} / ${history.length} changes`;
+    statusRow.append(badge, statusText);
+    body.appendChild(statusRow);
+
+    // History list header
+    if (history.length > 0) {
+      const hdr = el('div', 'dr-dt-tt-entry');
+      hdr.style.cssText = 'color:var(--dt-muted);font-size:9px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;cursor:default';
+      hdr.innerHTML = '<span>#</span><span>Signal</span><span>Prev</span><span>Next</span>';
+      body.appendChild(hdr);
+
+      // Show most recent first, up to last 50 entries
+      const visible = history.slice(-50);
+      for (let vi = visible.length - 1; vi >= 0; vi--) {
+        const absoluteIdx = history.length - visible.length + vi;
+        const entry = visible[vi];
+        if (!entry) continue;
+
+        const row = el('div', `dr-dt-tt-entry${absoluteIdx === cursor ? ' active' : ''}`);
+
+        const idxEl = el('span', 'dr-dt-tt-entry-idx');
+        idxEl.textContent = String(absoluteIdx);
+
+        const labelEl = el('span', 'dr-dt-tt-entry-label');
+        labelEl.textContent = entry.label;
+        labelEl.title = entry.label;
+
+        const prevEl = el('span', 'dr-dt-tt-entry-prev');
+        try { prevEl.textContent = JSON.stringify(entry.prev, null, 0).slice(0, 30); }
+        catch { prevEl.textContent = '[?]'; }
+
+        const nextEl = el('span', 'dr-dt-tt-entry-next');
+        try { nextEl.textContent = JSON.stringify(entry.next, null, 0).slice(0, 30); }
+        catch { nextEl.textContent = '[?]'; }
+
+        row.append(idxEl, labelEl, prevEl, nextEl);
+        row.addEventListener('click', () => { tt.goto(absoluteIdx); renderTab(); });
+        body.appendChild(row);
+      }
+    }
   };
 
   // ── Helpers ───────────────────────────────────────────────────────

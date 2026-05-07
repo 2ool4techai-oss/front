@@ -20,6 +20,11 @@ export let _totalEffectRuns = 0;
 
 export function _enableDevMode(): void { _devMode = true; }
 
+// ── Signal write hook (for time-travel, independent of dev mode) ───────
+type SignalWriteHook = (sig: Signal<unknown>, label: string, prev: unknown, next: unknown) => void;
+let _writeHook: SignalWriteHook | null = null;
+export function _setSignalWriteHook(fn: SignalWriteHook | null): void { _writeHook = fn; }
+
 // ── SSR mode — effects run once, no subscriptions ──────────────────────
 let _ssrMode = false;
 export function _setSSRMode(v: boolean): void { _ssrMode = v; }
@@ -83,7 +88,12 @@ export function signal<T>(initial: T): Signal<T> {
       peek: (): T => value,
       set: (next: T): void => {
         if (Object.is(value, next)) return;
+        const prev = value;
         value = next;
+        if (_writeHook) {
+          const entry = _devSignalMap.get(sig as object);
+          _writeHook(sig as unknown as Signal<unknown>, entry?.label ?? `sig_${Math.random().toString(36).slice(2, 6)}`, prev, next);
+        }
         notify();
       },
       subscribe: (fn: SignalSubscriber<T>): Unsubscribe => {
