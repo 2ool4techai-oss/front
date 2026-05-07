@@ -60,6 +60,10 @@ export { drishti, createSurface, createUnit } from './runtime.js';
 export { createCollabSession } from './collaborative.js';
 export type { CollabHandle, CollaborativeSignal, CollabOptions, CollabOperation, PresenceState, VectorClock, CollabClientId } from './collaborative.js';
 
+// ── Islands ────────────────────────────────────────────────────────────
+export { defineIsland, hydrateIslands, getIslandRegistry, generateIslandBootstrap } from './islands.js';
+export type { IslandOptions, IslandDefinition, IslandManifest } from './islands.js';
+
 // ── Types ──────────────────────────────────────────────────────────────
 export type {
   Signal,

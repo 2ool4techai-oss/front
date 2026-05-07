@@ -110,6 +110,10 @@ export function hydrate(
   // If SSR content is present, signals are now wired and will patch on change.
 }
 
+// ── Islands ────────────────────────────────────────────────────────────
+export { collectIslands, renderIslandPage } from './islands.js';
+export type { ServerIslandInfo } from './islands.js';
+
 // ── useSSRState ────────────────────────────────────────────────────────
 // In a component, use this to read pre-populated server state on the client.
 //
