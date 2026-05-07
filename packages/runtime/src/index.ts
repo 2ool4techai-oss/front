@@ -111,3 +111,7 @@ export { story, getStories, clearStories } from './story.js';
 export { launchPlayground } from './playground.js';
 export type { StoryDefinition, StoryVariant, StoryHandle } from './story.js';
 export type { PlaygroundOptions } from './playground.js';
+
+// ── Adaptive signals ───────────────────────────────────────────────────
+export { createAdaptSignal, useAdaptSignal } from './adapt.js';
+export type { AdaptSignal, AdaptOptions, AdaptObservation } from './adapt.js';
