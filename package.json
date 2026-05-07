@@ -5,7 +5,7 @@
   "description": "DRISHTI — AI-native frontend runtime. Sees. Feels. Heals. Protects.",
   "scripts": {
     "setup": "pnpm install && pnpm build:packages",
-    "build:packages": "pnpm --filter @drishti/runtime exec tsc -p tsconfig.json && pnpm --filter @drishti/compiler exec tsc -p tsconfig.json && pnpm --filter @drishti/components exec tsc -p tsconfig.json && pnpm --filter @drishti/testing exec tsc -p tsconfig.json",
+    "build:packages": "pnpm --filter @drishti/runtime exec tsc -p tsconfig.json && pnpm --filter @drishti/compiler exec tsc -p tsconfig.json && pnpm --filter @drishti/components exec tsc -p tsconfig.json && pnpm --filter @drishti/testing exec tsc -p tsconfig.json && pnpm --filter @drishti/devtools exec tsc -p tsconfig.json",
     "build": "pnpm build:packages && pnpm --filter drishti-demo exec vite build",
     "dev": "pnpm --filter drishti-demo exec vite",
     "test": "pnpm -r test",

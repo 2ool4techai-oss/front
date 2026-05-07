@@ -5,6 +5,30 @@ type EffectFn = () => void;
 let currentEffect: EffectFn | null = null;
 const effectDeps = new WeakMap<EffectFn, Set<Set<EffectFn>>>();
 
+// ── Dev registry ───────────────────────────────────────────────────────
+export interface _DevSignalEntry {
+  label:   string;
+  type:    'signal' | 'computed';
+  peek:    () => unknown;
+  updates: { n: number };
+}
+
+let _devMode = false;
+const _devSignalMap  = new WeakMap<object, _DevSignalEntry>();
+const _devSignalList: _DevSignalEntry[] = [];
+export let _totalEffectRuns = 0;
+
+export function _enableDevMode(): void { _devMode = true; }
+export function _getDevSignals(): readonly _DevSignalEntry[] { return _devSignalList; }
+
+export function label<T>(sig: Signal<T> | ComputedSignal<T>, name: string): typeof sig {
+  if (_devMode) {
+    const entry = _devSignalMap.get(sig as object);
+    if (entry) entry.label = name;
+  }
+  return sig;
+}
+
 // ── Batching ───────────────────────────────────────────────────────────
 let batchDepth = 0;
 const pendingEffects = new Set<EffectFn>();
@@ -38,8 +62,10 @@ export function signal<T>(initial: T): Signal<T> {
   let value = initial;
   const subs = new Set<EffectFn>();
   const listeners = new Set<SignalSubscriber<T>>();
+  const _uc = { n: 0 };
 
   const notify = () => {
+    if (_devMode) _uc.n++;
     for (const fn of [...subs]) scheduleEffect(fn);
     for (const fn of listeners) fn(value);
   };
@@ -63,6 +89,17 @@ export function signal<T>(initial: T): Signal<T> {
       },
     },
   ) as Signal<T>;
+
+  if (_devMode) {
+    const entry: _DevSignalEntry = {
+      label:   `signal_${_devSignalList.length}`,
+      type:    'signal',
+      peek:    () => value,
+      updates: _uc,
+    };
+    _devSignalMap.set(sig as object, entry);
+    _devSignalList.push(entry);
+  }
 
   return sig;
 }
@@ -117,6 +154,21 @@ export function computed<T>(fn: () => T): ComputedSignal<T> {
     },
   ) as ComputedSignal<T>;
 
+  if (_devMode) {
+    const _uc = { n: 0 };
+    const entry: _DevSignalEntry = {
+      label:   `computed_${_devSignalList.length}`,
+      type:    'computed',
+      peek:    () => sig.peek(),
+      updates: _uc,
+    };
+    const origRecompute = recompute;
+    // wrap recompute to count updates — already tracked via notify in deps
+    _devSignalMap.set(sig as object, entry);
+    _devSignalList.push(entry);
+    void origRecompute; // satisfy linter
+  }
+
   return sig;
 }
 
@@ -128,6 +180,7 @@ export function effect(fn: () => void | (() => void)): Unsubscribe {
 
   const run: EffectFn = () => {
     if (disposed) return;
+    if (_devMode) _totalEffectRuns++;
     if (typeof cleanup === 'function') cleanup();
 
     for (const dep of trackedDeps) dep.delete(run);

@@ -1,5 +1,9 @@
 // ── Signals ────────────────────────────────────────────────────────────
-export { signal, computed, effect, batch, untrack, createStore } from './signal.js';
+export { signal, computed, effect, batch, untrack, createStore, label } from './signal.js';
+
+// ── Dev mode (internal — prefixed with _) ──────────────────────────────
+export { _enableDevMode, _getDevSignals, _totalEffectRuns } from './signal.js';
+export type { _DevSignalEntry } from './signal.js';
 
 // ── Animation ──────────────────────────────────────────────────────────
 export { spring, tween, stagger, interpolate, Easing } from './spring.js';
@@ -29,6 +33,10 @@ export type { FieldSchema, FieldState, FormState, Form, Validator } from './form
 // ── Performance ────────────────────────────────────────────────────────
 export { memo, debounce, throttle, distinct, fromEvent, virtual, lazy, once, when } from './perf.js';
 export type { VirtualListConfig, VirtualList } from './perf.js';
+
+// ── Async data ─────────────────────────────────────────────────────────
+export { createResource, createMutation, createCache } from './resource.js';
+export type { Resource, ResourceOptions, ResourceStatus, Mutation, MutationOptions, MutationStatus, Cache, CacheOptions, CacheGetOptions } from './resource.js';
 
 // ── Router ─────────────────────────────────────────────────────────────
 export { createRouter, useRouter, setActiveRouter, Router } from './router.js';
