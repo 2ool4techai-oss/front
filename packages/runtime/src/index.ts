@@ -56,6 +56,10 @@ export { createRouter, useRouter, setActiveRouter, Router } from './router.js';
 // ── Runtime surface/unit ───────────────────────────────────────────────
 export { drishti, createSurface, createUnit } from './runtime.js';
 
+// ── Collaborative ──────────────────────────────────────────────────────
+export { createCollabSession } from './collaborative.js';
+export type { CollabHandle, CollaborativeSignal, CollabOptions, CollabOperation, PresenceState, VectorClock, CollabClientId } from './collaborative.js';
+
 // ── Types ──────────────────────────────────────────────────────────────
 export type {
   Signal,
