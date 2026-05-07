@@ -105,3 +105,9 @@ export type { EmotionSnapshot } from './emotion.js';
 // ── Intent Engine ──────────────────────────────────────────────────────
 export { createIntentEngine, useIntent } from './intent.js';
 export type { IntentEngine, IntentEngineOptions, UserIntent, IntentSignals } from './intent.js';
+
+// ── Playground / Stories ───────────────────────────────────────────────
+export { story, getStories, clearStories } from './story.js';
+export { launchPlayground } from './playground.js';
+export type { StoryDefinition, StoryVariant, StoryHandle } from './story.js';
+export type { PlaygroundOptions } from './playground.js';
