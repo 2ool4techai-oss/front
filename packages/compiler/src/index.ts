@@ -16,8 +16,9 @@ export interface CompileResult {
 }
 
 export interface CompileOptions {
-  runtime?: string;
+  runtime?:  string;
   filename?: string;
+  target?:   'js' | 'ts';
 }
 
 export function compile(source: string, opts: CompileOptions = {}): CompileResult {
@@ -28,7 +29,10 @@ export function compile(source: string, opts: CompileOptions = {}): CompileResul
     const tokens = tokenize(source);
     const parser = new Parser(tokens);
     const ast = parser.parseSurface();
-    const code = generateSurface(ast, opts.runtime ? { runtime: opts.runtime } : {});
+    const code = generateSurface(ast, {
+      ...(opts.runtime ? { runtime: opts.runtime } : {}),
+      ...(opts.target  ? { target: opts.target }   : {}),
+    });
 
     if (!ast.intent) {
       warnings.push(`Surface '${ast.name}' has no intent declaration — consider adding one for AI optimization`);

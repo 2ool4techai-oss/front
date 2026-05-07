@@ -47,7 +47,23 @@ importers:
         specifier: ^5.4.5
         version: 5.9.3
 
+  packages/create-app:
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+
   packages/runtime:
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+
+  packages/testing:
+    dependencies:
+      '@drishti/runtime':
+        specifier: workspace:*
+        version: link:../runtime
     devDependencies:
       typescript:
         specifier: ^5.4.5

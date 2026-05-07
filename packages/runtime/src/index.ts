@@ -22,6 +22,14 @@ export { loadGenome, loadGenomePreset, useGenome, usePalette, generatePalette, a
 // ── Renderer ───────────────────────────────────────────────────────────
 export { h, text, show, each, portal, mount, mountApp } from './renderer.js';
 
+// ── Forms ──────────────────────────────────────────────────────────────
+export { createForm } from './form.js';
+export type { FieldSchema, FieldState, FormState, Form, Validator } from './form.js';
+
+// ── Performance ────────────────────────────────────────────────────────
+export { memo, debounce, throttle, distinct, fromEvent, virtual, lazy, once, when } from './perf.js';
+export type { VirtualListConfig, VirtualList } from './perf.js';
+
 // ── Router ─────────────────────────────────────────────────────────────
 export { createRouter, useRouter, setActiveRouter, Router } from './router.js';
 

@@ -27,12 +27,25 @@ export type { DropdownProps, DropdownOption } from './Dropdown.js';
 export { Checkbox, Switch, RadioGroup } from './Checkbox.js';
 export type { CheckboxProps, SwitchProps, RadioGroupProps } from './Checkbox.js';
 
+export { Slider, Pagination, Breadcrumb } from './Pagination.js';
+export type { SliderProps, PaginationProps, BreadcrumbProps, BreadcrumbItem } from './Pagination.js';
+
 // ── Layout / Navigation ────────────────────────────────────────────────
 export { Tabs } from './Tabs.js';
 export type { TabsProps, TabItem, TabsVariant } from './Tabs.js';
 
 export { Accordion } from './Accordion.js';
 export type { AccordionProps, AccordionItem } from './Accordion.js';
+
+// ── Feedback ──────────────────────────────────────────────────────────
+export { Alert } from './Alert.js';
+export type { AlertProps, AlertVariant } from './Alert.js';
+
+export { Progress, CircularProgress } from './Progress.js';
+export type { ProgressProps, CircularProgressProps, ProgressVariant, ProgressSize } from './Progress.js';
+
+export { Skeleton, SkeletonCard } from './Skeleton.js';
+export type { SkeletonProps, SkeletonVariant } from './Skeleton.js';
 
 // ── Overlay ────────────────────────────────────────────────────────────
 export { toast } from './Toast.js';
