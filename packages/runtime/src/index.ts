@@ -115,3 +115,7 @@ export type { PlaygroundOptions } from './playground.js';
 // ── Adaptive signals ───────────────────────────────────────────────────
 export { createAdaptSignal, useAdaptSignal } from './adapt.js';
 export type { AdaptSignal, AdaptOptions, AdaptObservation } from './adapt.js';
+
+// ── Resilience ────────────────────────────────────────────────────────
+export { circuit, withFallback, retry, timeout } from './resilience.js';
+export type { CircuitHandle, CircuitOptions, ResilienceState, RetryPolicy, BulkheadOptions } from './resilience.js';
