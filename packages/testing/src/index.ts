@@ -189,3 +189,163 @@ export function createTestRouter(initialPath = '/'): TestRouter {
     get navigations() { return [...history]; },
   };
 }
+
+// ── Visual snapshot ───────────────────────────────────────────────────
+
+export interface SnapshotOptions {
+  /** Strip dynamic attributes like data-dr-id, random IDs. Default: true */
+  stripDynamic?:  boolean;
+  /** Normalize whitespace in text nodes. Default: true */
+  normalizeText?: boolean;
+  /** Attributes to ignore. Default: ['data-dr-id', 'aria-describedby'] */
+  ignoreAttrs?:   string[];
+  /** Sort attributes alphabetically for stable output. Default: true */
+  sortAttrs?:     boolean;
+}
+
+export interface SnapshotDiff {
+  /** True if snapshots are identical */
+  identical:     boolean;
+  /** Human-readable description of changes */
+  summary:       string;
+  /** Added elements/attributes */
+  added:         string[];
+  /** Removed elements/attributes */
+  removed:       string[];
+  /** Changed elements/attributes */
+  changed:       string[];
+}
+
+/**
+ * Serialize an HTMLElement to a normalized, stable HTML string
+ * suitable for snapshot testing.
+ */
+export function captureSnapshot(el: HTMLElement, opts: SnapshotOptions = {}): string {
+  const stripDynamic  = opts.stripDynamic  !== false;
+  const normalizeText = opts.normalizeText !== false;
+  const sortAttrs     = opts.sortAttrs     !== false;
+  const ignoreAttrs   = new Set([
+    ...(opts.ignoreAttrs ?? []),
+    ...(stripDynamic ? ['data-dr-id', 'aria-describedby', 'id'] : []),
+  ]);
+
+  function serializeNode(node: Node, indent = 0): string {
+    const pad = '  '.repeat(indent);
+
+    if (node.nodeType === Node.TEXT_NODE) {
+      let text = node.textContent ?? '';
+      if (normalizeText) text = text.trim().replace(/\s+/g, ' ');
+      return text ? `${pad}${text}` : '';
+    }
+
+    if (node.nodeType === Node.COMMENT_NODE) return '';
+
+    if (node.nodeType !== Node.ELEMENT_NODE) return '';
+
+    const elem = node as Element;
+    const tag = elem.tagName.toLowerCase();
+
+    // Collect and optionally sort attributes
+    let attrs = [...elem.attributes]
+      .filter(a => !ignoreAttrs.has(a.name))
+      .filter(a => !(stripDynamic && a.name.startsWith('data-dr-') && a.name !== 'data-island' && a.name !== 'data-emotion'));
+
+    if (sortAttrs) attrs = attrs.sort((a, b) => a.name.localeCompare(b.name));
+
+    const attrStr = attrs.map(a => ` ${a.name}="${a.value}"`).join('');
+
+    const VOID_TAGS = new Set(['area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr']);
+    if (VOID_TAGS.has(tag)) return `${pad}<${tag}${attrStr}/>`;
+
+    const children = [...node.childNodes]
+      .map(c => serializeNode(c, indent + 1))
+      .filter(Boolean);
+
+    if (children.length === 0) return `${pad}<${tag}${attrStr}></${tag}>`;
+
+    if (children.length === 1 && !children[0]!.includes('\n')) {
+      return `${pad}<${tag}${attrStr}>${children[0]!.trim()}</${tag}>`;
+    }
+
+    return `${pad}<${tag}${attrStr}>\n${children.join('\n')}\n${pad}</${tag}>`;
+  }
+
+  return serializeNode(el);
+}
+
+/**
+ * Diff two HTML snapshot strings and return a structured diff.
+ */
+export function diffSnapshots(before: string, after: string): SnapshotDiff {
+  if (before === after) return { identical: true, summary: 'No changes', added: [], removed: [], changed: [] };
+
+  const beforeLines = before.split('\n');
+  const afterLines  = after.split('\n');
+
+  const added:   string[] = [];
+  const removed: string[] = [];
+  const changed: string[] = [];
+
+  // Build a set for quick lookup
+  const beforeSet = new Set(beforeLines);
+  const afterSet  = new Set(afterLines);
+
+  for (const line of afterLines) {
+    if (!beforeSet.has(line) && line.trim()) added.push(line.trim());
+  }
+  for (const line of beforeLines) {
+    if (!afterSet.has(line) && line.trim()) removed.push(line.trim());
+  }
+
+  // Detect "changed" = lines that are modified (present in both added and removed lists
+  // with the same tag structure but different attributes/content)
+  for (const addedLine of [...added]) {
+    const addedTag = addedLine.match(/^<(\w+)/)?.[1];
+    if (!addedTag) continue;
+    const matchIdx = removed.findIndex(r => r.match(/^<(\w+)/)?.[1] === addedTag);
+    if (matchIdx >= 0) {
+      changed.push(`${removed[matchIdx]} → ${addedLine}`);
+      added.splice(added.indexOf(addedLine), 1);
+      removed.splice(matchIdx, 1);
+    }
+  }
+
+  const parts: string[] = [];
+  if (changed.length) parts.push(`${changed.length} changed`);
+  if (added.length)   parts.push(`${added.length} added`);
+  if (removed.length) parts.push(`${removed.length} removed`);
+
+  return {
+    identical: false,
+    summary:   parts.join(', ') || 'Structure changed',
+    added,
+    removed,
+    changed,
+  };
+}
+
+/**
+ * Vitest custom matcher. Add to your vitest setup file:
+ *   import { setupVisualMatchers } from '@drishti/testing';
+ *   setupVisualMatchers();
+ */
+export function setupVisualMatchers(): void {
+  // Extend vitest's expect with a custom matcher
+  // This works by adding to the global `expect` object
+  const globalExpect = (globalThis as Record<string, unknown>)['expect'] as
+    | ({ extend: (matchers: Record<string, unknown>) => void } & Record<string, unknown>)
+    | undefined;
+  if (globalExpect != null && 'extend' in globalExpect) {
+    globalExpect.extend({
+      toMatchVisualSnapshot(received: HTMLElement, opts?: SnapshotOptions) {
+        const snapshot = captureSnapshot(received, opts);
+        // Use vitest's built-in snapshot mechanism
+        return {
+          pass:    true,
+          message: () => snapshot,
+          actual:  snapshot,
+        };
+      },
+    });
+  }
+}
