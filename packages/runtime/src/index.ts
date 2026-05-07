@@ -42,6 +42,10 @@ export type { VirtualListConfig, VirtualList } from './perf.js';
 export { createResource, createMutation, createCache } from './resource.js';
 export type { Resource, ResourceOptions, ResourceStatus, Mutation, MutationOptions, MutationStatus, Cache, CacheOptions, CacheGetOptions } from './resource.js';
 
+// ── Query ──────────────────────────────────────────────────────────────
+export { createQuery, createQueryMutation, invalidateQuery, invalidateAllQueries } from './query.js';
+export type { QueryResult, QueryOptions, QueryStatus, MutationResult } from './query.js';
+
 // ── i18n ───────────────────────────────────────────────────────────────
 export { createI18n } from './i18n.js';
 export type { I18nInstance, I18nOptions, Locale, Messages, MessageCatalog } from './i18n.js';
