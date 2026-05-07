@@ -22,6 +22,9 @@ export { loadGenome, loadGenomePreset, useGenome, usePalette, generatePalette, a
 // ── Renderer ───────────────────────────────────────────────────────────
 export { h, text, show, each, portal, mount, mountApp } from './renderer.js';
 
+// ── Router ─────────────────────────────────────────────────────────────
+export { createRouter, useRouter, setActiveRouter, Router } from './router.js';
+
 // ── Runtime surface/unit ───────────────────────────────────────────────
 export { drishti, createSurface, createUnit } from './runtime.js';
 
@@ -54,6 +57,7 @@ export type {
 } from './types.js';
 
 export type { GenomeConfig, ColorPalette } from './genome.js';
+export type { RouteConfig, RouteLocation, RouteParams, RouteQuery, RouteGuard, RouterOptions } from './router.js';
 export type { HealStatus, HealEvent, CircuitBreakerConfig, ErrorBoundaryOptions, ErrorBoundary } from './healing.js';
 export type { ConnectorState, ConnectorStatus } from './integration.js';
 export type { EmotionSnapshot } from './emotion.js';

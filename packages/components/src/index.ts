@@ -1,4 +1,4 @@
-// ── Existing components ────────────────────────────────────────────────
+// ── Original components ────────────────────────────────────────────────
 export { MetricCard } from './MetricCard.js';
 export type { MetricCardProps } from './MetricCard.js';
 
@@ -14,15 +14,36 @@ export type { EmotionBadgeProps } from './EmotionBadge.js';
 export { HealingCard } from './HealingCard.js';
 export type { HealingCardProps } from './HealingCard.js';
 
-// ── New components ─────────────────────────────────────────────────────
+// ── Interactive ────────────────────────────────────────────────────────
 export { Button } from './Button.js';
 export type { ButtonProps, ButtonVariant, ButtonSize } from './Button.js';
 
 export { Input } from './Input.js';
 export type { InputProps, InputType, WrappedInput } from './Input.js';
 
+export { Dropdown } from './Dropdown.js';
+export type { DropdownProps, DropdownOption } from './Dropdown.js';
+
+export { Checkbox, Switch, RadioGroup } from './Checkbox.js';
+export type { CheckboxProps, SwitchProps, RadioGroupProps } from './Checkbox.js';
+
+// ── Layout / Navigation ────────────────────────────────────────────────
+export { Tabs } from './Tabs.js';
+export type { TabsProps, TabItem, TabsVariant } from './Tabs.js';
+
+export { Accordion } from './Accordion.js';
+export type { AccordionProps, AccordionItem } from './Accordion.js';
+
+// ── Overlay ────────────────────────────────────────────────────────────
 export { toast } from './Toast.js';
 export type { ToastOptions, ToastVariant, ToastDismiss } from './Toast.js';
 
 export { Modal } from './Modal.js';
 export type { ModalProps, ModalSize, ModalHandle } from './Modal.js';
+
+export { attachTooltip, withTooltip } from './Tooltip.js';
+export type { TooltipProps, TooltipPlacement } from './Tooltip.js';
+
+// ── Utility ────────────────────────────────────────────────────────────
+export { Spinner, Badge, Avatar, AvatarGroup } from './Spinner.js';
+export type { SpinnerProps, SpinnerSize, SpinnerVariant, BadgeProps, BadgeVariant, AvatarProps, AvatarGroupProps, AvatarSize } from './Spinner.js';
