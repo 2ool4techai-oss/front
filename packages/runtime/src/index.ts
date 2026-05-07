@@ -1,8 +1,8 @@
 // ── Signals ────────────────────────────────────────────────────────────
 export { signal, computed, effect, batch, untrack, createStore, label } from './signal.js';
 
-// ── Dev mode (internal — prefixed with _) ──────────────────────────────
-export { _enableDevMode, _getDevSignals, _totalEffectRuns } from './signal.js';
+// ── Dev / SSR mode (internal — prefixed with _) ────────────────────────
+export { _enableDevMode, _getDevSignals, _totalEffectRuns, _setSSRMode } from './signal.js';
 export type { _DevSignalEntry } from './signal.js';
 
 // ── Animation ──────────────────────────────────────────────────────────
@@ -37,6 +37,14 @@ export type { VirtualListConfig, VirtualList } from './perf.js';
 // ── Async data ─────────────────────────────────────────────────────────
 export { createResource, createMutation, createCache } from './resource.js';
 export type { Resource, ResourceOptions, ResourceStatus, Mutation, MutationOptions, MutationStatus, Cache, CacheOptions, CacheGetOptions } from './resource.js';
+
+// ── i18n ───────────────────────────────────────────────────────────────
+export { createI18n } from './i18n.js';
+export type { I18nInstance, I18nOptions, Locale, Messages, MessageCatalog } from './i18n.js';
+
+// ── Persistence ────────────────────────────────────────────────────────
+export { persistSignal, createPersistedStore } from './persist.js';
+export type { PersistOptions, PersistedSignal, PersistedStore } from './persist.js';
 
 // ── Router ─────────────────────────────────────────────────────────────
 export { createRouter, useRouter, setActiveRouter, Router } from './router.js';

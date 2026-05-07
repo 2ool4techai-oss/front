@@ -1,0 +1,111 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "DRISHTI",
+  "scopeName": "source.drishti",
+  "fileTypes": ["dr"],
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#surface-declaration" },
+    { "include": "#unit-declaration" },
+    { "include": "#keywords" },
+    { "include": "#emotion-state" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#operators" },
+    { "include": "#component-name" },
+    { "include": "#url" },
+    { "include": "#color" },
+    { "include": "#property" }
+  ],
+  "repository": {
+    "comment": {
+      "name": "comment.line.hash.drishti",
+      "match": "#.*$"
+    },
+    "surface-declaration": {
+      "match": "^(surface)(:)\\s+([A-Z][A-Za-z0-9_]*)",
+      "captures": {
+        "1": { "name": "keyword.declaration.surface.drishti" },
+        "2": { "name": "punctuation.separator.drishti" },
+        "3": { "name": "entity.name.class.surface.drishti" }
+      }
+    },
+    "unit-declaration": {
+      "match": "^\\s+(unit)(:)\\s+([A-Z][A-Za-z0-9_]*)",
+      "captures": {
+        "1": { "name": "keyword.declaration.unit.drishti" },
+        "2": { "name": "punctuation.separator.drishti" },
+        "3": { "name": "entity.name.class.unit.drishti" }
+      }
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "match": "\\b(surface|unit)\\b",
+          "name": "keyword.declaration.drishti"
+        },
+        {
+          "match": "^\\s*(intent|secure|layout|genome|on|data|feel|heal|adapt|predict|columns|props)(:)",
+          "captures": {
+            "1": { "name": "keyword.control.directive.drishti" },
+            "2": { "name": "punctuation.separator.drishti" }
+          }
+        },
+        {
+          "match": "\\b(realtime|mesh|retry|fallback|auto|lazy|eager)\\b",
+          "name": "keyword.other.drishti"
+        },
+        {
+          "match": "\\b(when|and|or|not|if|else|for|in|return)\\b",
+          "name": "keyword.control.flow.drishti"
+        },
+        {
+          "match": "\\b(mounted|unmounted|click|change|submit|input|focus|blur|keydown|keyup)\\b",
+          "name": "support.constant.event.drishti"
+        }
+      ]
+    },
+    "emotion-state": {
+      "match": "\\b(calm|engaged|focused|frustrated|confused|bored|celebrating)\\b",
+      "name": "support.constant.emotion.drishti"
+    },
+    "strings": {
+      "name": "string.quoted.double.drishti",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.drishti",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "numbers": {
+      "match": "\\b([0-9]+(\\.[0-9]+)?)\\b",
+      "name": "constant.numeric.drishti"
+    },
+    "operators": {
+      "match": "(>|<|>=|<=|==|!=|=)",
+      "name": "keyword.operator.comparison.drishti"
+    },
+    "component-name": {
+      "match": "\\b[A-Z][A-Za-z0-9_]*\\b",
+      "name": "entity.name.type.component.drishti"
+    },
+    "url": {
+      "match": "(/[A-Za-z0-9_/:.?&=%-]*)",
+      "name": "string.other.url.drishti"
+    },
+    "color": {
+      "match": "(#[0-9A-Fa-f]{3,8})\\b",
+      "name": "constant.other.color.drishti"
+    },
+    "property": {
+      "match": "\\b([a-z][a-zA-Z0-9_]*)\\s*(=)",
+      "captures": {
+        "1": { "name": "variable.other.property.drishti" },
+        "2": { "name": "keyword.operator.assignment.drishti" }
+      }
+    }
+  }
+}

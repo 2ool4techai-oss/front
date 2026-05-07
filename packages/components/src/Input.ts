@@ -23,6 +23,7 @@ export interface InputProps {
   id?:          string;
 }
 
+let _stylesInjected = false;
 injectInputStyles();
 
 export function Input(props: InputProps): HTMLDivElement {
@@ -76,13 +77,19 @@ export function Input(props: InputProps): HTMLDivElement {
   row.appendChild(input);
   wrapper.appendChild(row);
 
-  // ── Hint / Error ───────────────────────────────────────────────────
+  // ── Hint ──────────────────────────────────────────────────────────
   const hintEl = document.createElement('p');
   hintEl.className = 'dr-input__hint';
   hintEl.id = `${id}-hint`;
   hintEl.textContent = props.hint ?? '';
   input.setAttribute('aria-describedby', hintEl.id);
   wrapper.appendChild(hintEl);
+
+  // ── Error ─────────────────────────────────────────────────────────
+  const errEl = document.createElement('p');
+  errEl.className = 'dr-input-error';
+  errEl.textContent = '';
+  wrapper.appendChild(errEl);
 
   // ── Reactive value sync ────────────────────────────────────────────
   effect(() => {
@@ -108,9 +115,13 @@ export function Input(props: InputProps): HTMLDivElement {
     _err.set(err);
     input.setAttribute('aria-invalid', err ? 'true' : 'false');
     wrapper.classList.toggle('dr-input-wrap--error', !!err);
-    hintEl.textContent = err ?? (props.hint ?? '');
-    hintEl.classList.toggle('dr-input__hint--error', !!err);
+    hintEl.textContent = err ? '' : (props.hint ?? '');
+    errEl.textContent = err ?? '';
   };
+
+  input.addEventListener('blur', () => {
+    validate(input.value);
+  });
 
   input.addEventListener('input', () => {
     const v = input.value;
@@ -146,7 +157,6 @@ export interface WrappedInput extends HTMLDivElement {
 
 // ── Styles ─────────────────────────────────────────────────────────────
 
-let _stylesInjected = false;
 function injectInputStyles(): void {
   if (_stylesInjected || typeof document === 'undefined') return;
   _stylesInjected = true;

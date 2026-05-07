@@ -1,0 +1,37 @@
+{
+  "name": "drishti-language",
+  "displayName": "DRISHTI (.dr) Language Support",
+  "description": "Syntax highlighting, snippets, and IntelliSense for .dr surface files",
+  "version": "0.1.0",
+  "publisher": "drishti",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Programming Languages", "Snippets"],
+  "keywords": ["drishti", "dr", "frontend", "signals", "ai-native"],
+  "icon": "icon.png",
+  "repository": { "type": "git", "url": "https://github.com/2ool4techai-oss/front" },
+  "contributes": {
+    "languages": [
+      {
+        "id": "drishti",
+        "aliases": ["DRISHTI", "drishti", ".dr"],
+        "extensions": [".dr"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "drishti",
+        "scopeName": "source.drishti",
+        "path": "./syntaxes/drishti.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "drishti",
+        "path": "./snippets/drishti.code-snippets"
+      }
+    ],
+    "iconThemes": [],
+    "themes": []
+  }
+}

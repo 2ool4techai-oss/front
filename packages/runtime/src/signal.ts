@@ -19,6 +19,10 @@ const _devSignalList: _DevSignalEntry[] = [];
 export let _totalEffectRuns = 0;
 
 export function _enableDevMode(): void { _devMode = true; }
+
+// ── SSR mode — effects run once, no subscriptions ──────────────────────
+let _ssrMode = false;
+export function _setSSRMode(v: boolean): void { _ssrMode = v; }
 export function _getDevSignals(): readonly _DevSignalEntry[] { return _devSignalList; }
 
 export function label<T>(sig: Signal<T> | ComputedSignal<T>, name: string): typeof sig {
@@ -181,6 +185,16 @@ export function effect(fn: () => void | (() => void)): Unsubscribe {
   const run: EffectFn = () => {
     if (disposed) return;
     if (_devMode) _totalEffectRuns++;
+
+    // SSR mode: run once without subscribing to any signals
+    if (_ssrMode) {
+      const prev = currentEffect;
+      currentEffect = null;
+      try { fn(); } finally { currentEffect = prev; }
+      disposed = true;
+      return;
+    }
+
     if (typeof cleanup === 'function') cleanup();
 
     for (const dep of trackedDeps) dep.delete(run);

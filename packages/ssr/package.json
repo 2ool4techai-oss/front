@@ -1,8 +1,10 @@
 {
-  "name": "@drishti/components",
+  "name": "@drishti/ssr",
   "version": "0.1.0",
+  "description": "DRISHTI server-side rendering — renderToString + client hydration",
   "type": "module",
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -12,17 +14,14 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "tsc -p tsconfig.json --watch",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest run"
   },
   "dependencies": {
     "@drishti/runtime": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.4.5",
-    "vitest": "^1.6.0",
-    "jsdom": "^24.0.0"
+    "vitest": "^1.6.0"
   }
 }

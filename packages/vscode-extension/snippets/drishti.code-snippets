@@ -1,0 +1,74 @@
+{
+  "New Surface": {
+    "prefix": "surface",
+    "body": [
+      "surface: ${1:MyApp}",
+      "  intent: \"${2:Purpose of this surface}\"",
+      "  secure: mesh",
+      "  genome: primary=${3:#6366f1}",
+      "",
+      "  unit: ${4:MainUnit}",
+      "    data: ${5:/api/data}",
+      "    feel: calm",
+      "    heal: retry 3",
+      "    on: mounted",
+      "      action: ${6:load()}"
+    ],
+    "description": "New DRISHTI surface with a unit"
+  },
+  "New Unit": {
+    "prefix": "unit",
+    "body": [
+      "unit: ${1:UnitName}",
+      "  data: ${2:/api/endpoint}",
+      "  feel: ${3:calm} when ${4:condition}",
+      "  heal: retry ${5:3}",
+      "  on: ${6:mounted}",
+      "    action: ${7:load()}"
+    ],
+    "description": "New DRISHTI unit"
+  },
+  "Feel Rule": {
+    "prefix": "feel",
+    "body": [
+      "feel: ${1:engaged} when ${2:clicks} > ${3:5}"
+    ],
+    "description": "Emotion feel rule"
+  },
+  "Heal Directive": {
+    "prefix": "heal",
+    "body": [
+      "heal: retry ${1:3} fallback: \"${2:Something went wrong}\""
+    ],
+    "description": "Healing directive with retry and fallback"
+  },
+  "Data Connection": {
+    "prefix": "data",
+    "body": [
+      "data: ${1:/api/resource}${2: realtime}"
+    ],
+    "description": "Data connection directive"
+  },
+  "On Handler": {
+    "prefix": "on",
+    "body": [
+      "on: ${1:mounted}",
+      "  action: ${2:load()}"
+    ],
+    "description": "Event handler directive"
+  },
+  "Genome Preset": {
+    "prefix": "genome",
+    "body": [
+      "genome: primary=${1:#6366f1} preset=${2:midnight}"
+    ],
+    "description": "Design genome configuration"
+  },
+  "Adapt Directive": {
+    "prefix": "adapt",
+    "body": [
+      "adapt: ${1:emotion}"
+    ],
+    "description": "Emotion adaptation source"
+  }
+}

@@ -17,6 +17,7 @@ export interface ButtonProps {
   class?:    string;
 }
 
+let _stylesInjected = false;
 injectButtonStyles();
 
 export function Button(props: ButtonProps): HTMLButtonElement {
@@ -102,7 +103,6 @@ export function Button(props: ButtonProps): HTMLButtonElement {
 
 const spinnerSVG = `<svg class="dr-btn__spin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity=".25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>`;
 
-let _stylesInjected = false;
 function injectButtonStyles(): void {
   if (_stylesInjected || typeof document === 'undefined') return;
   _stylesInjected = true;

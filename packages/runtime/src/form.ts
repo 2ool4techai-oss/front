@@ -140,10 +140,14 @@ export function createForm<T extends Record<string, FieldSchema>>(schema: T): Fo
   }
 
   function validateAll(): boolean {
-    return Object.keys(schema).every(k => validateField(k as keyof T));
+    let allValid = true;
+    for (const k of Object.keys(schema)) {
+      if (!validateField(k as keyof T)) allValid = false;
+    }
+    return allValid;
   }
 
-  // Watch field values for live validation
+  // Watch field values and touched state for live validation
   for (const key of Object.keys(schema) as (keyof T)[]) {
     const field = fields[key]!;
     const initial = (schema[key]!.initial ?? '') as InferFieldType<typeof schema[keyof T]>;
@@ -151,6 +155,10 @@ export function createForm<T extends Record<string, FieldSchema>>(schema: T): Fo
     field.value.subscribe((v) => {
       field.dirty.set(!Object.is(v, initial));
       if (field.touched.peek()) validateField(key);
+    });
+
+    field.touched.subscribe((t) => {
+      if (t) validateField(key);
     });
   }
 

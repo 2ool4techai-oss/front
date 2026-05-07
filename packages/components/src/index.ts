@@ -60,3 +60,19 @@ export type { TooltipProps, TooltipPlacement } from './Tooltip.js';
 // ── Utility ────────────────────────────────────────────────────────────
 export { Spinner, Badge, Avatar, AvatarGroup } from './Spinner.js';
 export type { SpinnerProps, SpinnerSize, SpinnerVariant, BadgeProps, BadgeVariant, AvatarProps, AvatarGroupProps, AvatarSize } from './Spinner.js';
+
+// ── Data ───────────────────────────────────────────────────────────────
+export { DataTable } from './DataTable.js';
+export type { DataTableProps, DataTableHandle, TableColumn as DataTableColumn, SortDir } from './DataTable.js';
+
+// ── Date & Time ────────────────────────────────────────────────────────
+export { DatePicker, TimePicker } from './DatePicker.js';
+export type { DatePickerProps, TimePickerProps } from './DatePicker.js';
+
+// ── Color ──────────────────────────────────────────────────────────────
+export { ColorPicker } from './ColorPicker.js';
+export type { ColorPickerProps, ColorFormat } from './ColorPicker.js';
+
+// ── Command ────────────────────────────────────────────────────────────
+export { CommandPalette, installCommandPalette } from './CommandPalette.js';
+export type { Command, CommandPaletteOptions, CommandPaletteHandle } from './CommandPalette.js';
