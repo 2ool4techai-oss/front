@@ -97,3 +97,7 @@ export type { RouteConfig, RouteLocation, RouteParams, RouteQuery, RouteGuard, R
 export type { HealStatus, HealEvent, CircuitBreakerConfig, ErrorBoundaryOptions, ErrorBoundary } from './healing.js';
 export type { ConnectorState, ConnectorStatus } from './integration.js';
 export type { EmotionSnapshot } from './emotion.js';
+
+// ── Intent Engine ──────────────────────────────────────────────────────
+export { createIntentEngine, useIntent } from './intent.js';
+export type { IntentEngine, IntentEngineOptions, UserIntent, IntentSignals } from './intent.js';
