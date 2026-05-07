@@ -112,6 +112,10 @@ export function hydrate(
 
 // ── Islands ────────────────────────────────────────────────────────────
 export { collectIslands, renderIslandPage } from './islands.js';
+
+// ── Streaming ──────────────────────────────────────────────────────────
+export { renderToStream, suspend, _clearBoundaries } from './streaming.js';
+export type { StreamChunk, StreamOptions, StreamResult } from './streaming.js';
 export type { ServerIslandInfo } from './islands.js';
 
 // ── useSSRState ────────────────────────────────────────────────────────
