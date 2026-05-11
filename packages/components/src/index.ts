@@ -104,3 +104,15 @@ export type { FileUploadHandle, FileUploadOptions } from './FileUpload.js';
 // ── Chart ──────────────────────────────────────────────────────────────
 export { createChart } from './Chart.js';
 export type { ChartHandle, ChartOptions, ChartDataset, ChartType } from './Chart.js';
+
+// ── Drawer ─────────────────────────────────────────────────────────────
+export { createDrawer } from './Drawer.js';
+export type { DrawerHandle, DrawerOptions } from './Drawer.js';
+
+// ── Stepper ────────────────────────────────────────────────────────────
+export { createStepper } from './Stepper.js';
+export type { StepperHandle, StepperOptions, StepConfig } from './Stepper.js';
+
+// ── NotificationCenter ─────────────────────────────────────────────────
+export { createNotificationCenter } from './NotificationCenter.js';
+export type { NotificationCenterHandle, NotificationCenterOptions, Notification } from './NotificationCenter.js';
