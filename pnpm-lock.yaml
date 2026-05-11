@@ -47,6 +47,22 @@ importers:
         specifier: ^5.2.0
         version: 5.4.21(@types/node@20.19.39)
 
+  apps/showcase:
+    dependencies:
+      '@drishti/components':
+        specifier: workspace:*
+        version: link:../../packages/components
+      '@drishti/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vite:
+        specifier: ^5.2.0
+        version: 5.4.21(@types/node@20.19.39)
+
   apps/todo:
     dependencies:
       '@drishti/components':

@@ -1,0 +1,17 @@
+{
+  "name": "drishti-showcase",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5175",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@drishti/runtime": "workspace:*",
+    "@drishti/components": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vite": "^5.2.0"
+  }
+}
