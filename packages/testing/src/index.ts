@@ -349,3 +349,7 @@ export function setupVisualMatchers(): void {
     });
   }
 }
+
+// ── A11y audit ─────────────────────────────────────────────────────────
+export { auditA11y, assertA11y, setupA11yMatchers } from './a11y.js';
+export type { A11yViolation, A11yReport, A11yOptions, A11ySeverity, WCAGLevel } from './a11y.js';

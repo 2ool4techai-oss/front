@@ -48,14 +48,14 @@ export { Skeleton, SkeletonCard } from './Skeleton.js';
 export type { SkeletonProps, SkeletonVariant } from './Skeleton.js';
 
 // ── Overlay ────────────────────────────────────────────────────────────
-export { toast } from './Toast.js';
-export type { ToastOptions, ToastVariant, ToastDismiss } from './Toast.js';
+export { toast, mountToastContainer } from './Toast.js';
+export type { ToastOptions, ToastHandle, ToastType } from './Toast.js';
 
-export { Modal } from './Modal.js';
-export type { ModalProps, ModalSize, ModalHandle } from './Modal.js';
+export { createModal, confirm, alert } from './Modal.js';
+export type { ModalOptions, ModalHandle } from './Modal.js';
 
-export { attachTooltip, withTooltip } from './Tooltip.js';
-export type { TooltipProps, TooltipPlacement } from './Tooltip.js';
+export { createTooltip, createPopover } from './Tooltip.js';
+export type { TooltipOptions, PopoverOptions, TooltipHandle, TooltipPlacement } from './Tooltip.js';
 
 // ── Utility ────────────────────────────────────────────────────────────
 export { Spinner, Badge, Avatar, AvatarGroup } from './Spinner.js';

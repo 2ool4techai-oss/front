@@ -119,3 +119,15 @@ export type { AdaptSignal, AdaptOptions, AdaptObservation } from './adapt.js';
 // ── Resilience ────────────────────────────────────────────────────────
 export { circuit, withFallback, retry, timeout } from './resilience.js';
 export type { CircuitHandle, CircuitOptions, ResilienceState, RetryPolicy, BulkheadOptions } from './resilience.js';
+
+// ── State Machines ────────────────────────────────────────────────────
+export { createMachine } from './machine.js';
+export type { MachineConfig, MachineHandle, MachineStateConfig, MachineTransition, MachineHistoryEntry } from './machine.js';
+
+// ── GDPR Consent Manager ──────────────────────────────────────────────
+export { createConsentManager } from './consent.js';
+export type { ConsentHandle, ConsentState, ConsentOptions, ConsentCategory } from './consent.js';
+
+// ── Server Signals ────────────────────────────────────────────────────
+export { createServerSignal, createSSESignal } from './server-signal.js';
+export type { ServerSignalHandle, ServerSignalState, ServerSignalOptions, ServerSignalStatus, SSESignalHandle, SSESignalOptions } from './server-signal.js';
