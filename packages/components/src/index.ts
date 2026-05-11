@@ -88,3 +88,19 @@ export type { SwitchHandle, SwitchOptions } from './Switch.js';
 // ── VirtualList ────────────────────────────────────────────────────────
 export { createVirtualList } from './VirtualList.js';
 export type { VirtualListHandle, VirtualListOptions } from './VirtualList.js';
+
+// ── Slider ─────────────────────────────────────────────────────────────
+export { createSlider } from './Slider.js';
+export type { SliderHandle, SliderOptions } from './Slider.js';
+
+// ── RadioGroup (handle-based) ──────────────────────────────────────────
+export { createRadioGroup } from './RadioGroup.js';
+export type { RadioGroupHandle, RadioGroupOptions, RadioOption } from './RadioGroup.js';
+
+// ── FileUpload ─────────────────────────────────────────────────────────
+export { createFileUpload } from './FileUpload.js';
+export type { FileUploadHandle, FileUploadOptions } from './FileUpload.js';
+
+// ── Chart ──────────────────────────────────────────────────────────────
+export { createChart } from './Chart.js';
+export type { ChartHandle, ChartOptions, ChartDataset, ChartType } from './Chart.js';
