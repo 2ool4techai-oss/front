@@ -1,0 +1,19 @@
+{
+  "name": "@drishti/bench",
+  "version": "0.1.0",
+  "description": "Performance benchmarks for DRISHTI signals",
+  "type": "module",
+  "scripts": {
+    "bench": "tsx src/run.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "tinybench": "^2.6.0",
+    "@drishti/runtime": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0",
+    "tsx": "^4.7.0"
+  }
+}
