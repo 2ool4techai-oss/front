@@ -6,7 +6,8 @@ import type { SurfaceNode } from './ast.js';
 export type { SurfaceNode, UnitNode, ASTNode } from './ast.js';
 export { tokenize } from './lexer.js';
 export { Parser, ParseError } from './parser.js';
-export { generateSurface } from './codegen.js';
+export { generateSurface, generateDirectDOM } from './codegen.js';
+export type { CodegenResult, DOMASTNode as ASTNode, ASTExpr } from './codegen.js';
 
 export interface CompileResult {
   code: string;

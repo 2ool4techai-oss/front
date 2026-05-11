@@ -24,5 +24,16 @@
     "typescript": "^5.4.5",
     "vitest": "^1.6.0",
     "jsdom": "^24.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/2ool4techai-oss/front"
+  },
+  "keywords": ["components", "ui", "reactive", "framework", "typescript", "drishti"],
+  "files": ["dist", "src", "README.md"],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

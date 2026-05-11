@@ -8,6 +8,130 @@ export interface CodegenOptions {
   runtime?:  string;
   target?:   'ts' | 'js';   // default 'js' — emit ESM JS directly
   comments?: boolean;
+  mode?:     'dom' | 'ssr' | 'hydrate';
+  minify?:   boolean;
+}
+
+export interface CodegenResult {
+  code: string;
+  imports: string[];
+  exports: string[];
+}
+
+export interface ASTExpr {
+  type: 'signal' | 'static' | 'event';
+  value: string;
+}
+
+export interface DOMASTNode {
+  type: 'element' | 'text' | 'expression' | 'component' | 'fragment';
+  tag?: string;
+  attrs?: Record<string, string | ASTExpr>;
+  children?: DOMASTNode[];
+  value?: string;
+  expr?: ASTExpr;
+}
+
+/**
+ * Generate direct DOM creation code (no vdom overhead).
+ * Input: a simple AST node (as produced by the parser).
+ * Output: TypeScript code using document.createElement, etc.
+ */
+export function generateDirectDOM(ast: DOMASTNode, opts?: CodegenOptions): CodegenResult {
+  const lines: string[] = [];
+  let counter = 0;
+
+  function nextId(): number {
+    return counter++;
+  }
+
+  function processNode(node: DOMASTNode): string {
+    if (node.type === 'text') {
+      const id = nextId();
+      const varName = `t_${id}`;
+      const escaped = (node.value ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      lines.push(`  const ${varName} = document.createTextNode('${escaped}');`);
+      return varName;
+    }
+
+    if (node.type === 'element') {
+      const id = nextId();
+      const varName = `el_${id}`;
+      lines.push(`  const ${varName} = document.createElement('${node.tag ?? 'div'}');`);
+
+      // Process attrs
+      if (node.attrs) {
+        for (const [attrName, attrVal] of Object.entries(node.attrs)) {
+          if (typeof attrVal === 'string') {
+            // static string attr
+            lines.push(`  ${varName}.setAttribute('${attrName}', '${attrVal.replace(/'/g, "\\'")}');`);
+          } else if (attrVal.type === 'event') {
+            // event handler
+            const eventName = attrName.startsWith('on:') ? attrName.slice(3) : attrName;
+            lines.push(`  ${varName}.addEventListener('${eventName}', ${attrVal.value});`);
+          } else if (attrVal.type === 'signal') {
+            // reactive signal attr
+            lines.push(`  effect(() => { ${varName}.setAttribute('${attrName}', ${attrVal.value}()); });`);
+          } else {
+            // static expr
+            lines.push(`  ${varName}.setAttribute('${attrName}', ${attrVal.value});`);
+          }
+        }
+      }
+
+      // Process children
+      if (node.children) {
+        for (const child of node.children) {
+          const childVar = processNode(child);
+          lines.push(`  ${varName}.appendChild(${childVar});`);
+        }
+      }
+
+      return varName;
+    }
+
+    if (node.type === 'fragment') {
+      const id = nextId();
+      const varName = `frag_${id}`;
+      lines.push(`  const ${varName} = document.createDocumentFragment();`);
+      if (node.children) {
+        for (const child of node.children) {
+          const childVar = processNode(child);
+          lines.push(`  ${varName}.appendChild(${childVar});`);
+        }
+      }
+      return varName;
+    }
+
+    if (node.type === 'expression') {
+      const id = nextId();
+      const varName = `t_${id}`;
+      const exprVal = node.expr ? `${node.expr.value}()` : "''";
+      lines.push(`  const ${varName} = document.createTextNode(String(${exprVal}));`);
+      if (node.expr?.type === 'signal') {
+        lines.push(`  effect(() => { ${varName}.textContent = String(${node.expr!.value}()); });`);
+      }
+      return varName;
+    }
+
+    // component — placeholder
+    const id = nextId();
+    const varName = `el_${id}`;
+    lines.push(`  const ${varName} = document.createElement('div');`);
+    return varName;
+  }
+
+  const rootVar = processNode(ast);
+  lines.push(`  return ${rootVar};`);
+
+  const fnBody = lines.join('\n');
+  const code = `function render() {\n${fnBody}\n}`;
+
+  return {
+    code,
+    imports: ['signal', 'effect', 'h'],
+    exports: ['render'],
+  };
 }
 
 // ── generateSurface ────────────────────────────────────────────────────

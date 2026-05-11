@@ -25,5 +25,16 @@
     "vitest": "^1.6.0",
     "@vitest/coverage-v8": "^1.6.0",
     "jsdom": "^24.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/2ool4techai-oss/front"
+  },
+  "keywords": ["testing", "test-utils", "reactive", "signals", "framework", "typescript", "drishti"],
+  "files": ["dist", "src", "README.md"],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
