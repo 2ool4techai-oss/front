@@ -1,865 +1,817 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DRISHTI Examples — 8 Full Working Examples</title>
-  <meta name="description" content="Complete working examples for DRISHTI: Counter with Time-Travel, TodoMVC, Data Fetching, Form Validation, State Machine Wizard, LLM Chat, Feature Flags, and Real-time Sync." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="src/styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DRISHTI — Examples</title>
+  <meta name="description" content="Complete working examples for DRISHTI: Counter with time-travel, TodoMVC, data fetching, forms, state machines, LLM chat, A/B testing, and real-time collaboration.">
+  <meta property="og:title" content="DRISHTI Examples">
+  <meta property="og:description" content="8 complete, runnable examples covering every major DRISHTI feature.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
 
-<nav class="nav">
+<!-- ── Navigation ───────────────────────────────────────────── -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
       <span class="nav-logo-icon">DR</span>
       DRISHTI
     </a>
-    <div class="nav-links">
-      <a href="docs.html">Docs</a>
-      <a href="api.html">API</a>
-      <a href="examples.html" class="active">Examples</a>
-      <a href="index.html#packages">Packages</a>
+    <div class="nav-links" role="menubar">
+      <a href="docs.html" role="menuitem">Docs</a>
+      <a href="api.html" role="menuitem">API</a>
+      <a href="examples.html" class="active" role="menuitem">Examples</a>
+      <a href="index.html#packages" role="menuitem">Packages</a>
+      <a href="https://github.com/2ool4techai-oss/front" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" role="menuitem">GitHub &rarr;</a>
     </div>
     <div class="nav-actions">
       <span class="nav-version">v0.1.0</span>
-      <a href="https://github.com/drishti-framework/drishti" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">GitHub</a>
-      <button class="nav-mobile-toggle" aria-label="Toggle mobile menu">
+      <button class="nav-mobile-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
     </div>
   </div>
 </nav>
 
+<!-- ── Page Hero ─────────────────────────────────────────────── -->
 <div class="page-hero">
   <h1>Examples</h1>
-  <p>8 full working examples. Copy, paste, run.</p>
+  <p>8 complete, production-quality examples — from a simple counter to real-time collaboration and AI streaming.</p>
 </div>
 
+<!-- ── Examples Grid ─────────────────────────────────────────── -->
 <div class="examples-grid">
 
-  <!-- ── Example 1: Counter with Time-Travel ─────────────────── -->
-  <div class="example-card" id="counter-timetravel">
+  <!-- ── Example 1: Counter with Time-Travel ──────────────────── -->
+  <article class="example-card" id="ex-counter">
     <div class="example-header">
       <div class="example-num">Example 01</div>
-      <div class="example-title">Counter with Time-Travel</div>
-      <div class="example-desc">Fine-grained signal counter with full time-travel debugging. Step back and forward through every state change.</div>
+      <h2 class="example-title">Counter with Time-Travel</h2>
+      <p class="example-desc">Fine-grained signals, computed values, and <code>enableTimeTravel()</code> for undo/redo. Demonstrates the core reactive primitives.</p>
     </div>
     <div class="example-body">
       <pre><code><span class="kw">import</span> {
-  <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">label</span>,
-  <span class="fn">enableTimeTravel</span>, <span class="fn">h</span>, <span class="fn">each</span>, <span class="fn">mountApp</span>
+  <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">effect</span>,
+  <span class="fn">enableTimeTravel</span>, <span class="fn">h</span>, <span class="fn">mountApp</span>, <span class="fn">show</span>,
 } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
 
-<span class="cmt">// Named signals — visible in devtools and time-travel UI</span>
-<span class="kw">const</span> <span class="var">count</span>   = <span class="fn">label</span>(<span class="str">'counter'</span>, <span class="fn">signal</span>(<span class="num">0</span>));
-<span class="kw">const</span> <span class="var">step</span>    = <span class="fn">label</span>(<span class="str">'step'</span>,    <span class="fn">signal</span>(<span class="num">1</span>));
-<span class="kw">const</span> <span class="var">doubled</span> = <span class="fn">computed</span>(() =&gt; <span class="var">count</span>() * <span class="num">2</span>);
-<span class="kw">const</span> <span class="var">squared</span> = <span class="fn">computed</span>(() =&gt; <span class="var">count</span>() ** <span class="num">2</span>);
-<span class="kw">const</span> <span class="var">isNeg</span>   = <span class="fn">computed</span>(() =&gt; <span class="var">count</span>() &lt; <span class="num">0</span>);
+<span class="cmt">// Enable time travel before creating signals</span>
+<span class="kw">const</span> <span class="var">tt</span> = <span class="fn">enableTimeTravel</span>({ <span class="attr">maxEntries</span>: <span class="num">50</span> });
 
-<span class="cmt">// Enable time travel — records every signal mutation</span>
-<span class="kw">const</span> <span class="var">tt</span> = <span class="fn">enableTimeTravel</span>({ maxEntries: <span class="num">50</span> });
+<span class="kw">const</span> <span class="var">count</span>   = <span class="fn">signal</span>(<span class="num">0</span>);
+<span class="kw">const</span> <span class="var">doubled</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">count</span>() <span class="op">*</span> <span class="num">2</span>);
+<span class="kw">const</span> <span class="var">squared</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">count</span>() <span class="op">**</span> <span class="num">2</span>);
+<span class="kw">const</span> <span class="var">isEven</span>  = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">count</span>() <span class="op">%</span> <span class="num">2</span> <span class="op">===</span> <span class="num">0</span>);
 
-<span class="kw">function</span> <span class="fn">increment</span>() { <span class="var">count</span>.<span class="fn">set</span>(<span class="var">c</span> =&gt; <span class="var">c</span> + <span class="var">step</span>()); }
-<span class="kw">function</span> <span class="fn">decrement</span>() { <span class="var">count</span>.<span class="fn">set</span>(<span class="var">c</span> =&gt; <span class="var">c</span> - <span class="var">step</span>()); }
-<span class="kw">function</span> <span class="fn">reset</span>()     { <span class="var">count</span>.<span class="fn">set</span>(<span class="num">0</span>); <span class="var">step</span>.<span class="fn">set</span>(<span class="num">1</span>); }
-
-<span class="kw">const</span> <span class="var">Counter</span> = () =&gt; <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'counter-app'</span> },
-  <span class="fn">h</span>(<span class="str">'h1'</span>, {}, () =&gt; <span class="str">`</span>${<span class="var">count</span>()}<span class="str">`</span>),
-  <span class="fn">h</span>(<span class="str">'p'</span>, { class: <span class="str">'muted'</span> },
-    () =&gt; <span class="str">`doubled: </span>${<span class="var">doubled</span>()}<span class="str"> · squared: </span>${<span class="var">squared</span>()}<span class="str">`</span>
-  ),
-  <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'controls'</span> },
-    <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: <span class="fn">decrement</span> }, <span class="str">'−'</span>),
-    <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: <span class="fn">increment</span> }, <span class="str">'+'</span>),
-    <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: <span class="fn">reset</span>, class: <span class="str">'secondary'</span> }, <span class="str">'Reset'</span>),
-  ),
-  <span class="fn">h</span>(<span class="str">'label'</span>, {},
-    <span class="str">'Step: '</span>,
-    <span class="fn">h</span>(<span class="str">'input'</span>, {
-      type: <span class="str">'number'</span>, value: <span class="var">step</span>, min: <span class="num">1</span>,
-      oninput: <span class="var">e</span> =&gt; <span class="var">step</span>.<span class="fn">set</span>(<span class="var">Number</span>(<span class="var">e</span>.target.value)),
-    }),
-  ),
-
-  <span class="cmt">// Time-travel controls</span>
-  <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'tt-controls'</span> },
-    <span class="fn">h</span>(<span class="str">'button'</span>, {
-      onclick: () =&gt; <span class="var">tt</span>.<span class="fn">back</span>(),
-      disabled: () =&gt; <span class="var">tt</span>.<span class="fn">canGoBack</span>() <span class="op">===</span> <span class="kw">false</span>
-    }, <span class="str">'← Undo'</span>),
-    <span class="fn">h</span>(<span class="str">'button'</span>, {
-      onclick: () =&gt; <span class="var">tt</span>.<span class="fn">forward</span>(),
-      disabled: () =&gt; <span class="var">tt</span>.<span class="fn">canGoForward</span>() <span class="op">===</span> <span class="kw">false</span>
-    }, <span class="str">'Redo →'</span>),
-    <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: () =&gt; <span class="var">tt</span>.<span class="fn">replay</span>({ speed: <span class="num">2</span> }) }, <span class="str">'Replay ×2'</span>),
-  ),
-
-  <span class="cmt">// Live history</span>
-  <span class="fn">h</span>(<span class="str">'ol'</span>, { class: <span class="str">'tt-history'</span>, reversed: <span class="kw">true</span> },
-    <span class="fn">each</span>(<span class="var">tt</span>.<span class="fn">entries</span>, (<span class="var">e</span>, <span class="var">i</span>) =&gt;
-      <span class="fn">h</span>(<span class="str">'li'</span>, { key: <span class="var">e</span>.id },
-        <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'tt-label'</span> }, <span class="var">e</span>.label),
-        <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'tt-value'</span> }, <span class="str">`</span>${<span class="var">JSON</span>.<span class="fn">stringify</span>(<span class="var">e</span>.prev)}<span class="str"> → </span>${<span class="var">JSON</span>.<span class="fn">stringify</span>(<span class="var">e</span>.next)}<span class="str">`</span>),
-        <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: () =&gt; <span class="var">tt</span>.<span class="fn">restore</span>(<span class="var">e</span>) }, <span class="str">'Restore'</span>),
-      )
-    )
-  ),
-);
-
-<span class="fn">mountApp</span>(<span class="var">Counter</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>));</code></pre>
-    </div>
-  </div>
-
-  <!-- ── Example 2: TodoMVC ───────────────────────────────────── -->
-  <div class="example-card" id="todomvc">
-    <div class="example-header">
-      <div class="example-num">Example 02</div>
-      <div class="example-title">TodoMVC</div>
-      <div class="example-desc">Full todo app with add, complete, filter, and clear. Demonstrates signal arrays, computed filtering, and keyed list rendering.</div>
-    </div>
-    <div class="example-body">
-      <pre><code><span class="kw">import</span> {
-  <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">batch</span>,
-  <span class="fn">h</span>, <span class="fn">each</span>, <span class="fn">show</span>, <span class="fn">mountApp</span>
-} <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
-
-<span class="kw">type</span> <span class="type">Todo</span> = { id: <span class="type">number</span>; text: <span class="type">string</span>; done: <span class="type">boolean</span> };
-<span class="kw">type</span> <span class="type">Filter</span> = <span class="str">'all'</span> | <span class="str">'active'</span> | <span class="str">'completed'</span>;
-
-<span class="kw">const</span> <span class="var">todos</span>   = <span class="fn">signal</span>&lt;<span class="type">Todo[]</span>&gt;([]);
-<span class="kw">const</span> <span class="var">filter</span>  = <span class="fn">signal</span>&lt;<span class="type">Filter</span>&gt;(<span class="str">'all'</span>);
-<span class="kw">const</span> <span class="var">input</span>   = <span class="fn">signal</span>(<span class="str">''</span>);
-<span class="kw">let</span>   <span class="var">nextId</span>  = <span class="num">1</span>;
-
-<span class="kw">const</span> <span class="var">filtered</span> = <span class="fn">computed</span>(() =&gt; {
-  <span class="kw">const</span> <span class="var">f</span> = <span class="var">filter</span>();
-  <span class="kw">return</span> <span class="var">todos</span>().<span class="fn">filter</span>(<span class="var">t</span> =&gt;
-    <span class="var">f</span> <span class="op">===</span> <span class="str">'all'</span>       ? <span class="kw">true</span>  :
-    <span class="var">f</span> <span class="op">===</span> <span class="str">'active'</span>    ? !<span class="var">t</span>.done :
-    <span class="var">f</span> <span class="op">===</span> <span class="str">'completed'</span> ?  <span class="var">t</span>.done : <span class="kw">true</span>
-  );
+<span class="cmt">// Log every change (effect cleans up on re-run via return)</span>
+<span class="fn">effect</span>(() <span class="op">=&gt;</span> {
+  console.<span class="fn">log</span>(<span class="str">`count changed → </span>${<span class="var">count</span>()}<span class="str">`</span>);
 });
 
-<span class="kw">const</span> <span class="var">remaining</span>  = <span class="fn">computed</span>(() =&gt; <span class="var">todos</span>().<span class="fn">filter</span>(<span class="var">t</span> =&gt; !<span class="var">t</span>.done).<span class="var">length</span>);
-<span class="kw">const</span> <span class="var">allDone</span>    = <span class="fn">computed</span>(() =&gt; <span class="var">todos</span>().<span class="var">length</span> &gt; <span class="num">0</span> <span class="op">&amp;&amp;</span> <span class="var">remaining</span>() <span class="op">===</span> <span class="num">0</span>);
+<span class="kw">function</span> <span class="fn">CounterApp</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'counter-app'</span> },
+    <span class="cmt">// Display row</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'stats'</span> },
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'stat'</span> },
+        <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'stat-value'</span> }, () <span class="op">=&gt;</span> <span class="var">count</span>()),
+        <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'stat-label'</span> }, <span class="str">'Count'</span>),
+      ),
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'stat'</span> },
+        <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'stat-value'</span> }, () <span class="op">=&gt;</span> <span class="var">doubled</span>()),
+        <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'stat-label'</span> }, <span class="str">'Doubled'</span>),
+      ),
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'stat'</span> },
+        <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'stat-value'</span> }, () <span class="op">=&gt;</span> <span class="var">squared</span>()),
+        <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'stat-label'</span> }, <span class="str">'Squared'</span>),
+      ),
+    ),
 
-<span class="kw">function</span> <span class="fn">add</span>() {
-  <span class="kw">const</span> <span class="var">text</span> = <span class="var">input</span>().<span class="fn">trim</span>();
-  <span class="kw">if</span> (!<span class="var">text</span>) <span class="kw">return</span>;
-  <span class="var">todos</span>.<span class="fn">set</span>([...<span class="var">todos</span>(), { id: <span class="var">nextId</span>++, text, done: <span class="kw">false</span> }]);
-  <span class="var">input</span>.<span class="fn">set</span>(<span class="str">''</span>);
-}
+    <span class="cmt">// Parity badge — reactive class + text</span>
+    <span class="fn">h</span>(<span class="str">'span'</span>, {
+      <span class="attr">class</span>: () <span class="op">=&gt;</span> <span class="var">isEven</span>() ? <span class="str">'badge badge-green'</span> : <span class="str">'badge'</span>
+    }, () <span class="op">=&gt;</span> <span class="var">isEven</span>() ? <span class="str">'Even'</span> : <span class="str">'Odd'</span>),
 
-<span class="kw">function</span> <span class="fn">toggle</span>(<span class="var">id</span>: <span class="type">number</span>) {
-  <span class="var">todos</span>.<span class="fn">set</span>(<span class="var">todos</span>().<span class="fn">map</span>(<span class="var">t</span> =&gt; <span class="var">t</span>.id <span class="op">===</span> <span class="var">id</span> ? { ...<span class="var">t</span>, done: !<span class="var">t</span>.done } : <span class="var">t</span>));
-}
+    <span class="cmt">// Controls</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'controls'</span> },
+      <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">class</span>: <span class="str">'btn btn-secondary'</span>, <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">count</span>.<span class="fn">set</span>(<span class="var">c</span> <span class="op">=&gt;</span> <span class="var">c</span> <span class="op">-</span> <span class="num">1</span>) }, <span class="str">'−'</span>),
+      <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">class</span>: <span class="str">'btn btn-primary'</span>,   <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">count</span>.<span class="fn">set</span>(<span class="var">c</span> <span class="op">=&gt;</span> <span class="var">c</span> <span class="op">+</span> <span class="num">1</span>) }, <span class="str">'+'</span>),
+      <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">class</span>: <span class="str">'btn btn-ghost'</span>,     <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">count</span>.<span class="fn">set</span>(<span class="num">0</span>) }, <span class="str">'Reset'</span>),
+    ),
 
-<span class="kw">function</span> <span class="fn">remove</span>(<span class="var">id</span>: <span class="type">number</span>) {
-  <span class="var">todos</span>.<span class="fn">set</span>(<span class="var">todos</span>().<span class="fn">filter</span>(<span class="var">t</span> =&gt; <span class="var">t</span>.id <span class="op">!==</span> <span class="var">id</span>));
-}
-
-<span class="kw">function</span> <span class="fn">toggleAll</span>() {
-  <span class="kw">const</span> <span class="var">done</span> = !<span class="var">allDone</span>();
-  <span class="var">todos</span>.<span class="fn">set</span>(<span class="var">todos</span>().<span class="fn">map</span>(<span class="var">t</span> =&gt; ({ ...<span class="var">t</span>, done })));
-}
-
-<span class="kw">function</span> <span class="fn">clearDone</span>() {
-  <span class="var">todos</span>.<span class="fn">set</span>(<span class="var">todos</span>().<span class="fn">filter</span>(<span class="var">t</span> =&gt; !<span class="var">t</span>.done));
-}
-
-<span class="kw">const</span> <span class="var">TodoApp</span> = () =&gt; <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'todo-app'</span> },
-  <span class="fn">h</span>(<span class="str">'h1'</span>, {}, <span class="str">'todos'</span>),
-
-  <span class="cmt">// Input row</span>
-  <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'todo-input-row'</span> },
-    <span class="fn">h</span>(<span class="str">'input'</span>, {
-      class: <span class="str">'todo-checkbox-all'</span>, type: <span class="str">'checkbox'</span>,
-      checked: <span class="var">allDone</span>, onchange: <span class="fn">toggleAll</span>
-    }),
-    <span class="fn">h</span>(<span class="str">'input'</span>, {
-      class: <span class="str">'todo-input'</span>, placeholder: <span class="str">'What needs to be done?'</span>,
-      value: <span class="var">input</span>,
-      oninput: (<span class="var">e</span>) =&gt; <span class="var">input</span>.<span class="fn">set</span>((<span class="var">e</span>.target <span class="kw">as</span> <span class="type">HTMLInputElement</span>).value),
-      onkeydown: (<span class="var">e</span>) =&gt; (<span class="var">e</span> <span class="kw">as</span> <span class="type">KeyboardEvent</span>).key <span class="op">===</span> <span class="str">'Enter'</span> <span class="op">&amp;&amp;</span> <span class="fn">add</span>(),
-      autofocus: <span class="kw">true</span>,
-    }),
-  ),
-
-  <span class="cmt">// Todo list</span>
-  <span class="fn">h</span>(<span class="str">'ul'</span>, { class: <span class="str">'todo-list'</span> },
-    <span class="fn">each</span>(<span class="var">filtered</span>, (<span class="var">todo</span>) =&gt;
-      <span class="fn">h</span>(<span class="str">'li'</span>, {
-        key: <span class="var">todo</span>.id,
-        class: () =&gt; <span class="var">todo</span>.done ? <span class="str">'todo-item done'</span> : <span class="str">'todo-item'</span>
-      },
-        <span class="fn">h</span>(<span class="str">'input'</span>, {
-          type: <span class="str">'checkbox'</span>, checked: <span class="var">todo</span>.done,
-          onchange: () =&gt; <span class="fn">toggle</span>(<span class="var">todo</span>.id),
-        }),
-        <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'todo-text'</span> }, <span class="var">todo</span>.text),
-        <span class="fn">h</span>(<span class="str">'button'</span>, {
-          class: <span class="str">'todo-delete'</span>, onclick: () =&gt; <span class="fn">remove</span>(<span class="var">todo</span>.id)
-        }, <span class="str">'×'</span>),
-      )
-    )
-  ),
-
-  <span class="cmt">// Footer</span>
-  <span class="fn">show</span>(() =&gt; <span class="var">todos</span>().<span class="var">length</span> &gt; <span class="num">0</span>,
-    <span class="fn">h</span>(<span class="str">'footer'</span>, { class: <span class="str">'todo-footer'</span> },
-      <span class="fn">h</span>(<span class="str">'span'</span>, {}, () =&gt; <span class="str">`</span>${<span class="var">remaining</span>()}<span class="str"> item</span>${<span class="var">remaining</span>() <span class="op">===</span> <span class="num">1</span> ? <span class="str">''</span> : <span class="str">'s'</span>}<span class="str"> left`</span>),
-      <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'filters'</span> },
-        ...(([<span class="str">'all'</span>, <span class="str">'active'</span>, <span class="str">'completed'</span>] <span class="kw">as</span> <span class="type">Filter[]</span>).<span class="fn">map</span>(<span class="var">f</span> =&gt;
-          <span class="fn">h</span>(<span class="str">'button'</span>, {
-            class: () =&gt; <span class="var">filter</span>() <span class="op">===</span> <span class="var">f</span> ? <span class="str">'filter-btn active'</span> : <span class="str">'filter-btn'</span>,
-            onclick: () =&gt; <span class="var">filter</span>.<span class="fn">set</span>(<span class="var">f</span>),
-          }, <span class="var">f</span>)
-        )),
+    <span class="cmt">// Time-travel controls</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'tt-bar'</span> },
+      <span class="fn">h</span>(<span class="str">'button'</span>, {
+        <span class="attr">class</span>: <span class="str">'btn btn-ghost btn-sm'</span>,
+        <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">tt</span>.<span class="fn">travel</span>(<span class="op">-</span><span class="num">1</span>),
+        <span class="attr">disabled</span>: () <span class="op">=&gt;</span> <span class="var">tt</span>.<span class="fn">present</span>() <span class="op">===</span> <span class="num">0</span>,
+      }, <span class="str">'← Undo'</span>),
+      <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'text-muted'</span> },
+        () <span class="op">=&gt;</span> <span class="str">`Step </span>${<span class="var">tt</span>.<span class="fn">present</span>()}<span class="str"> / </span>${<span class="var">tt</span>.<span class="fn">entries</span>().<span class="var">length</span>}<span class="str">`</span>
       ),
       <span class="fn">h</span>(<span class="str">'button'</span>, {
-        class: <span class="str">'clear-btn'</span>,
-        onclick: <span class="fn">clearDone</span>,
-        style: () =&gt; <span class="var">todos</span>().<span class="fn">some</span>(<span class="var">t</span> =&gt; <span class="var">t</span>.done) ? <span class="str">''</span> : <span class="str">'visibility:hidden'</span>,
-      }, <span class="str">'Clear completed'</span>),
-    )
-  ),
-);
-
-<span class="fn">mountApp</span>(<span class="var">TodoApp</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>));</code></pre>
-    </div>
-  </div>
-
-  <!-- ── Example 3: Data Fetching ────────────────────────────── -->
-  <div class="example-card" id="data-fetching">
-    <div class="example-header">
-      <div class="example-num">Example 03</div>
-      <div class="example-title">Data Fetching</div>
-      <div class="example-desc">Reactive data loading with <code>createResource</code> — automatic refetch on dependency change, loading skeletons, and error handling.</div>
-    </div>
-    <div class="example-body">
-      <pre><code><span class="kw">import</span> {
-  <span class="fn">signal</span>, <span class="fn">createResource</span>,
-  <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">each</span>, <span class="fn">mountApp</span>
-} <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
-
-<span class="kw">interface</span> <span class="type">Post</span> {
-  id: <span class="type">number</span>; title: <span class="type">string</span>; body: <span class="type">string</span>; userId: <span class="type">number</span>;
-}
-
-<span class="kw">const</span> <span class="var">userId</span> = <span class="fn">signal</span>(<span class="num">1</span>);
-
-<span class="cmt">// createResource re-fetches automatically when userId changes</span>
-<span class="kw">const</span> [<span class="var">posts</span>, { refetch }] = <span class="fn">createResource</span>(
-  <span class="var">userId</span>,
-  <span class="kw">async</span> (<span class="var">id</span>) =&gt; {
-    <span class="kw">const</span> <span class="var">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`https://jsonplaceholder.typicode.com/posts?userId=</span>${<span class="var">id</span>}<span class="str">`</span>);
-    <span class="kw">if</span> (!<span class="var">res</span>.ok) <span class="kw">throw new</span> <span class="cls">Error</span>(<span class="str">`HTTP </span>${<span class="var">res</span>.status}<span class="str">`</span>);
-    <span class="kw">return</span> <span class="var">res</span>.<span class="fn">json</span>() <span class="kw">as</span> <span class="type">Promise&lt;Post[]&gt;</span>;
-  }
-);
-
-<span class="kw">const</span> <span class="var">PostList</span> = () =&gt; <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'post-list'</span> },
-
-  <span class="cmt">// User selector</span>
-  <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'user-selector'</span> },
-    <span class="fn">h</span>(<span class="str">'label'</span>, {}, <span class="str">'User ID: '</span>),
-    <span class="fn">h</span>(<span class="str">'select'</span>, {
-      value: <span class="var">userId</span>,
-      onchange: (<span class="var">e</span>) =&gt; <span class="var">userId</span>.<span class="fn">set</span>(<span class="type">Number</span>((<span class="var">e</span>.target <span class="kw">as</span> <span class="type">HTMLSelectElement</span>).value))
-    },
-      ...[<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>].<span class="fn">map</span>(<span class="var">n</span> =&gt;
-        <span class="fn">h</span>(<span class="str">'option'</span>, { value: <span class="var">n</span> }, <span class="str">`User </span>${<span class="var">n</span>}<span class="str">`</span>)
-      )
-    ),
-    <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: <span class="var">refetch</span> }, <span class="str">'↻ Refresh'</span>),
-  ),
-
-  <span class="cmt">// Loading skeleton</span>
-  <span class="fn">show</span>(() =&gt; <span class="var">posts</span>.<span class="fn">loading</span>(),
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'skeleton-list'</span> },
-      ...<span class="type">Array</span>(<span class="num">3</span>).<span class="fn">fill</span>(<span class="kw">null</span>).<span class="fn">map</span>(() =&gt;
-        <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'skeleton-card'</span> })
-      )
-    )
-  ),
-
-  <span class="cmt">// Error state</span>
-  <span class="fn">show</span>(() =&gt; !!<span class="var">posts</span>.<span class="fn">error</span>(),
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'error-banner'</span> },
-      <span class="fn">h</span>(<span class="str">'p'</span>, {}, () =&gt; <span class="str">`Error: </span>${<span class="var">posts</span>.<span class="fn">error</span>()?.message}<span class="str">`</span>),
-      <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: <span class="var">refetch</span> }, <span class="str">'Retry'</span>),
-    )
-  ),
-
-  <span class="cmt">// Posts grid</span>
-  <span class="fn">show</span>(() =&gt; !<span class="var">posts</span>.<span class="fn">loading</span>() <span class="op">&amp;&amp;</span> !<span class="var">posts</span>.<span class="fn">error</span>(),
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'posts-grid'</span> },
-      <span class="fn">each</span>(() =&gt; <span class="var">posts</span>() ?? [], (<span class="var">post</span>) =&gt;
-        <span class="fn">h</span>(<span class="str">'article'</span>, { key: <span class="var">post</span>.id, class: <span class="str">'post-card'</span> },
-          <span class="fn">h</span>(<span class="str">'h3'</span>, {}, <span class="var">post</span>.title),
-          <span class="fn">h</span>(<span class="str">'p'</span>, {}, <span class="var">post</span>.body),
-          <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'post-id'</span> }, <span class="str">`#</span>${<span class="var">post</span>.id}<span class="str">`</span>),
-        )
-      )
-    )
-  ),
-);
-
-<span class="fn">mountApp</span>(<span class="var">PostList</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>));</code></pre>
-    </div>
-  </div>
-
-  <!-- ── Example 4: Form Validation ──────────────────────────── -->
-  <div class="example-card" id="form-validation">
-    <div class="example-header">
-      <div class="example-num">Example 04</div>
-      <div class="example-title">Form Validation</div>
-      <div class="example-desc">Reactive form with per-field validation, async username availability check, and submit handling via <code>createForm</code>.</div>
-    </div>
-    <div class="example-body">
-      <pre><code><span class="kw">import</span> { <span class="fn">createForm</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
-
-<span class="kw">const</span> <span class="var">form</span> = <span class="fn">createForm</span>({
-  username: {
-    initial: <span class="str">''</span>,
-    validators: [
-      (<span class="var">v</span>) =&gt; <span class="var">v</span>.<span class="var">length</span> &lt; <span class="num">3</span> ? <span class="str">'Min 3 characters'</span> : <span class="kw">null</span>,
-      (<span class="var">v</span>) =&gt; /[^a-z0-9_]/.test(<span class="var">v</span>) ? <span class="str">'Only a-z, 0-9, _'</span> : <span class="kw">null</span>,
-      <span class="kw">async</span> (<span class="var">v</span>) =&gt; {
-        <span class="kw">const</span> <span class="var">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`/api/check-username?q=</span>${<span class="var">v</span>}<span class="str">`</span>).<span class="fn">then</span>(<span class="var">r</span> =&gt; <span class="var">r</span>.<span class="fn">json</span>());
-        <span class="kw">return</span> <span class="var">res</span>.taken ? <span class="str">'Username taken'</span> : <span class="kw">null</span>;
-      }
-    ],
-  },
-  email: {
-    initial: <span class="str">''</span>,
-    validators: [
-      (<span class="var">v</span>) =&gt; !<span class="var">v</span>.<span class="fn">includes</span>(<span class="str">'@'</span>) ? <span class="str">'Invalid email'</span> : <span class="kw">null</span>,
-    ],
-  },
-  password: {
-    initial: <span class="str">''</span>,
-    validators: [
-      (<span class="var">v</span>) =&gt; <span class="var">v</span>.<span class="var">length</span> &lt; <span class="num">8</span>  ? <span class="str">'Min 8 characters'</span>    : <span class="kw">null</span>,
-      (<span class="var">v</span>) =&gt; !/[A-Z]/.test(<span class="var">v</span>) ? <span class="str">'Needs uppercase letter'</span> : <span class="kw">null</span>,
-      (<span class="var">v</span>) =&gt; !/[0-9]/.test(<span class="var">v</span>) ? <span class="str">'Needs a number'</span>         : <span class="kw">null</span>,
-    ],
-  },
-});
-
-<span class="kw">function</span> <span class="fn">Field</span>({ <span class="var">label</span>, <span class="var">name</span>, <span class="var">type</span> = <span class="str">'text'</span> }: { label: <span class="type">string</span>; name: <span class="kw">keyof typeof</span> <span class="var">form</span>.fields; type?: <span class="type">string</span> }) {
-  <span class="kw">const</span> <span class="var">field</span> = <span class="var">form</span>.fields[<span class="var">name</span>];
-  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'field-group'</span> },
-    <span class="fn">h</span>(<span class="str">'label'</span>, {}, <span class="var">label</span>),
-    <span class="fn">h</span>(<span class="str">'input'</span>, {
-      type,
-      value: <span class="var">field</span>.value,
-      class: () =&gt; <span class="var">field</span>.<span class="fn">error</span>() <span class="op">&amp;&amp;</span> <span class="var">field</span>.<span class="fn">touched</span>() ? <span class="str">'input-error'</span> : <span class="str">''</span>,
-      oninput: (<span class="var">e</span>) =&gt; <span class="var">field</span>.<span class="fn">set</span>((<span class="var">e</span>.target <span class="kw">as</span> <span class="type">HTMLInputElement</span>).value),
-      onblur: () =&gt; <span class="var">field</span>.<span class="fn">touch</span>(),
-    }),
-    <span class="fn">show</span>(() =&gt; !!<span class="var">field</span>.<span class="fn">error</span>() <span class="op">&amp;&amp;</span> <span class="var">field</span>.<span class="fn">touched</span>(),
-      <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'field-error'</span> }, () =&gt; <span class="var">field</span>.<span class="fn">error</span>() ?? <span class="str">''</span>)
+        <span class="attr">class</span>: <span class="str">'btn btn-ghost btn-sm'</span>,
+        <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">tt</span>.<span class="fn">travel</span>(<span class="op">+</span><span class="num">1</span>),
+        <span class="attr">disabled</span>: () <span class="op">=&gt;</span> <span class="var">tt</span>.<span class="fn">present</span>() <span class="op">===</span> <span class="var">tt</span>.<span class="fn">entries</span>().<span class="var">length</span>,
+      }, <span class="str">'Redo →'</span>),
     ),
   );
 }
 
-<span class="kw">const</span> <span class="var">RegisterForm</span> = () =&gt; <span class="fn">h</span>(<span class="str">'form'</span>, {
-  class: <span class="str">'register-form'</span>,
-  onsubmit: <span class="var">form</span>.<span class="fn">submit</span>(<span class="kw">async</span> (<span class="var">values</span>) =&gt; {
-    <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/register'</span>, {
-      method: <span class="str">'POST'</span>,
-      body: <span class="var">JSON</span>.<span class="fn">stringify</span>(<span class="var">values</span>),
-      headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
-    });
-  }),
-},
-  <span class="fn">h</span>(<span class="str">'h2'</span>, {}, <span class="str">'Create Account'</span>),
-  <span class="fn">Field</span>({ label: <span class="str">'Username'</span>, name: <span class="str">'username'</span> }),
-  <span class="fn">Field</span>({ label: <span class="str">'Email'</span>,    name: <span class="str">'email'</span>,    type: <span class="str">'email'</span> }),
-  <span class="fn">Field</span>({ label: <span class="str">'Password'</span>, name: <span class="str">'password'</span>, type: <span class="str">'password'</span> }),
-  <span class="fn">h</span>(<span class="str">'button'</span>, {
-    type: <span class="str">'submit'</span>,
-    disabled: () =&gt; !<span class="var">form</span>.<span class="fn">valid</span>() || <span class="var">form</span>.<span class="fn">submitting</span>(),
-    class: <span class="str">'btn-primary'</span>,
-  }, () =&gt; <span class="var">form</span>.<span class="fn">submitting</span>() ? <span class="str">'Creating...'</span> : <span class="str">'Create Account'</span>),
-  <span class="fn">show</span>(() =&gt; <span class="var">form</span>.<span class="fn">submitted</span>(),
-    <span class="fn">h</span>(<span class="str">'p'</span>, { class: <span class="str">'success'</span> }, <span class="str">'Account created!'</span>)
-  ),
-);
-
-<span class="fn">mountApp</span>(<span class="var">RegisterForm</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>));</code></pre>
+<span class="fn">mountApp</span>(<span class="type">CounterApp</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
     </div>
-  </div>
+  </article>
 
-  <!-- ── Example 5: State Machine Wizard ─────────────────────── -->
-  <div class="example-card" id="state-machine-wizard">
+  <!-- ── Example 2: TodoMVC ──────────────────────────────────── -->
+  <article class="example-card" id="ex-todo">
     <div class="example-header">
-      <div class="example-num">Example 05</div>
-      <div class="example-title">State Machine Wizard</div>
-      <div class="example-desc">Multi-step onboarding wizard driven by a typed state machine. Guards prevent invalid transitions; progress is tracked reactively.</div>
+      <div class="example-num">Example 02</div>
+      <h2 class="example-title">TodoMVC</h2>
+      <p class="example-desc">Full TodoMVC implementation with filters, add/complete/clear, and reactive computed counts. Shows <code>each()</code>, <code>show()</code>, and <code>batch()</code>.</p>
     </div>
     <div class="example-body">
-      <pre><code><span class="kw">import</span> { <span class="fn">createMachine</span>, <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">each</span>, <span class="fn">show</span>, <span class="fn">batch</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
 
+<span class="kw">interface</span> <span class="type">Todo</span> { <span class="attr">id</span>: <span class="type">number</span>; <span class="attr">text</span>: <span class="type">string</span>; <span class="attr">done</span>: <span class="type">boolean</span>; }
+<span class="kw">type</span> <span class="type">Filter</span> = <span class="str">'all'</span> | <span class="str">'active'</span> | <span class="str">'completed'</span>;
+
+<span class="kw">const</span> <span class="var">todos</span>   = <span class="fn">signal</span><span class="op">&lt;</span><span class="type">Todo</span>[]<span class="op">&gt;</span>([]);
+<span class="kw">const</span> <span class="var">input</span>   = <span class="fn">signal</span>(<span class="str">''</span>);
+<span class="kw">const</span> <span class="var">filter</span>  = <span class="fn">signal</span><span class="op">&lt;</span><span class="type">Filter</span><span class="op">&gt;</span>(<span class="str">'all'</span>);
+
+<span class="kw">const</span> <span class="var">visible</span>   = <span class="fn">computed</span>(() <span class="op">=&gt;</span> {
+  <span class="kw">const</span> <span class="var">f</span> = <span class="var">filter</span>();
+  <span class="kw">return</span> <span class="var">todos</span>().<span class="fn">filter</span>(<span class="var">t</span> <span class="op">=&gt;</span>
+    <span class="var">f</span> <span class="op">===</span> <span class="str">'all'</span>       ? <span class="kw">true</span> :
+    <span class="var">f</span> <span class="op">===</span> <span class="str">'active'</span>    ? <span class="op">!</span><span class="var">t</span>.done :
+    <span class="var">t</span>.done
+  );
+});
+<span class="kw">const</span> <span class="var">remaining</span>  = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">todos</span>().<span class="fn">filter</span>(<span class="var">t</span> <span class="op">=&gt;</span> <span class="op">!</span><span class="var">t</span>.done).<span class="var">length</span>);
+<span class="kw">const</span> <span class="var">allDone</span>    = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">todos</span>().<span class="var">length</span> <span class="op">&gt;</span> <span class="num">0</span> <span class="op">&amp;&amp;</span> <span class="var">remaining</span>() <span class="op">===</span> <span class="num">0</span>);
+
+<span class="kw">const</span> <span class="fn">addTodo</span> = () <span class="op">=&gt;</span> {
+  <span class="kw">const</span> <span class="var">text</span> = <span class="var">input</span>().<span class="fn">trim</span>();
+  <span class="kw">if</span> (!<span class="var">text</span>) <span class="kw">return</span>;
+  <span class="var">todos</span>.<span class="fn">set</span>([...<span class="var">todos</span>(), { <span class="attr">id</span>: <span class="type">Date</span>.<span class="fn">now</span>(), <span class="attr">text</span>, <span class="attr">done</span>: <span class="kw">false</span> }]);
+  <span class="var">input</span>.<span class="fn">set</span>(<span class="str">''</span>);
+};
+
+<span class="kw">const</span> <span class="fn">toggle</span> = (<span class="var">id</span>: <span class="type">number</span>) <span class="op">=&gt;</span>
+  <span class="var">todos</span>.<span class="fn">set</span>(<span class="var">todos</span>().<span class="fn">map</span>(<span class="var">t</span> <span class="op">=&gt;</span> <span class="var">t</span>.id <span class="op">===</span> <span class="var">id</span> ? { ...<span class="var">t</span>, <span class="attr">done</span>: <span class="op">!</span><span class="var">t</span>.done } : <span class="var">t</span>));
+
+<span class="kw">const</span> <span class="fn">remove</span> = (<span class="var">id</span>: <span class="type">number</span>) <span class="op">=&gt;</span>
+  <span class="var">todos</span>.<span class="fn">set</span>(<span class="var">todos</span>().<span class="fn">filter</span>(<span class="var">t</span> <span class="op">=&gt;</span> <span class="var">t</span>.id <span class="op">!==</span> <span class="var">id</span>));
+
+<span class="kw">const</span> <span class="fn">clearCompleted</span> = () <span class="op">=&gt;</span>
+  <span class="var">todos</span>.<span class="fn">set</span>(<span class="var">todos</span>().<span class="fn">filter</span>(<span class="var">t</span> <span class="op">=&gt;</span> <span class="op">!</span><span class="var">t</span>.done));
+
+<span class="kw">const</span> <span class="fn">toggleAll</span> = () <span class="op">=&gt;</span>
+  <span class="var">todos</span>.<span class="fn">set</span>(<span class="var">todos</span>().<span class="fn">map</span>(<span class="var">t</span> <span class="op">=&gt;</span> ({ ...<span class="var">t</span>, <span class="attr">done</span>: !<span class="var">allDone</span>() })));
+
+<span class="kw">function</span> <span class="fn">TodoApp</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'section'</span>, { <span class="attr">class</span>: <span class="str">'todoapp'</span> },
+    <span class="fn">h</span>(<span class="str">'header'</span>, {},
+      <span class="fn">h</span>(<span class="str">'h1'</span>, {}, <span class="str">'todos'</span>),
+      <span class="fn">h</span>(<span class="str">'input'</span>, {
+        <span class="attr">class</span>: <span class="str">'new-todo'</span>,
+        <span class="attr">placeholder</span>: <span class="str">'What needs to be done?'</span>,
+        <span class="attr">value</span>: <span class="var">input</span>,
+        <span class="attr">oninput</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">input</span>.<span class="fn">set</span>(<span class="var">e</span>.target.value),
+        <span class="attr">onkeydown</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">e</span>.key <span class="op">===</span> <span class="str">'Enter'</span> <span class="op">&amp;&amp;</span> <span class="fn">addTodo</span>(),
+      }),
+    ),
+    <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">todos</span>().<span class="var">length</span> <span class="op">&gt;</span> <span class="num">0</span>,
+      () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'section'</span>, { <span class="attr">class</span>: <span class="str">'main'</span> },
+        <span class="fn">h</span>(<span class="str">'input'</span>, {
+          <span class="attr">id</span>: <span class="str">'toggle-all'</span>, <span class="attr">type</span>: <span class="str">'checkbox'</span>,
+          <span class="attr">checked</span>: <span class="var">allDone</span>, <span class="attr">onchange</span>: <span class="fn">toggleAll</span>,
+        }),
+        <span class="fn">each</span>(() <span class="op">=&gt;</span> <span class="var">visible</span>(), <span class="var">t</span> <span class="op">=&gt;</span> <span class="var">t</span>.id, (<span class="var">t</span>) <span class="op">=&gt;</span>
+          <span class="fn">h</span>(<span class="str">'li'</span>, { <span class="attr">class</span>: () <span class="op">=&gt;</span> <span class="var">t</span>.done ? <span class="str">'completed'</span> : <span class="str">''</span> },
+            <span class="fn">h</span>(<span class="str">'input'</span>, { <span class="attr">type</span>: <span class="str">'checkbox'</span>, <span class="attr">checked</span>: <span class="var">t</span>.done,
+              <span class="attr">onchange</span>: () <span class="op">=&gt;</span> <span class="fn">toggle</span>(<span class="var">t</span>.id) }),
+            <span class="fn">h</span>(<span class="str">'label'</span>, {}, <span class="var">t</span>.text),
+            <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">class</span>: <span class="str">'destroy'</span>, <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="fn">remove</span>(<span class="var">t</span>.id) }, <span class="str">'×'</span>),
+          )
+        ),
+      )
+    ),
+    <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">todos</span>().<span class="var">length</span> <span class="op">&gt;</span> <span class="num">0</span>,
+      () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'footer'</span>, { <span class="attr">class</span>: <span class="str">'footer'</span> },
+        <span class="fn">h</span>(<span class="str">'span'</span>, {}, () <span class="op">=&gt;</span> <span class="str">`</span>${<span class="var">remaining</span>()}<span class="str"> item</span>${<span class="var">remaining</span>() <span class="op">===</span> <span class="num">1</span> ? <span class="str">''</span> : <span class="str">'s'</span>}<span class="str"> left`</span>),
+        <span class="fn">h</span>(<span class="str">'ul'</span>, { <span class="attr">class</span>: <span class="str">'filters'</span> },
+          ...[<span class="str">'all'</span>, <span class="str">'active'</span>, <span class="str">'completed'</span>].<span class="fn">map</span>(<span class="var">f</span> <span class="op">=&gt;</span>
+            <span class="fn">h</span>(<span class="str">'li'</span>, {},
+              <span class="fn">h</span>(<span class="str">'a'</span>, {
+                <span class="attr">class</span>: () <span class="op">=&gt;</span> <span class="var">filter</span>() <span class="op">===</span> <span class="var">f</span> ? <span class="str">'selected'</span> : <span class="str">''</span>,
+                <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">filter</span>.<span class="fn">set</span>(<span class="var">f</span> <span class="kw">as</span> <span class="type">Filter</span>),
+              }, <span class="var">f</span>[<span class="num">0</span>].<span class="fn">toUpperCase</span>() <span class="op">+</span> <span class="var">f</span>.<span class="fn">slice</span>(<span class="num">1</span>))
+            )
+          )
+        ),
+        <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">todos</span>().<span class="fn">some</span>(<span class="var">t</span> <span class="op">=&gt;</span> <span class="var">t</span>.done),
+          () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">onclick</span>: <span class="fn">clearCompleted</span> }, <span class="str">'Clear completed'</span>)
+        ),
+      )
+    ),
+  );
+}
+
+<span class="fn">mountApp</span>(<span class="type">TodoApp</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
+    </div>
+  </article>
+
+  <!-- ── Example 3: Data Fetching ──────────────────────────────── -->
+  <article class="example-card" id="ex-data">
+    <div class="example-header">
+      <div class="example-num">Example 03</div>
+      <h2 class="example-title">Data Fetching</h2>
+      <p class="example-desc"><code>createResource</code> with reactive loading, error, and retry states. Skeleton UI while fetching, error recovery, and dependent queries.</p>
+    </div>
+    <div class="example-body">
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">createResource</span>, <span class="fn">createQuery</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">each</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+
+<span class="kw">interface</span> <span class="type">Post</span> { <span class="attr">id</span>: <span class="type">number</span>; <span class="attr">title</span>: <span class="type">string</span>; <span class="attr">body</span>: <span class="type">string</span>; <span class="attr">userId</span>: <span class="type">number</span>; }
+<span class="kw">interface</span> <span class="type">User</span> { <span class="attr">id</span>: <span class="type">number</span>; <span class="attr">name</span>: <span class="type">string</span>; <span class="attr">email</span>: <span class="type">string</span>; }
+
+<span class="kw">const</span> <span class="var">selectedId</span> = <span class="fn">signal</span><span class="op">&lt;</span><span class="type">number</span> | <span class="kw">null</span><span class="op">&gt;</span>(<span class="kw">null</span>);
+<span class="kw">const</span> <span class="var">page</span>       = <span class="fn">signal</span>(<span class="num">1</span>);
+
+<span class="cmt">// Posts re-fetch automatically when page changes</span>
+<span class="kw">const</span> <span class="var">posts</span> = <span class="fn">createResource</span><span class="op">&lt;</span><span class="type">Post</span>[]<span class="op">&gt;</span>(
+  () <span class="op">=&gt;</span> <span class="fn">fetch</span>(<span class="str">`https://jsonplaceholder.typicode.com/posts?_page=</span>${<span class="var">page</span>()}<span class="str">&_limit=5`</span>)
+          .<span class="fn">then</span>(<span class="var">r</span> <span class="op">=&gt;</span> <span class="var">r</span>.<span class="fn">json</span>()),
+  { <span class="attr">initialValue</span>: [] }
+);
+
+<span class="cmt">// User resource — only fetches when selectedId is non-null</span>
+<span class="kw">const</span> <span class="var">selectedUser</span> = <span class="fn">createResource</span><span class="op">&lt;</span><span class="type">User</span> | <span class="kw">null</span><span class="op">&gt;</span>(
+  () <span class="op">=&gt;</span> <span class="var">selectedId</span>()
+    ? <span class="fn">fetch</span>(<span class="str">`https://jsonplaceholder.typicode.com/users/</span>${<span class="var">selectedId</span>()}<span class="str">`</span>)
+        .<span class="fn">then</span>(<span class="var">r</span> <span class="op">=&gt;</span> <span class="var">r</span>.<span class="fn">json</span>())
+    : <span class="type">Promise</span>.<span class="fn">resolve</span>(<span class="kw">null</span>),
+  { <span class="attr">initialValue</span>: <span class="kw">null</span> }
+);
+
+<span class="kw">function</span> <span class="fn">Skeleton</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'skeleton-list'</span> },
+    ...<span class="type">Array</span>(<span class="num">5</span>).<span class="fn">fill</span>(<span class="num">0</span>).<span class="fn">map</span>(() <span class="op">=&gt;</span>
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'skeleton-item'</span>,
+        <span class="attr">style</span>: <span class="str">'height:60px;background:var(--bg-hover);border-radius:8px;margin:8px 0;animation:pulse 1.5s infinite'</span>
+      })
+    )
+  );
+}
+
+<span class="kw">function</span> <span class="fn">DataApp</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'data-app'</span> },
+
+    <span class="fn">show</span>(() <span class="op">=&gt;</span> !!<span class="var">posts</span>.<span class="fn">error</span>(),
+      () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'callout callout-warn'</span> },
+        <span class="str">'Error loading posts. '</span>,
+        <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">posts</span>.<span class="fn">refetch</span>() }, <span class="str">'Retry'</span>),
+      )
+    ),
+
+    <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">posts</span>.<span class="fn">loading</span>(),
+      <span class="fn">Skeleton</span>,
+      () <span class="op">=&gt;</span> <span class="fn">each</span>(() <span class="op">=&gt;</span> <span class="var">posts</span>.<span class="fn">data</span>(), <span class="var">p</span> <span class="op">=&gt;</span> <span class="var">p</span>.id, (<span class="var">post</span>) <span class="op">=&gt;</span>
+        <span class="fn">h</span>(<span class="str">'div'</span>, {
+          <span class="attr">class</span>: () <span class="op">=&gt;</span> <span class="var">selectedId</span>() <span class="op">===</span> <span class="var">post</span>.userId ? <span class="str">'post-card active'</span> : <span class="str">'post-card'</span>,
+          <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">selectedId</span>.<span class="fn">set</span>(<span class="var">post</span>.userId),
+        },
+          <span class="fn">h</span>(<span class="str">'h3'</span>, {}, <span class="var">post</span>.title),
+          <span class="fn">h</span>(<span class="str">'p'</span>, {}, <span class="var">post</span>.body.<span class="fn">slice</span>(<span class="num">0</span>, <span class="num">80</span>) <span class="op">+</span> <span class="str">'...'</span>),
+        )
+      )
+    ),
+
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'pagination'</span> },
+      <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">page</span>.<span class="fn">set</span>(<span class="var">p</span> <span class="op">=&gt;</span> <span class="type">Math</span>.<span class="fn">max</span>(<span class="num">1</span>, <span class="var">p</span> <span class="op">-</span> <span class="num">1</span>)), <span class="attr">disabled</span>: () <span class="op">=&gt;</span> <span class="var">page</span>() <span class="op">===</span> <span class="num">1</span> }, <span class="str">'Previous'</span>),
+      () <span class="op">=&gt;</span> <span class="str">`Page </span>${<span class="var">page</span>()}<span class="str">`</span>,
+      <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">page</span>.<span class="fn">set</span>(<span class="var">p</span> <span class="op">=&gt;</span> <span class="var">p</span> <span class="op">+</span> <span class="num">1</span>) }, <span class="str">'Next'</span>),
+    ),
+  );
+}
+
+<span class="fn">mountApp</span>(<span class="type">DataApp</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
+    </div>
+  </article>
+
+  <!-- ── Example 4: Form with Validation ───────────────────────── -->
+  <article class="example-card" id="ex-form">
+    <div class="example-header">
+      <div class="example-num">Example 04</div>
+      <h2 class="example-title">Form with Validation</h2>
+      <p class="example-desc"><code>createForm</code> with schema-driven validation, field-level errors, touched tracking, and async submission handling.</p>
+    </div>
+    <div class="example-body">
+      <pre><code><span class="kw">import</span> { <span class="fn">createForm</span>, <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">submitStatus</span> = <span class="fn">signal</span><span class="op">&lt;</span><span class="str">'idle'</span> | <span class="str">'submitting'</span> | <span class="str">'success'</span> | <span class="str">'error'</span><span class="op">&gt;</span>(<span class="str">'idle'</span>);
+
+<span class="kw">const</span> <span class="var">form</span> = <span class="fn">createForm</span>({
+  <span class="attr">name</span>:     { <span class="attr">initial</span>: <span class="str">''</span>,    <span class="attr">validate</span>: <span class="var">v</span> <span class="op">=&gt;</span> <span class="var">v</span>.<span class="var">length</span> <span class="op">&gt;=</span> <span class="num">2</span>  || <span class="str">'Name must be at least 2 characters'</span> },
+  <span class="attr">email</span>:    { <span class="attr">initial</span>: <span class="str">''</span>,    <span class="attr">validate</span>: <span class="var">v</span> <span class="op">=&gt;</span> <span class="op">/</span>^[^\s@]+@[^\s@]+\.[^\s@]+$<span class="op">/</span>.<span class="fn">test</span>(<span class="var">v</span>) || <span class="str">'Invalid email address'</span> },
+  <span class="attr">password</span>: { <span class="attr">initial</span>: <span class="str">''</span>,    <span class="attr">validate</span>: <span class="var">v</span> <span class="op">=&gt;</span> <span class="var">v</span>.<span class="var">length</span> <span class="op">&gt;=</span> <span class="num">8</span>  || <span class="str">'Password must be at least 8 characters'</span> },
+  <span class="attr">age</span>:      { <span class="attr">initial</span>: <span class="str">''</span>,    <span class="attr">validate</span>: <span class="var">v</span> <span class="op">=&gt;</span> <span class="type">Number</span>(<span class="var">v</span>) <span class="op">&gt;=</span> <span class="num">18</span> || <span class="str">'Must be 18 or older'</span> },
+  <span class="attr">terms</span>:    { <span class="attr">initial</span>: <span class="kw">false</span>, <span class="attr">validate</span>: <span class="var">v</span> <span class="op">=&gt;</span> <span class="var">v</span> <span class="op">===</span> <span class="kw">true</span>     || <span class="str">'You must accept the terms'</span> },
+}, {
+  <span class="attr">onSubmit</span>: <span class="kw">async</span> (<span class="var">values</span>) <span class="op">=&gt;</span> {
+    <span class="var">submitStatus</span>.<span class="fn">set</span>(<span class="str">'submitting'</span>);
+    <span class="kw">try</span> {
+      <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/register'</span>, {
+        <span class="attr">method</span>: <span class="str">'POST'</span>,
+        <span class="attr">body</span>: <span class="type">JSON</span>.<span class="fn">stringify</span>(<span class="var">values</span>),
+        <span class="attr">headers</span>: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
+      });
+      <span class="var">submitStatus</span>.<span class="fn">set</span>(<span class="str">'success'</span>);
+    } <span class="kw">catch</span> {
+      <span class="var">submitStatus</span>.<span class="fn">set</span>(<span class="str">'error'</span>);
+    }
+  }
+});
+
+<span class="kw">function</span> <span class="fn">Field</span>({ <span class="var">label</span>, <span class="var">field</span>, <span class="var">type</span> = <span class="str">'text'</span> }: { <span class="attr">label</span>: <span class="type">string</span>; <span class="attr">field</span>: <span class="kw">any</span>; <span class="attr">type</span>?: <span class="type">string</span> }) {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'field'</span> },
+    <span class="fn">h</span>(<span class="str">'label'</span>, {}, <span class="var">label</span>),
+    <span class="fn">h</span>(<span class="str">'input'</span>, {
+      <span class="attr">type</span>,
+      <span class="attr">value</span>: <span class="var">field</span>.value,
+      <span class="attr">oninput</span>: (<span class="var">e</span>: <span class="kw">any</span>) <span class="op">=&gt;</span> <span class="var">field</span>.value.<span class="fn">set</span>(<span class="var">e</span>.target.value),
+      <span class="attr">onblur</span>:  () <span class="op">=&gt;</span> <span class="var">field</span>.<span class="fn">touch</span>(),
+      <span class="attr">class</span>: () <span class="op">=&gt;</span> <span class="var">field</span>.<span class="fn">error</span>() <span class="op">&amp;&amp;</span> <span class="var">field</span>.<span class="fn">touched</span>() ? <span class="str">'invalid'</span> : <span class="str">''</span>,
+    }),
+    <span class="fn">show</span>(() <span class="op">=&gt;</span> !!(field.error() <span class="op">&amp;&amp;</span> <span class="var">field</span>.<span class="fn">touched</span>()),
+      () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'p'</span>, { <span class="attr">class</span>: <span class="str">'field-error text-red'</span> }, () <span class="op">=&gt;</span> <span class="var">field</span>.<span class="fn">error</span>())
+    ),
+  );
+}
+
+<span class="kw">function</span> <span class="fn">RegisterForm</span>() {
+  <span class="kw">return</span> <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">submitStatus</span>() <span class="op">===</span> <span class="str">'success'</span>,
+    () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'callout callout-tip'</span> }, <span class="str">'Registration successful!'</span>),
+    () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'form'</span>, { <span class="attr">onsubmit</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> { <span class="var">e</span>.<span class="fn">preventDefault</span>(); <span class="var">form</span>.<span class="fn">submit</span>(); } },
+      <span class="fn">Field</span>({ <span class="attr">label</span>: <span class="str">'Full Name'</span>, <span class="attr">field</span>: <span class="var">form</span>.fields.name }),
+      <span class="fn">Field</span>({ <span class="attr">label</span>: <span class="str">'Email'</span>,     <span class="attr">field</span>: <span class="var">form</span>.fields.email,    <span class="attr">type</span>: <span class="str">'email'</span> }),
+      <span class="fn">Field</span>({ <span class="attr">label</span>: <span class="str">'Password'</span>,  <span class="attr">field</span>: <span class="var">form</span>.fields.password, <span class="attr">type</span>: <span class="str">'password'</span> }),
+      <span class="fn">Field</span>({ <span class="attr">label</span>: <span class="str">'Age'</span>,       <span class="attr">field</span>: <span class="var">form</span>.fields.age,      <span class="attr">type</span>: <span class="str">'number'</span> }),
+      <span class="fn">h</span>(<span class="str">'button'</span>, {
+        <span class="attr">type</span>: <span class="str">'submit'</span>,
+        <span class="attr">class</span>: <span class="str">'btn btn-primary'</span>,
+        <span class="attr">disabled</span>: () <span class="op">=&gt;</span> !<span class="var">form</span>.<span class="fn">valid</span>() || <span class="var">submitStatus</span>() <span class="op">===</span> <span class="str">'submitting'</span>,
+      }, () <span class="op">=&gt;</span> <span class="var">submitStatus</span>() <span class="op">===</span> <span class="str">'submitting'</span> ? <span class="str">'Submitting...'</span> : <span class="str">'Create Account'</span>),
+    )
+  );
+}
+
+<span class="fn">mountApp</span>(<span class="type">RegisterForm</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
+    </div>
+  </article>
+
+  <!-- ── Example 5: Wizard State Machine ───────────────────────── -->
+  <article class="example-card" id="ex-wizard">
+    <div class="example-header">
+      <div class="example-num">Example 05</div>
+      <h2 class="example-title">Wizard State Machine</h2>
+      <p class="example-desc"><code>createMachine</code> with guarded transitions for a multi-step form. Guards prevent advancing without valid data. Entry hooks log analytics.</p>
+    </div>
+    <div class="example-body">
+      <pre><code><span class="kw">import</span> { <span class="fn">createMachine</span>, <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+
+<span class="cmt">// Step data</span>
 <span class="kw">const</span> <span class="var">name</span>    = <span class="fn">signal</span>(<span class="str">''</span>);
 <span class="kw">const</span> <span class="var">email</span>   = <span class="fn">signal</span>(<span class="str">''</span>);
-<span class="kw">const</span> <span class="var">plan</span>    = <span class="fn">signal</span>(<span class="str">''</span>);
-<span class="kw">const</span> <span class="var">card</span>    = <span class="fn">signal</span>(<span class="str">''</span>);
-<span class="kw">const</span> <span class="var">submitting</span> = <span class="fn">signal</span>(<span class="kw">false</span>);
+<span class="kw">const</span> <span class="var">plan</span>    = <span class="fn">signal</span><span class="op">&lt;</span><span class="str">'free'</span> | <span class="str">'pro'</span> | <span class="str">'team'</span><span class="op">&gt;</span>(<span class="str">'free'</span>);
+<span class="kw">const</span> <span class="var">payment</span> = <span class="fn">signal</span>(<span class="str">''</span>);
+
+<span class="cmt">// Guards — each step validates before advancing</span>
+<span class="kw">const</span> <span class="var">step1Valid</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">name</span>().<span class="var">length</span> <span class="op">&gt;=</span> <span class="num">2</span>);
+<span class="kw">const</span> <span class="var">step2Valid</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="op">/</span>^[^\s@]+@[^\s@]+<span class="op">/</span>.<span class="fn">test</span>(<span class="var">email</span>()));
+<span class="kw">const</span> <span class="var">step3Valid</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">plan</span>() <span class="op">===</span> <span class="str">'free'</span> || <span class="var">payment</span>().<span class="var">length</span> <span class="op">===</span> <span class="num">16</span>);
 
 <span class="kw">const</span> <span class="var">wizard</span> = <span class="fn">createMachine</span>({
-  initial: <span class="str">'personal'</span>,
-  states: {
-    personal: {
-      on: {
-        NEXT: {
-          target: <span class="str">'plan'</span>,
-          guard: () =&gt; <span class="var">name</span>().<span class="var">length</span> &gt; <span class="num">1</span> <span class="op">&amp;&amp;</span> <span class="var">email</span>().<span class="fn">includes</span>(<span class="str">'@'</span>),
-        },
+  <span class="attr">initial</span>: <span class="str">'name'</span>,
+  <span class="attr">states</span>: {
+    <span class="attr">name</span>: {
+      <span class="attr">on</span>: { <span class="attr">NEXT</span>: { <span class="attr">target</span>: <span class="str">'email'</span>,   <span class="attr">guard</span>: () <span class="op">=&gt;</span> <span class="var">step1Valid</span>() } },
+      <span class="attr">entry</span>: () <span class="op">=&gt;</span> <span class="fn">trackStep</span>(<span class="str">'name'</span>),
+    },
+    <span class="attr">email</span>: {
+      <span class="attr">on</span>: {
+        <span class="attr">NEXT</span>: { <span class="attr">target</span>: <span class="str">'plan'</span>, <span class="attr">guard</span>: () <span class="op">=&gt;</span> <span class="var">step2Valid</span>() },
+        <span class="attr">BACK</span>: <span class="str">'name'</span>,
       },
-      meta: { title: <span class="str">'Personal Info'</span>, step: <span class="num">1</span> },
+      <span class="attr">entry</span>: () <span class="op">=&gt;</span> <span class="fn">trackStep</span>(<span class="str">'email'</span>),
     },
-    plan: {
-      on: {
-        NEXT: { target: <span class="str">'payment'</span>, guard: () =&gt; !!<span class="var">plan</span>() },
-        BACK: <span class="str">'personal'</span>,
+    <span class="attr">plan</span>: {
+      <span class="attr">on</span>: {
+        <span class="attr">NEXT</span>: { <span class="attr">target</span>: <span class="str">'payment'</span>, <span class="attr">guard</span>: () <span class="op">=&gt;</span> <span class="var">step3Valid</span>() },
+        <span class="attr">BACK</span>: <span class="str">'email'</span>,
       },
-      meta: { title: <span class="str">'Choose Plan'</span>, step: <span class="num">2</span> },
     },
-    payment: {
-      on: {
-        SUBMIT: { target: <span class="str">'processing'</span>, guard: () =&gt; <span class="var">card</span>().<span class="var">length</span> <span class="op">===</span> <span class="num">16</span> },
-        BACK: <span class="str">'plan'</span>,
-      },
-      meta: { title: <span class="str">'Payment'</span>, step: <span class="num">3</span> },
+    <span class="attr">payment</span>: {
+      <span class="attr">on</span>: { <span class="attr">NEXT</span>: <span class="str">'confirm'</span>, <span class="attr">BACK</span>: <span class="str">'plan'</span> }
     },
-    processing: {
-      entry: <span class="kw">async</span> () =&gt; {
-        <span class="var">submitting</span>.<span class="fn">set</span>(<span class="kw">true</span>);
-        <span class="kw">await</span> <span class="kw">new</span> <span class="cls">Promise</span>(<span class="var">r</span> =&gt; <span class="fn">setTimeout</span>(<span class="var">r</span>, <span class="num">2000</span>));
-        <span class="var">wizard</span>.<span class="fn">send</span>(<span class="str">'DONE'</span>);
-      },
-      on: { DONE: <span class="str">'complete'</span> },
-      meta: { title: <span class="str">'Processing…'</span>, step: <span class="num">3</span> },
-    },
-    complete: {
-      meta: { title: <span class="str">'All Done!'</span>, step: <span class="num">4</span> },
-    },
+    <span class="attr">confirm</span>: {},
   },
 });
 
-<span class="kw">const</span> <span class="var">Wizard</span> = () =&gt; <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'wizard'</span> },
+<span class="kw">const</span> <span class="var">steps</span> = [<span class="str">'name'</span>, <span class="str">'email'</span>, <span class="str">'plan'</span>, <span class="str">'payment'</span>, <span class="str">'confirm'</span>];
+<span class="kw">const</span> <span class="var">stepIndex</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">steps</span>.<span class="fn">indexOf</span>(<span class="var">wizard</span>.<span class="fn">state</span>()));
+<span class="kw">const</span> <span class="fn">trackStep</span> = (<span class="var">s</span>: <span class="type">string</span>) <span class="op">=&gt;</span> console.<span class="fn">log</span>(<span class="str">'wizard:step:'</span> <span class="op">+</span> <span class="var">s</span>);
 
-  <span class="cmt">// Progress bar</span>
-  <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'wizard-progress'</span> },
-    <span class="fn">h</span>(<span class="str">'div'</span>, {
-      class: <span class="str">'wizard-progress-bar'</span>,
-      style: () =&gt; <span class="str">`width: </span>${(<span class="var">wizard</span>.<span class="fn">state</span>().<span class="var">meta</span>.step / <span class="num">4</span>) * <span class="num">100</span>}<span class="str">%`</span>
-    })
-  ),
-  <span class="fn">h</span>(<span class="str">'h2'</span>, {}, () =&gt; <span class="var">wizard</span>.<span class="fn">state</span>().<span class="var">meta</span>.title),
+<span class="kw">function</span> <span class="fn">WizardApp</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'wizard'</span> },
+    <span class="cmt">// Progress bar</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'progress'</span> },
+      <span class="fn">h</span>(<span class="str">'div'</span>, {
+        <span class="attr">class</span>: <span class="str">'progress-bar'</span>,
+        <span class="attr">style</span>: () <span class="op">=&gt;</span> <span class="str">`width:</span>${((<span class="var">stepIndex</span>() <span class="op">+</span> <span class="num">1</span>) / <span class="var">steps</span>.<span class="var">length</span>) <span class="op">*</span> <span class="num">100</span>}<span class="str">%`</span>,
+      })
+    ),
+    () <span class="op">=&gt;</span> <span class="str">`Step </span>${<span class="var">stepIndex</span>() <span class="op">+</span> <span class="num">1</span>}<span class="str"> of </span>${<span class="var">steps</span>.<span class="var">length</span>}<span class="str">: </span>${<span class="var">wizard</span>.<span class="fn">state</span>()}<span class="str">`,
 
-  <span class="cmt">// Step 1: Personal</span>
-  <span class="fn">show</span>(() =&gt; <span class="var">wizard</span>.<span class="fn">matches</span>(<span class="str">'personal'</span>),
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'step'</span> },
-      <span class="fn">h</span>(<span class="str">'input'</span>, { placeholder: <span class="str">'Full name'</span>, value: <span class="var">name</span>, oninput: <span class="var">e</span> =&gt; <span class="var">name</span>.<span class="fn">set</span>(<span class="var">e</span>.target.value) }),
-      <span class="fn">h</span>(<span class="str">'input'</span>, { type: <span class="str">'email'</span>, placeholder: <span class="str">'Email'</span>, value: <span class="var">email</span>, oninput: <span class="var">e</span> =&gt; <span class="var">email</span>.<span class="fn">set</span>(<span class="var">e</span>.target.value) }),
-      <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: () =&gt; <span class="var">wizard</span>.<span class="fn">send</span>(<span class="str">'NEXT'</span>) }, <span class="str">'Continue →'</span>),
-    )
-  ),
-
-  <span class="cmt">// Step 2: Plan</span>
-  <span class="fn">show</span>(() =&gt; <span class="var">wizard</span>.<span class="fn">matches</span>(<span class="str">'plan'</span>),
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'step'</span> },
-      ...[<span class="str">'free'</span>, <span class="str">'pro'</span>, <span class="str">'enterprise'</span>].<span class="fn">map</span>(<span class="var">p</span> =&gt;
+    <span class="cmt">// Step 1 — Name</span>
+    <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">wizard</span>.<span class="fn">state</span>() <span class="op">===</span> <span class="str">'name'</span>, () <span class="op">=&gt;</span>
+      <span class="fn">h</span>(<span class="str">'div'</span>, {},
+        <span class="fn">h</span>(<span class="str">'input'</span>, { <span class="attr">placeholder</span>: <span class="str">'Your name'</span>, <span class="attr">value</span>: <span class="var">name</span>, <span class="attr">oninput</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">name</span>.<span class="fn">set</span>(<span class="var">e</span>.target.value) }),
+      )
+    ),
+    <span class="cmt">// Step 2 — Email</span>
+    <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">wizard</span>.<span class="fn">state</span>() <span class="op">===</span> <span class="str">'email'</span>, () <span class="op">=&gt;</span>
+      <span class="fn">h</span>(<span class="str">'input'</span>, { <span class="attr">type</span>: <span class="str">'email'</span>, <span class="attr">placeholder</span>: <span class="str">'Email address'</span>, <span class="attr">value</span>: <span class="var">email</span>, <span class="attr">oninput</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">email</span>.<span class="fn">set</span>(<span class="var">e</span>.target.value) })
+    ),
+    <span class="cmt">// Navigation buttons</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'wizard-nav'</span> },
+      <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">wizard</span>.<span class="fn">can</span>(<span class="str">'BACK'</span>), () <span class="op">=&gt;</span>
+        <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">class</span>: <span class="str">'btn btn-ghost'</span>, <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">wizard</span>.<span class="fn">send</span>(<span class="str">'BACK'</span>) }, <span class="str">'Back'</span>)
+      ),
+      <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">wizard</span>.<span class="fn">state</span>() <span class="op">!==</span> <span class="str">'confirm'</span>, () <span class="op">=&gt;</span>
         <span class="fn">h</span>(<span class="str">'button'</span>, {
-          class: () =&gt; <span class="var">plan</span>() <span class="op">===</span> <span class="var">p</span> ? <span class="str">'plan-btn active'</span> : <span class="str">'plan-btn'</span>,
-          onclick: () =&gt; <span class="var">plan</span>.<span class="fn">set</span>(<span class="var">p</span>),
-        }, <span class="var">p</span>.<span class="fn">charAt</span>(<span class="num">0</span>).<span class="fn">toUpperCase</span>() + <span class="var">p</span>.<span class="fn">slice</span>(<span class="num">1</span>))
+          <span class="attr">class</span>: <span class="str">'btn btn-primary'</span>,
+          <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">wizard</span>.<span class="fn">send</span>(<span class="str">'NEXT'</span>),
+          <span class="attr">disabled</span>: () <span class="op">=&gt;</span> !<span class="var">wizard</span>.<span class="fn">can</span>(<span class="str">'NEXT'</span>),
+        }, <span class="str">'Next →'</span>)
       ),
-      <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'step-nav'</span> },
-        <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: () =&gt; <span class="var">wizard</span>.<span class="fn">send</span>(<span class="str">'BACK'</span>) }, <span class="str">'← Back'</span>),
-        <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: () =&gt; <span class="var">wizard</span>.<span class="fn">send</span>(<span class="str">'NEXT'</span>) }, <span class="str">'Continue →'</span>),
-      ),
-    )
-  ),
+    ),
+  );
+}
 
-  <span class="cmt">// Step 3: Payment</span>
-  <span class="fn">show</span>(() =&gt; <span class="var">wizard</span>.<span class="fn">matches</span>(<span class="str">'payment'</span>),
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'step'</span> },
-      <span class="fn">h</span>(<span class="str">'input'</span>, { placeholder: <span class="str">'Card number (16 digits)'</span>, maxlength: <span class="num">16</span>, value: <span class="var">card</span>, oninput: <span class="var">e</span> =&gt; <span class="var">card</span>.<span class="fn">set</span>(<span class="var">e</span>.target.value) }),
-      <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'step-nav'</span> },
-        <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: () =&gt; <span class="var">wizard</span>.<span class="fn">send</span>(<span class="str">'BACK'</span>) }, <span class="str">'← Back'</span>),
-        <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: () =&gt; <span class="var">wizard</span>.<span class="fn">send</span>(<span class="str">'SUBMIT'</span>) }, <span class="str">'Pay Now'</span>),
-      ),
-    )
-  ),
-
-  <span class="cmt">// Processing</span>
-  <span class="fn">show</span>(() =&gt; <span class="var">wizard</span>.<span class="fn">matches</span>(<span class="str">'processing'</span>),
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'step processing'</span> },
-      <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'spinner'</span> }),
-      <span class="fn">h</span>(<span class="str">'p'</span>, {}, <span class="str">'Processing your payment...'</span>),
-    )
-  ),
-
-  <span class="cmt">// Complete</span>
-  <span class="fn">show</span>(() =&gt; <span class="var">wizard</span>.<span class="fn">matches</span>(<span class="str">'complete'</span>),
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'step complete'</span> },
-      <span class="fn">h</span>(<span class="str">'p'</span>, { class: <span class="str">'success-icon'</span> }, <span class="str">'✓'</span>),
-      <span class="fn">h</span>(<span class="str">'h3'</span>, {}, () =&gt; <span class="str">`Welcome, </span>${<span class="var">name</span>()}<span class="str">!`</span>),
-      <span class="fn">h</span>(<span class="str">'p'</span>, {}, () =&gt; <span class="str">`You're on the </span>${<span class="var">plan</span>()}<span class="str"> plan.`</span>),
-    )
-  ),
-);
-
-<span class="fn">mountApp</span>(<span class="var">Wizard</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>));</code></pre>
+<span class="fn">mountApp</span>(<span class="type">WizardApp</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
     </div>
-  </div>
+  </article>
 
-  <!-- ── Example 6: LLM Chat ──────────────────────────────────── -->
-  <div class="example-card" id="llm-chat">
+  <!-- ── Example 6: LLM Chat Interface ────────────────────────── -->
+  <article class="example-card" id="ex-llm">
     <div class="example-header">
       <div class="example-num">Example 06</div>
-      <div class="example-title">LLM Chat</div>
-      <div class="example-desc">Full chat UI with streaming responses, extended thinking visualization, tool call display, and message history using <code>createLLMStream</code>.</div>
+      <h2 class="example-title">LLM Chat Interface</h2>
+      <p class="example-desc"><code>createLLMStream</code> with streaming tokens, thinking indicator, tool call state, and message history. Full chat UI in under 60 lines.</p>
     </div>
     <div class="example-body">
       <pre><code><span class="kw">import</span> {
   <span class="fn">signal</span>, <span class="fn">computed</span>,
   <span class="fn">createLLMStream</span>, <span class="fn">createThinkingState</span>, <span class="fn">createToolCallState</span>,
-  <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">each</span>, <span class="fn">mountApp</span>
+  <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">each</span>, <span class="fn">mountApp</span>,
 } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
 
-<span class="kw">type</span> <span class="type">Message</span> = { role: <span class="str">'user'</span> | <span class="str">'assistant'</span>; content: <span class="type">string</span>; ts: <span class="type">number</span> };
+<span class="kw">interface</span> <span class="type">Message</span> { <span class="attr">role</span>: <span class="str">'user'</span> | <span class="str">'assistant'</span>; <span class="attr">content</span>: <span class="type">string</span>; }
 
-<span class="kw">const</span> <span class="var">messages</span>  = <span class="fn">signal</span>&lt;<span class="type">Message[]</span>&gt;([]);
-<span class="kw">const</span> <span class="var">input</span>     = <span class="fn">signal</span>(<span class="str">''</span>);
-<span class="kw">const</span> <span class="var">showThink</span> = <span class="fn">signal</span>(<span class="kw">false</span>);
+<span class="kw">const</span> <span class="var">messages</span>  = <span class="fn">signal</span><span class="op">&lt;</span><span class="type">Message</span>[]<span class="op">&gt;</span>([]);
+<span class="kw">const</span> <span class="var">userInput</span> = <span class="fn">signal</span>(<span class="str">''</span>);
+<span class="kw">const</span> <span class="var">thinking</span>  = <span class="fn">createThinkingState</span>();
+<span class="kw">const</span> <span class="var">toolCalls</span> = <span class="fn">createToolCallState</span>();
+<span class="kw">const</span> <span class="var">currentTokens</span> = <span class="fn">signal</span>(<span class="num">0</span>);
 
-<span class="cmt">// Create streaming connection</span>
-<span class="kw">const</span> <span class="var">stream</span>  = <span class="fn">createLLMStream</span>({ endpoint: <span class="str">'/api/chat'</span> });
-<span class="kw">const</span> <span class="var">thinking</span> = <span class="fn">createThinkingState</span>();
-<span class="kw">const</span> <span class="var">tools</span>   = <span class="fn">createToolCallState</span>();
+<span class="kw">const</span> <span class="var">stream</span> = <span class="fn">createLLMStream</span>({
+  <span class="attr">endpoint</span>: <span class="str">'/api/chat'</span>,
+  <span class="attr">onStart</span>: () <span class="op">=&gt;</span> {
+    <span class="var">currentTokens</span>.<span class="fn">set</span>(<span class="num">0</span>);
+    <span class="var">messages</span>.<span class="fn">set</span>([...<span class="var">messages</span>(), { <span class="attr">role</span>: <span class="str">'assistant'</span>, <span class="attr">content</span>: <span class="str">''</span> }]);
+  },
+  <span class="attr">onChunk</span>: (<span class="var">chunk</span>) <span class="op">=&gt;</span> {
+    <span class="kw">const</span> <span class="var">list</span> = <span class="var">messages</span>();
+    <span class="kw">const</span> <span class="var">last</span> = list[<span class="var">list</span>.<span class="var">length</span> <span class="op">-</span> <span class="num">1</span>];
+    <span class="var">messages</span>.<span class="fn">set</span>([...<span class="var">list</span>.<span class="fn">slice</span>(<span class="num">0</span>, <span class="op">-</span><span class="num">1</span>), { ...<span class="var">last</span>, <span class="attr">content</span>: <span class="var">last</span>.content <span class="op">+</span> <span class="var">chunk</span> }]);
+    <span class="var">currentTokens</span>.<span class="fn">set</span>(<span class="var">currentTokens</span>() <span class="op">+</span> <span class="num">1</span>);
+  },
+  <span class="attr">onDone</span>: () <span class="op">=&gt;</span> <span class="var">thinking</span>.<span class="fn">stop</span>(),
+  <span class="attr">onError</span>: (<span class="var">err</span>) <span class="op">=&gt;</span> console.<span class="fn">error</span>(<span class="str">'Stream error:'</span>, <span class="var">err</span>),
+  <span class="attr">onTool</span>: (<span class="var">call</span>) <span class="op">=&gt;</span> <span class="var">toolCalls</span>.<span class="fn">add</span>(<span class="var">call</span>),
+});
 
-<span class="kw">const</span> <span class="var">isStreaming</span> = <span class="fn">computed</span>(() =&gt; <span class="var">stream</span>.<span class="fn">status</span>() <span class="op">===</span> <span class="str">'streaming'</span>);
+<span class="kw">const</span> <span class="fn">sendMessage</span> = <span class="kw">async</span> () <span class="op">=&gt;</span> {
+  <span class="kw">const</span> <span class="var">text</span> = <span class="var">userInput</span>().<span class="fn">trim</span>();
+  <span class="kw">if</span> (!<span class="var">text</span> || <span class="var">stream</span>.<span class="fn">status</span>() <span class="op">===</span> <span class="str">'streaming'</span>) <span class="kw">return</span>;
 
-<span class="kw">async function</span> <span class="fn">send</span>() {
-  <span class="kw">const</span> <span class="var">text</span> = <span class="var">input</span>().<span class="fn">trim</span>();
-  <span class="kw">if</span> (!<span class="var">text</span> || <span class="var">isStreaming</span>()) <span class="kw">return</span>;
+  <span class="var">messages</span>.<span class="fn">set</span>([...<span class="var">messages</span>(), { <span class="attr">role</span>: <span class="str">'user'</span>, <span class="attr">content</span>: <span class="var">text</span> }]);
+  <span class="var">userInput</span>.<span class="fn">set</span>(<span class="str">''</span>);
+  <span class="var">thinking</span>.<span class="fn">start</span>();
 
-  <span class="cmt">// Append user message</span>
-  <span class="var">messages</span>.<span class="fn">set</span>([...<span class="var">messages</span>(), { role: <span class="str">'user'</span>, content: <span class="var">text</span>, ts: <span class="var">Date</span>.<span class="fn">now</span>() }]);
-  <span class="var">input</span>.<span class="fn">set</span>(<span class="str">''</span>);
-
-  <span class="cmt">// Stream response</span>
-  <span class="kw">await</span> <span class="var">stream</span>.<span class="fn">send</span>({
-    messages: <span class="var">messages</span>().<span class="fn">map</span>((<span class="var">m</span>) =&gt; ({ role: <span class="var">m</span>.role, content: <span class="var">m</span>.content })),
+  <span class="kw">await</span> <span class="var">stream</span>.<span class="fn">start</span>({
+    <span class="attr">messages</span>: <span class="var">messages</span>().<span class="fn">map</span>(<span class="var">m</span> <span class="op">=&gt;</span> ({ <span class="attr">role</span>: <span class="var">m</span>.role, <span class="attr">content</span>: <span class="var">m</span>.content })),
   });
+};
 
-  <span class="cmt">// Commit streamed response to history</span>
-  <span class="var">messages</span>.<span class="fn">set</span>([...<span class="var">messages</span>(), { role: <span class="str">'assistant'</span>, content: <span class="var">stream</span>.<span class="fn">text</span>(), ts: <span class="var">Date</span>.<span class="fn">now</span>() }]);
+<span class="kw">function</span> <span class="fn">ChatApp</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'chat-app'</span> },
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'messages'</span> },
+      <span class="fn">each</span>(() <span class="op">=&gt;</span> <span class="var">messages</span>(), (<span class="var">_</span>, <span class="var">i</span>) <span class="op">=&gt;</span> <span class="var">i</span>, (<span class="var">msg</span>) <span class="op">=&gt;</span>
+        <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">`message message-</span>${<span class="var">msg</span>.role}<span class="str">`</span> },
+          <span class="fn">h</span>(<span class="str">'strong'</span>, {}, <span class="var">msg</span>.role <span class="op">===</span> <span class="str">'user'</span> ? <span class="str">'You'</span> : <span class="str">'AI'</span>),
+          <span class="fn">h</span>(<span class="str">'p'</span>, {}, <span class="var">msg</span>.content),
+        )
+      ),
+      <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">thinking</span>.<span class="fn">active</span>(), () <span class="op">=&gt;</span>
+        <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'thinking-indicator'</span> },
+          <span class="fn">h</span>(<span class="str">'span'</span>, {}, <span class="str">'AI is thinking'</span>),
+          <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'dots'</span> }, <span class="str">'...'</span>),
+          () <span class="op">=&gt;</span> <span class="str">`</span>${<span class="var">currentTokens</span>()}<span class="str"> tokens`</span>,
+        )
+      ),
+    ),
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'chat-input'</span> },
+      <span class="fn">h</span>(<span class="str">'textarea'</span>, {
+        <span class="attr">value</span>: <span class="var">userInput</span>,
+        <span class="attr">oninput</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">userInput</span>.<span class="fn">set</span>(<span class="var">e</span>.target.value),
+        <span class="attr">onkeydown</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">e</span>.key <span class="op">===</span> <span class="str">'Enter'</span> <span class="op">&amp;&amp;</span> !<span class="var">e</span>.shiftKey <span class="op">&amp;&amp;</span> (<span class="var">e</span>.<span class="fn">preventDefault</span>(), <span class="fn">sendMessage</span>()),
+        <span class="attr">placeholder</span>: <span class="str">'Ask anything... (Enter to send, Shift+Enter for newline)'</span>,
+      }),
+      <span class="fn">h</span>(<span class="str">'button'</span>, {
+        <span class="attr">class</span>: <span class="str">'btn btn-primary'</span>,
+        <span class="attr">onclick</span>: <span class="fn">sendMessage</span>,
+        <span class="attr">disabled</span>: () <span class="op">=&gt;</span> <span class="var">stream</span>.<span class="fn">status</span>() <span class="op">===</span> <span class="str">'streaming'</span>,
+      }, () <span class="op">=&gt;</span> <span class="var">stream</span>.<span class="fn">status</span>() <span class="op">===</span> <span class="str">'streaming'</span> ? <span class="str">'Streaming...'</span> : <span class="str">'Send'</span>),
+      <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">stream</span>.<span class="fn">status</span>() <span class="op">===</span> <span class="str">'streaming'</span>, () <span class="op">=&gt;</span>
+        <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">class</span>: <span class="str">'btn btn-ghost'</span>, <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">stream</span>.<span class="fn">abort</span>() }, <span class="str">'Stop'</span>)
+      ),
+    ),
+  );
 }
 
-<span class="kw">const</span> <span class="var">ChatApp</span> = () =&gt; <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'chat-app'</span> },
-
-  <span class="cmt">// Messages</span>
-  <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'messages'</span> },
-    <span class="fn">each</span>(<span class="var">messages</span>, (<span class="var">msg</span>) =&gt;
-      <span class="fn">h</span>(<span class="str">'div'</span>, { key: <span class="var">msg</span>.ts, class: <span class="str">`message </span>${<span class="var">msg</span>.role}<span class="str">`</span> },
-        <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'message-role'</span> }, <span class="var">msg</span>.role),
-        <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'message-content'</span> }, <span class="var">msg</span>.content),
-      )
-    ),
-
-    <span class="cmt">// Live streaming token</span>
-    <span class="fn">show</span>(<span class="var">isStreaming</span>,
-      <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'message assistant streaming'</span> },
-        <span class="fn">show</span>(() =&gt; <span class="var">thinking</span>.<span class="fn">active</span>() <span class="op">&amp;&amp;</span> <span class="var">showThink</span>(),
-          <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'thinking-block'</span> },
-            <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'thinking-label'</span> }, <span class="str">'Thinking…'</span>),
-            <span class="fn">h</span>(<span class="str">'p'</span>, { class: <span class="str">'thinking-text'</span> }, () =&gt; <span class="var">thinking</span>.<span class="fn">text</span>()),
-          )
-        ),
-        <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'message-content'</span> }, () =&gt; <span class="var">stream</span>.<span class="fn">text</span>()),
-        <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'cursor'</span> }),
-      )
-    ),
-  ),
-
-  <span class="cmt">// Tool calls badge</span>
-  <span class="fn">show</span>(() =&gt; <span class="var">tools</span>.<span class="fn">active</span>().<span class="var">length</span> &gt; <span class="num">0</span>,
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'tool-calls'</span> },
-      <span class="fn">each</span>(<span class="var">tools</span>.<span class="fn">active</span>, (<span class="var">tc</span>) =&gt;
-        <span class="fn">h</span>(<span class="str">'div'</span>, { key: <span class="var">tc</span>.id, class: <span class="str">'tool-call'</span> },
-          <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'tool-name'</span> }, <span class="var">tc</span>.name),
-          <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'tool-status'</span> }, <span class="var">tc</span>.status),
-        )
-      )
-    )
-  ),
-
-  <span class="cmt">// Input bar</span>
-  <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'chat-input-bar'</span> },
-    <span class="fn">h</span>(<span class="str">'textarea'</span>, {
-      placeholder: <span class="str">'Message AI...'</span>,
-      value: <span class="var">input</span>,
-      oninput: (<span class="var">e</span>) =&gt; <span class="var">input</span>.<span class="fn">set</span>((<span class="var">e</span>.target <span class="kw">as</span> <span class="type">HTMLTextAreaElement</span>).value),
-      onkeydown: (<span class="var">e</span>) =&gt; {
-        <span class="kw">if</span> ((<span class="var">e</span> <span class="kw">as</span> <span class="type">KeyboardEvent</span>).key <span class="op">===</span> <span class="str">'Enter'</span> <span class="op">&amp;&amp;</span> !(<span class="var">e</span> <span class="kw">as</span> <span class="type">KeyboardEvent</span>).shiftKey) {
-          <span class="var">e</span>.<span class="fn">preventDefault</span>();
-          <span class="fn">send</span>();
-        }
-      },
-    }),
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'chat-options'</span> },
-      <span class="fn">h</span>(<span class="str">'label'</span>, {},
-        <span class="fn">h</span>(<span class="str">'input'</span>, { type: <span class="str">'checkbox'</span>, checked: <span class="var">showThink</span>, onchange: () =&gt; <span class="var">showThink</span>.<span class="fn">set</span>(!<span class="var">showThink</span>()) }),
-        <span class="str">' Show thinking'</span>,
-      ),
-      <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'token-count'</span> }, () =&gt; <span class="str">`</span>${<span class="var">stream</span>.<span class="fn">tokens</span>()}<span class="str"> tokens`</span>),
-    ),
-    <span class="fn">h</span>(<span class="str">'button'</span>, {
-      onclick: <span class="fn">send</span>,
-      disabled: <span class="var">isStreaming</span>,
-      class: <span class="str">'send-btn'</span>,
-    }, () =&gt; <span class="var">isStreaming</span>() ? <span class="str">'Streaming...'</span> : <span class="str">'Send'</span>),
-  ),
-);
-
-<span class="fn">mountApp</span>(<span class="var">ChatApp</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>));</code></pre>
+<span class="fn">mountApp</span>(<span class="type">ChatApp</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
     </div>
-  </div>
+  </article>
 
-  <!-- ── Example 7: Feature Flags ────────────────────────────── -->
-  <div class="example-card" id="feature-flags">
+  <!-- ── Example 7: Feature Flag A/B Test ─────────────────────── -->
+  <article class="example-card" id="ex-flags">
     <div class="example-header">
       <div class="example-num">Example 07</div>
-      <div class="example-title">Feature Flags &amp; A/B Testing</div>
-      <div class="example-desc">Multi-armed bandit A/B testing with auto-rollout, percentage-based flags, and real-time variant switching.</div>
+      <h2 class="example-title">Feature Flag A/B Test</h2>
+      <p class="example-desc"><code>createFlag</code> for boolean and variant flags, <code>createBandit</code> for epsilon-greedy traffic allocation, and reactive UI that updates when flag values change.</p>
     </div>
     <div class="example-body">
-      <pre><code><span class="kw">import</span> {
-  <span class="fn">createFlag</span>, <span class="fn">createFlagStore</span>, <span class="fn">createBandit</span>, <span class="fn">createAutoRollout</span>,
-  <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">each</span>, <span class="fn">mountApp</span>
-} <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createFlag</span>, <span class="fn">createBandit</span>, <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
 
-<span class="kw">const</span> <span class="var">userId</span> = <span class="fn">signal</span>(<span class="str">'user-abc-123'</span>);
-
-<span class="cmt">// Simple boolean flag with percentage rollout</span>
-<span class="kw">const</span> <span class="var">darkMode</span> = <span class="fn">createFlag</span>({
-  key: <span class="str">'dark-mode-v2'</span>,
-  defaultValue: <span class="kw">false</span>,
-  rules: [{ percentage: <span class="num">50</span>, value: <span class="kw">true</span> }],
-  userId: <span class="var">userId</span>,
+<span class="cmt">// Simple boolean flag</span>
+<span class="kw">const</span> <span class="var">newUiFlag</span> = <span class="fn">createFlag</span>(<span class="str">'new-ui'</span>, {
+  <span class="attr">defaultValue</span>: <span class="kw">false</span>,
+  <span class="attr">targeting</span>: { <span class="attr">percentile</span>: <span class="num">50</span> },  <span class="cmt">// 50% of users</span>
 });
 
 <span class="cmt">// Multi-variant flag</span>
-<span class="kw">const</span> <span class="var">checkoutVariant</span> = <span class="fn">createFlag</span>({
-  key: <span class="str">'checkout-flow'</span>,
-  defaultValue: <span class="str">'control'</span>,
-  variants: [
-    { key: <span class="str">'control'</span>,    weight: <span class="num">40</span> },
-    { key: <span class="str">'one-page'</span>,   weight: <span class="num">30</span> },
-    { key: <span class="str">'progressive'</span>, weight: <span class="num">30</span> },
-  ],
-  userId: <span class="var">userId</span>,
+<span class="kw">const</span> <span class="var">ctaFlag</span> = <span class="fn">createFlag</span><span class="op">&lt;</span><span class="str">'control'</span> | <span class="str">'variant-a'</span> | <span class="str">'variant-b'</span><span class="op">&gt;</span>(<span class="str">'cta-text'</span>, {
+  <span class="attr">defaultValue</span>: <span class="str">'control'</span>,
+  <span class="attr">variants</span>: {
+    <span class="str">'control'</span>:   { <span class="attr">weight</span>: <span class="num">34</span> },
+    <span class="str">'variant-a'</span>: { <span class="attr">weight</span>: <span class="num">33</span> },
+    <span class="str">'variant-b'</span>: { <span class="attr">weight</span>: <span class="num">33</span> },
+  },
 });
 
-<span class="cmt">// Bandit — converges automatically on best-performing variant</span>
+<span class="cmt">// Multi-armed bandit — automatically shifts traffic to the winner</span>
 <span class="kw">const</span> <span class="var">bandit</span> = <span class="fn">createBandit</span>({
-  key: <span class="str">'cta-button'</span>,
-  arms: [
-    { key: <span class="str">'Get Started'</span>,  initialReward: <span class="num">0.1</span> },
-    { key: <span class="str">'Start for Free'</span>, initialReward: <span class="num">0.12</span> },
-    { key: <span class="str">'Try DRISHTI'</span>,   initialReward: <span class="num">0.08</span> },
-  ],
-  algorithm: <span class="str">'thompson'</span>,
+  <span class="attr">arms</span>: [<span class="str">'control'</span>, <span class="str">'variant-a'</span>, <span class="str">'variant-b'</span>],
+  <span class="attr">algorithm</span>: <span class="str">'epsilon-greedy'</span>,
+  <span class="attr">epsilon</span>: <span class="num">0.1</span>,
+  <span class="attr">onConvert</span>: (<span class="var">arm</span>, <span class="var">reward</span>) <span class="op">=&gt;</span> console.<span class="fn">log</span>(<span class="str">`Arm </span>${<span class="var">arm</span>}<span class="str"> converted with reward </span>${<span class="var">reward</span>}<span class="str">`</span>),
 });
 
-<span class="cmt">// Auto-rollout — ramps 0→100% over 7 days while error rate &lt; 1%</span>
-<span class="kw">const</span> <span class="var">newEditor</span> = <span class="fn">createAutoRollout</span>({
-  key: <span class="str">'new-editor'</span>,
-  targetPercentage: <span class="num">100</span>,
-  durationDays: <span class="num">7</span>,
-  gates: [
-    { metric: <span class="str">'error_rate'</span>, threshold: <span class="num">0.01</span>, direction: <span class="str">'below'</span> },
-    { metric: <span class="str">'p95_latency_ms'</span>, threshold: <span class="num">200</span>, direction: <span class="str">'below'</span> },
-  ],
+<span class="cmt">// Compute the CTA text for the current variant</span>
+<span class="kw">const</span> <span class="var">ctaText</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> {
+  <span class="kw">const</span> <span class="var">variant</span> = <span class="var">ctaFlag</span>.<span class="fn">value</span>();
+  <span class="kw">return</span> {
+    <span class="str">'control'</span>:   <span class="str">'Sign Up Free'</span>,
+    <span class="str">'variant-a'</span>: <span class="str">'Start Building Today'</span>,
+    <span class="str">'variant-b'</span>: <span class="str">'Get Started in 60 Seconds'</span>,
+  }[<span class="var">variant</span>] ?? <span class="str">'Sign Up'</span>;
 });
 
-<span class="kw">const</span> <span class="var">FlagDemo</span> = () =&gt; <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'flag-demo'</span> },
-  <span class="fn">h</span>(<span class="str">'h2'</span>, {}, <span class="str">'Feature Flags'</span>),
+<span class="kw">const</span> <span class="var">clicks</span>     = <span class="fn">signal</span>(<span class="num">0</span>);
+<span class="kw">const</span> <span class="var">conversions</span> = <span class="fn">signal</span>(<span class="num">0</span>);
+<span class="kw">const</span> <span class="var">ctr</span>         = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">clicks</span>() <span class="op">===</span> <span class="num">0</span> ? <span class="str">'0%'</span> : `${((<span class="var">conversions</span>() / <span class="var">clicks</span>()) <span class="op">*</span> <span class="num">100</span>).<span class="fn">toFixed</span>(<span class="num">1</span>)}<span class="str">%`</span>);
 
-  <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'flag-table'</span> },
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'flag-row'</span> },
-      <span class="fn">h</span>(<span class="str">'span'</span>, {}, <span class="str">'dark-mode-v2'</span>),
-      <span class="fn">h</span>(<span class="str">'span'</span>, { class: () =&gt; <span class="var">darkMode</span>.<span class="fn">value</span>() ? <span class="str">'badge-green'</span> : <span class="str">'badge'</span> },
-        () =&gt; <span class="fn">String</span>(<span class="var">darkMode</span>.<span class="fn">value</span>())
-      ),
-    ),
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'flag-row'</span> },
-      <span class="fn">h</span>(<span class="str">'span'</span>, {}, <span class="str">'checkout-flow'</span>),
-      <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'badge'</span> }, () =&gt; <span class="var">checkoutVariant</span>.<span class="fn">value</span>()),
-    ),
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'flag-row'</span> },
-      <span class="fn">h</span>(<span class="str">'span'</span>, {}, <span class="str">'CTA Bandit winner'</span>),
-      <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'badge'</span> }, () =&gt; <span class="var">bandit</span>.<span class="fn">bestArm</span>()?.key ?? <span class="str">'—'</span>),
-    ),
-    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'flag-row'</span> },
-      <span class="fn">h</span>(<span class="str">'span'</span>, {}, <span class="str">'new-editor rollout'</span>),
-      <span class="fn">h</span>(<span class="str">'span'</span>, {}, () =&gt; <span class="str">`</span>${<span class="var">newEditor</span>.<span class="fn">percentage</span>().<span class="fn">toFixed</span>(<span class="num">1</span>)}<span class="str">%`</span>),
-    ),
-  ),
+<span class="kw">function</span> <span class="fn">FlagDemo</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'flag-demo'</span> },
 
-  <span class="cmt">// Dynamic CTA from bandit</span>
-  <span class="fn">h</span>(<span class="str">'button'</span>, {
-    class: <span class="str">'btn-primary btn-lg'</span>,
-    onclick: () =&gt; <span class="var">bandit</span>.<span class="fn">reward</span>(<span class="var">bandit</span>.<span class="fn">value</span>(), <span class="num">1</span>),
-  }, () =&gt; <span class="var">bandit</span>.<span class="fn">value</span>()),
+    <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">newUiFlag</span>.<span class="fn">value</span>(),
+      () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'callout callout-tip'</span> }, <span class="str">'New UI is enabled for you!'</span>),
+      () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'callout callout-info'</span> }, <span class="str">'You are in the control group.'</span>),
+    ),
 
-  <span class="cmt">// Override user id for testing</span>
-  <span class="fn">h</span>(<span class="str">'input'</span>, {
-    placeholder: <span class="str">'Override user ID'</span>,
-    value: <span class="var">userId</span>,
-    oninput: (<span class="var">e</span>) =&gt; <span class="var">userId</span>.<span class="fn">set</span>((<span class="var">e</span>.target <span class="kw">as</span> <span class="type">HTMLInputElement</span>).value),
-  }),
-);
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'ab-hero'</span> },
+      <span class="fn">h</span>(<span class="str">'h2'</span>, {}, () <span class="op">=&gt;</span> <span class="var">ctaText</span>()),
+      <span class="fn">h</span>(<span class="str">'p'</span>, { <span class="attr">class</span>: <span class="str">'text-muted'</span> }, () <span class="op">=&gt;</span> <span class="str">`Variant: </span>${<span class="var">ctaFlag</span>.<span class="fn">value</span>()}<span class="str">`</span>),
+      <span class="fn">h</span>(<span class="str">'button'</span>, {
+        <span class="attr">class</span>: <span class="str">'btn btn-primary btn-lg'</span>,
+        <span class="attr">onclick</span>: () <span class="op">=&gt;</span> {
+          <span class="var">clicks</span>.<span class="fn">set</span>(<span class="var">c</span> <span class="op">=&gt;</span> <span class="var">c</span> <span class="op">+</span> <span class="num">1</span>);
+          <span class="kw">if</span> (<span class="type">Math</span>.<span class="fn">random</span>() <span class="op">&gt;</span> <span class="num">0.7</span>) {
+            <span class="var">conversions</span>.<span class="fn">set</span>(<span class="var">c</span> <span class="op">=&gt;</span> <span class="var">c</span> <span class="op">+</span> <span class="num">1</span>);
+            <span class="var">bandit</span>.<span class="fn">reward</span>(<span class="var">ctaFlag</span>.<span class="fn">value</span>(), <span class="num">1</span>);
+          }
+        },
+      }, () <span class="op">=&gt;</span> <span class="var">ctaText</span>()),
+    ),
 
-<span class="fn">mountApp</span>(<span class="var">FlagDemo</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>));</code></pre>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'stats'</span> },
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'stat'</span> }, () <span class="op">=&gt;</span> <span class="str">`Clicks: </span>${<span class="var">clicks</span>()}<span class="str">`</span>),
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'stat'</span> }, () <span class="op">=&gt;</span> <span class="str">`Conversions: </span>${<span class="var">conversions</span>()}<span class="str">`</span>),
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'stat'</span> }, () <span class="op">=&gt;</span> <span class="str">`CTR: </span>${<span class="var">ctr</span>()}<span class="str">`</span>),
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'stat'</span> }, () <span class="op">=&gt;</span> <span class="str">`Bandit arm: </span>${<span class="var">bandit</span>.<span class="fn">bestArm</span>()}<span class="str">`</span>),
+    ),
+  );
+}
+
+<span class="fn">mountApp</span>(<span class="type">FlagDemo</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
     </div>
-  </div>
+  </article>
 
-  <!-- ── Example 8: Real-time Sync ────────────────────────────── -->
-  <div class="example-card" id="realtime-sync">
+  <!-- ── Example 8: Real-time Collab ───────────────────────────── -->
+  <article class="example-card" id="ex-collab">
     <div class="example-header">
       <div class="example-num">Example 08</div>
-      <div class="example-title">Real-time Sync</div>
-      <div class="example-desc">Collaborative whiteboard using <code>createCollabSession</code> for CRDT state and <code>connectWS</code> for cursor presence. All conflict-free.</div>
+      <h2 class="example-title">Real-time Collaboration</h2>
+      <p class="example-desc"><code>createCollabSession</code> with CRDT-backed signal syncing, live presence indicators, and cursor positions. Shows the full multi-user reactive model.</p>
     </div>
     <div class="example-body">
       <pre><code><span class="kw">import</span> {
-  <span class="fn">createCollabSession</span>, <span class="fn">connectWS</span>, <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">effect</span>,
-  <span class="fn">h</span>, <span class="fn">each</span>, <span class="fn">show</span>, <span class="fn">mountApp</span>
+  <span class="fn">createCollabSession</span>, <span class="fn">signal</span>, <span class="fn">computed</span>,
+  <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">each</span>, <span class="fn">mountApp</span>,
 } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
 
-<span class="kw">type</span> <span class="type">Point</span> = { x: <span class="type">number</span>; y: <span class="type">number</span> };
-<span class="kw">type</span> <span class="type">Shape</span> = { id: <span class="type">string</span>; type: <span class="str">'rect'</span> | <span class="str">'circle'</span>; pos: <span class="type">Point</span>; color: <span class="type">string</span> };
+<span class="kw">const</span> <span class="var">COLORS</span> = [<span class="str">'#6366f1'</span>, <span class="str">'#10b981'</span>, <span class="str">'#f59e0b'</span>, <span class="str">'#ef4444'</span>, <span class="str">'#3b82f6'</span>];
 
-<span class="kw">const</span> <span class="var">myId</span> = <span class="fn">signal</span>(<span class="var">crypto</span>.<span class="fn">randomUUID</span>());
-<span class="kw">const</span> <span class="var">myColor</span> = <span class="fn">signal</span>(<span class="str">#6366f1'</span>);
+<span class="cmt">// Each user gets a random ID and color</span>
+<span class="kw">const</span> <span class="var">myId</span>    = <span class="str">'user-'</span> <span class="op">+</span> <span class="type">Math</span>.<span class="fn">random</span>().<span class="fn">toString</span>(<span class="num">36</span>).<span class="fn">slice</span>(<span class="num">2</span>, <span class="num">8</span>);
+<span class="kw">const</span> <span class="var">myColor</span> = <span class="var">COLORS</span>[<span class="type">Math</span>.<span class="fn">floor</span>(<span class="type">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="var">COLORS</span>.<span class="var">length</span>)];
 
-<span class="cmt">// CRDT session — all mutations are conflict-free</span>
 <span class="kw">const</span> <span class="var">session</span> = <span class="fn">createCollabSession</span>({
-  room: <span class="str">'whiteboard-1'</span>,
-  transport: <span class="str">'wss://collab.example.com'</span>,
-  userId: <span class="var">myId</span>(),
-  presence: { color: <span class="var">myColor</span>(), name: <span class="str">'Me'</span> },
+  <span class="attr">room</span>:     <span class="str">'drishti-demo-doc'</span>,
+  <span class="attr">userId</span>:   <span class="var">myId</span>,
+  <span class="attr">wsUrl</span>:    <span class="str">'wss://collab.drishti.dev'</span>,
+  <span class="attr">presence</span>: <span class="kw">true</span>,
+  <span class="attr">meta</span>:     { <span class="attr">color</span>: <span class="var">myColor</span>, <span class="attr">name</span>: <span class="str">'Anonymous '</span> <span class="op">+</span> <span class="var">myId</span>.<span class="fn">slice</span>(<span class="op">-</span><span class="num">4</span>) },
 });
 
-<span class="cmt">// Shared signals — sync automatically across all clients</span>
-<span class="kw">const</span> <span class="var">shapes</span> = <span class="var">session</span>.<span class="fn">signal</span>&lt;<span class="type">Shape[]</span>&gt;(<span class="str">'shapes'</span>, []);
-<span class="kw">const</span> <span class="var">title</span>  = <span class="var">session</span>.<span class="fn">signal</span>&lt;<span class="type">string</span>&gt;(<span class="str">'title'</span>, <span class="str">'Untitled Board'</span>);
+<span class="cmt">// These signals are synced via CRDT across all connected clients</span>
+<span class="kw">const</span> <span class="var">title</span>   = <span class="fn">signal</span>(<span class="str">'Untitled Document'</span>);
+<span class="kw">const</span> <span class="var">content</span> = <span class="fn">signal</span>(<span class="str">''</span>);
+<span class="kw">const</span> <span class="var">tags</span>    = <span class="fn">signal</span><span class="op">&lt;</span><span class="type">string</span>[]<span class="op">&gt;</span>([]);
 
-<span class="cmt">// Local cursor position (not shared via CRDT — use presence instead)</span>
-<span class="kw">const</span> <span class="var">cursor</span> = <span class="fn">signal</span>&lt;<span class="type">Point</span>&gt;({ x: <span class="num">0</span>, y: <span class="num">0</span> });
+<span class="var">session</span>.<span class="fn">sync</span>(<span class="str">'title'</span>,   <span class="var">title</span>);
+<span class="var">session</span>.<span class="fn">sync</span>(<span class="str">'content'</span>, <span class="var">content</span>);
+<span class="var">session</span>.<span class="fn">sync</span>(<span class="str">'tags'</span>,    <span class="var">tags</span>);
 
-<span class="cmt">// Computed: number of online collaborators</span>
-<span class="kw">const</span> <span class="var">onlineCount</span> = <span class="fn">computed</span>(() =&gt; <span class="var">session</span>.<span class="fn">presence</span>().<span class="var">length</span>);
+<span class="cmt">// Derived reactive values</span>
+<span class="kw">const</span> <span class="var">peerCount</span>  = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">session</span>.<span class="fn">peers</span>().<span class="var">length</span>);
+<span class="kw">const</span> <span class="var">wordCount</span>  = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">content</span>().<span class="fn">split</span>(<span class="op">/</span>\s+<span class="op">/</span>).<span class="fn">filter</span>(<span class="type">Boolean</span>).<span class="var">length</span>);
+<span class="kw">const</span> <span class="var">charCount</span>  = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">content</span>().<span class="var">length</span>);
+<span class="kw">const</span> <span class="var">newTag</span>     = <span class="fn">signal</span>(<span class="str">''</span>);
 
-<span class="kw">function</span> <span class="fn">addShape</span>(<span class="var">type</span>: <span class="type">'rect' | 'circle'</span>) {
-  <span class="kw">const</span> <span class="var">shape</span>: <span class="type">Shape</span> = {
-    id: <span class="var">crypto</span>.<span class="fn">randomUUID</span>(),
-    type,
-    pos: { x: <span class="var">cursor</span>().x, y: <span class="var">cursor</span>().y },
-    color: <span class="var">myColor</span>(),
-  };
-  <span class="var">shapes</span>.<span class="fn">set</span>([...<span class="var">shapes</span>(), <span class="var">shape</span>]);
-  <span class="cmt">// Change syncs to all clients instantly via WebSocket + CRDT</span>
-}
+<span class="kw">const</span> <span class="fn">addTag</span> = () <span class="op">=&gt;</span> {
+  <span class="kw">const</span> <span class="var">t</span> = <span class="var">newTag</span>().<span class="fn">trim</span>();
+  <span class="kw">if</span> (<span class="var">t</span> <span class="op">&amp;&amp;</span> !<span class="var">tags</span>().<span class="fn">includes</span>(<span class="var">t</span>)) <span class="var">tags</span>.<span class="fn">set</span>([...<span class="var">tags</span>(), <span class="var">t</span>]);
+  <span class="var">newTag</span>.<span class="fn">set</span>(<span class="str">''</span>);
+};
 
-<span class="kw">function</span> <span class="fn">deleteShape</span>(<span class="var">id</span>: <span class="type">string</span>) {
-  <span class="var">shapes</span>.<span class="fn">set</span>(<span class="var">shapes</span>().<span class="fn">filter</span>(<span class="var">s</span> =&gt; <span class="var">s</span>.id <span class="op">!==</span> <span class="var">id</span>));
-}
+<span class="kw">function</span> <span class="fn">CollabDoc</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'collab-doc'</span> },
 
-<span class="kw">const</span> <span class="var">Whiteboard</span> = () =&gt; <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'whiteboard'</span> },
+    <span class="cmt">// Presence bar</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'presence-bar'</span> },
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'presence-avatars'</span> },
+        <span class="cmt">// My avatar</span>
+        <span class="fn">h</span>(<span class="str">'span'</span>, {
+          <span class="attr">class</span>: <span class="str">'avatar'</span>,
+          <span class="attr">style</span>: <span class="str">`background:</span>${<span class="var">myColor</span>}<span class="str">;outline:2px solid </span>${<span class="var">myColor</span>}<span class="str">`</span>,
+          <span class="attr">title</span>: <span class="str">'You (me)'</span>,
+        }, <span class="var">myId</span>.<span class="fn">slice</span>(<span class="op">-</span><span class="num">2</span>).<span class="fn">toUpperCase</span>()),
+        <span class="cmt">// Peer avatars</span>
+        <span class="fn">each</span>(() <span class="op">=&gt;</span> <span class="var">session</span>.<span class="fn">peers</span>(), <span class="var">p</span> <span class="op">=&gt;</span> <span class="var">p</span>.userId, (<span class="var">peer</span>) <span class="op">=&gt;</span>
+          <span class="fn">h</span>(<span class="str">'span'</span>, {
+            <span class="attr">class</span>: <span class="str">'avatar'</span>,
+            <span class="attr">style</span>: () <span class="op">=&gt;</span> <span class="str">`background:</span>${<span class="var">peer</span>.meta?.color ?? <span class="str">'#6366f1'</span>}<span class="str">`</span>,
+            <span class="attr">title</span>: () <span class="op">=&gt;</span> <span class="var">peer</span>.meta?.name ?? <span class="var">peer</span>.userId,
+          }, () <span class="op">=&gt;</span> <span class="var">peer</span>.userId.<span class="fn">slice</span>(<span class="op">-</span><span class="num">2</span>).<span class="fn">toUpperCase</span>())
+        ),
+      ),
+      <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'presence-count text-muted'</span> },
+        () <span class="op">=&gt;</span> <span class="str">`</span>${<span class="var">peerCount</span>() <span class="op">+</span> <span class="num">1</span>}<span class="str"> user</span>${<span class="var">peerCount</span>() <span class="op">===</span> <span class="num">0</span> ? <span class="str">''</span> : <span class="str">'s'</span>}<span class="str"> editing`</span>
+      ),
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'token-pill'</span> },
+        <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'token-dot'</span> }),
+        () <span class="op">=&gt;</span> <span class="var">session</span>.<span class="fn">status</span>(),
+      ),
+    ),
 
-  <span class="cmt">// Toolbar</span>
-  <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'wb-toolbar'</span> },
+    <span class="cmt">// Title input — synced</span>
     <span class="fn">h</span>(<span class="str">'input'</span>, {
-      value: <span class="var">title</span>,
-      class: <span class="str">'wb-title'</span>,
-      oninput: (<span class="var">e</span>) =&gt; <span class="var">title</span>.<span class="fn">set</span>((<span class="var">e</span>.target <span class="kw">as</span> <span class="type">HTMLInputElement</span>).value),
+      <span class="attr">class</span>: <span class="str">'doc-title'</span>,
+      <span class="attr">value</span>: <span class="var">title</span>,
+      <span class="attr">oninput</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">title</span>.<span class="fn">set</span>(<span class="var">e</span>.target.value),
+      <span class="attr">placeholder</span>: <span class="str">'Document title...'</span>,
     }),
-    <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: () =&gt; <span class="fn">addShape</span>(<span class="str">'rect'</span>) }, <span class="str">'+ Rect'</span>),
-    <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: () =&gt; <span class="fn">addShape</span>(<span class="str">'circle'</span>) }, <span class="str">'+ Circle'</span>),
-    <span class="fn">h</span>(<span class="str">'input'</span>, { type: <span class="str">'color'</span>, value: <span class="var">myColor</span>, oninput: (<span class="var">e</span>) =&gt; <span class="var">myColor</span>.<span class="fn">set</span>((<span class="var">e</span>.target <span class="kw">as</span> <span class="type">HTMLInputElement</span>).value) }),
-    <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'presence-badge'</span> }, () =&gt; <span class="str">`</span>${<span class="var">onlineCount</span>()}<span class="str"> online`</span>),
-  ),
 
-  <span class="cmt">// Canvas</span>
-  <span class="fn">h</span>(<span class="str">'div'</span>, {
-    class: <span class="str">'canvas'</span>,
-    onmousemove: (<span class="var">e</span>) =&gt; {
-      <span class="kw">const</span> <span class="var">rect</span> = (<span class="var">e</span>.currentTarget <span class="kw">as</span> <span class="type">HTMLDivElement</span>).<span class="fn">getBoundingClientRect</span>();
-      <span class="var">cursor</span>.<span class="fn">set</span>({ x: <span class="var">e</span>.clientX - <span class="var">rect</span>.left, y: <span class="var">e</span>.clientY - <span class="var">rect</span>.top });
-      <span class="cmt">// Broadcast cursor position to presence</span>
-      <span class="var">session</span>.<span class="fn">updatePresence</span>({ cursor: <span class="var">cursor</span>() });
-    },
-  },
-    <span class="cmt">// Render shapes</span>
-    <span class="fn">each</span>(<span class="var">shapes</span>, (<span class="var">shape</span>) =&gt;
-      <span class="fn">h</span>(<span class="str">'div'</span>, {
-        key: <span class="var">shape</span>.id,
-        class: <span class="str">`shape </span>${<span class="var">shape</span>.type}<span class="str">`</span>,
-        style: () =&gt; <span class="str">`left: </span>${<span class="var">shape</span>.pos.x}<span class="str">px; top: </span>${<span class="var">shape</span>.pos.y}<span class="str">px; background: </span>${<span class="var">shape</span>.color}<span class="str">`</span>,
-        ondblclick: () =&gt; <span class="fn">deleteShape</span>(<span class="var">shape</span>.id),
-      })
+    <span class="cmt">// Content textarea — synced</span>
+    <span class="fn">h</span>(<span class="str">'textarea'</span>, {
+      <span class="attr">class</span>: <span class="str">'doc-content'</span>,
+      <span class="attr">value</span>: <span class="var">content</span>,
+      <span class="attr">oninput</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">content</span>.<span class="fn">set</span>(<span class="var">e</span>.target.value),
+      <span class="attr">placeholder</span>: <span class="str">'Start writing — edits sync to all collaborators in real time...'</span>,
+      <span class="attr">rows</span>: <span class="num">12</span>,
+    }),
+
+    <span class="cmt">// Word/char count</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'doc-meta text-muted'</span> },
+      () <span class="op">=&gt;</span> <span class="str">`</span>${<span class="var">wordCount</span>()}<span class="str"> words · </span>${<span class="var">charCount</span>()}<span class="str"> characters`</span>,
     ),
 
-    <span class="cmt">// Render remote cursors</span>
-    <span class="fn">each</span>(<span class="var">session</span>.<span class="fn">presence</span>, (<span class="var">peer</span>) =&gt;
-      <span class="fn">show</span>(() =&gt; <span class="var">peer</span>.cursor <span class="op">&amp;&amp;</span> <span class="var">peer</span>.userId <span class="op">!==</span> <span class="var">myId</span>(),
-        <span class="fn">h</span>(<span class="str">'div'</span>, {
-          key: <span class="var">peer</span>.userId,
-          class: <span class="str">'remote-cursor'</span>,
-          style: () =&gt; <span class="str">`left: </span>${<span class="var">peer</span>.cursor.x}<span class="str">px; top: </span>${<span class="var">peer</span>.cursor.y}<span class="str">px; border-color: </span>${<span class="var">peer</span>.color}<span class="str">`</span>,
-        },
-          <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'cursor-label'</span>, style: () =&gt; <span class="str">`background: </span>${<span class="var">peer</span>.color}<span class="str">`</span> }, <span class="var">peer</span>.name),
+    <span class="cmt">// Tags — synced</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'tags-section'</span> },
+      <span class="fn">each</span>(() <span class="op">=&gt;</span> <span class="var">tags</span>(), <span class="var">t</span> <span class="op">=&gt;</span> <span class="var">t</span>, (<span class="var">tag</span>) <span class="op">=&gt;</span>
+        <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'tag tag-new'</span> },
+          <span class="var">tag</span>, <span class="str">' '</span>,
+          <span class="fn">h</span>(<span class="str">'button'</span>, {
+            <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">tags</span>.<span class="fn">set</span>(<span class="var">tags</span>().<span class="fn">filter</span>(<span class="var">t</span> <span class="op">=&gt;</span> <span class="var">t</span> <span class="op">!==</span> <span class="var">tag</span>)),
+          }, <span class="str">'×'</span>)
         )
-      )
+      ),
+      <span class="fn">h</span>(<span class="str">'input'</span>, {
+        <span class="attr">placeholder</span>: <span class="str">'Add tag...'</span>,
+        <span class="attr">value</span>: <span class="var">newTag</span>,
+        <span class="attr">oninput</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">newTag</span>.<span class="fn">set</span>(<span class="var">e</span>.target.value),
+        <span class="attr">onkeydown</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">e</span>.key <span class="op">===</span> <span class="str">'Enter'</span> <span class="op">&amp;&amp;</span> <span class="fn">addTag</span>(),
+      }),
     ),
-  ),
+  );
+}
 
-  <span class="cmt">// Status bar</span>
-  <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'wb-status'</span> },
-    <span class="fn">h</span>(<span class="str">'span'</span>, {}, () =&gt; <span class="str">`</span>${<span class="var">shapes</span>().<span class="var">length</span>}<span class="str"> shapes`</span>),
-    <span class="fn">h</span>(<span class="str">'span'</span>, { class: () =&gt; <span class="str">`conn-status </span>${<span class="var">session</span>.<span class="fn">status</span>()}<span class="str">`</span> },
-      () =&gt; <span class="var">session</span>.<span class="fn">status</span>()
-    ),
-  ),
-);
-
-<span class="fn">mountApp</span>(<span class="var">Whiteboard</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>));</code></pre>
+<span class="fn">mountApp</span>(<span class="type">CollabDoc</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
     </div>
-  </div>
+  </article>
 
 </div><!-- .examples-grid -->
 
+<!-- ── Footer ────────────────────────────────────────────────── -->
 <footer>
   <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="text-decoration:none">
+          <span class="nav-logo-icon">DR</span>
+          DRISHTI
+        </a>
+        <p>The frontend framework built for the AI era. Fine-grained signals, zero virtual DOM, and first-class AI agent control.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Framework</h4>
+        <ul>
+          <li><a href="docs.html#installation">Getting Started</a></li>
+          <li><a href="docs.html#signals">Signals</a></li>
+          <li><a href="docs.html#machines">State Machines</a></li>
+          <li><a href="docs.html#llm-stream">LLM Streaming</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="api.html">API Reference</a></li>
+          <li><a href="examples.html">Examples</a></li>
+          <li><a href="docs.html#vercel">Deployment</a></li>
+          <li><a href="docs.html#testing-render">Testing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <ul>
+          <li><a href="https://github.com/2ool4techai-oss/front" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://discord.gg/drishti" target="_blank" rel="noopener">Discord</a></li>
+          <li><a href="https://twitter.com/drishtifw" target="_blank" rel="noopener">Twitter/X</a></li>
+        </ul>
+      </div>
+    </div>
     <div class="footer-bottom">
-      <p>© 2026 DRISHTI Framework. MIT License.</p>
+      <p>© 2026 DRISHTI Framework. Released under the MIT License.</p>
       <div class="footer-links">
-        <a href="docs.html">Docs</a>
-        <a href="api.html">API</a>
-        <a href="https://github.com/drishti-framework/drishti" target="_blank" rel="noopener">GitHub</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="https://github.com/2ool4techai-oss/front" target="_blank" rel="noopener">GitHub</a>
       </div>
     </div>
   </div>
