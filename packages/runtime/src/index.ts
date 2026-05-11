@@ -157,8 +157,12 @@ export { createLLMStream, createThinkingState, createToolCallState } from './llm
 export type { LLMStreamHandle, LLMStreamOptions, LLMStatus, ThinkingState, ToolCallState, ToolCall } from './llm.js';
 
 // ── Feature Flags / A/B Testing ───────────────────────────────────────
-export { createFlag, createFlagStore } from './flags.js';
-export type { FlagHandle, FlagConfig, FlagVariant } from './flags.js';
+export { createFlag, createFlagStore, createRateLimitedFlag } from './flags.js';
+export type { FlagHandle, FlagConfig, FlagVariant, RateLimitedFlagOptions } from './flags.js';
+
+// ── Advanced A/B Testing ──────────────────────────────────────────────
+export { createBandit, createIntentGatedFlag, createAutoRollout } from './ab.js';
+export type { BanditHandle, BanditOptions, BanditArm, BanditAlgorithm, IntentGatedOptions, IntentGatedHandle, AutoRolloutOptions, AutoRolloutHandle } from './ab.js';
 
 // ── Session Replay ────────────────────────────────────────────────────
 export { createSessionReplay } from './replay.js';
@@ -179,3 +183,19 @@ export type { RUMHandle, RUMOptions, WebVitals } from './rum.js';
 // ── Deploy Adapters ───────────────────────────────────────────────────
 export { generateVercelConfig, generateNetlifyConfig, generateCloudflareConfig, generateVercelJson, generateNetlifyToml, generateWranglerToml } from './deploy.js';
 export type { DeployConfig, VercelConfig, NetlifyConfig, CloudflareConfig } from './deploy.js';
+
+// ── OpenTelemetry ─────────────────────────────────────────────────────
+export { createOtelTracer } from './otel.js';
+export type { OtelHandle, OtelOptions, OtelSpan } from './otel.js';
+
+// ── Error Tracking ────────────────────────────────────────────────────
+export { createErrorTracker } from './error-tracking.js';
+export type { ErrorTrackingHandle, ErrorTrackingOptions, TrackedError } from './error-tracking.js';
+
+// ── PWA / Offline ─────────────────────────────────────────────────────
+export { createPWA, createOfflineQueue } from './pwa.js';
+export type { PWAHandle, PWAOptions, OfflineQueueHandle, OfflineQueueOptions } from './pwa.js';
+
+// ── CSP ───────────────────────────────────────────────────────────────
+export { createCSP } from './csp.js';
+export type { CSPHandle, CSPOptions, CSPDirectives } from './csp.js';

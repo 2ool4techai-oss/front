@@ -137,6 +137,53 @@ export function createFlag<T extends FlagVariant>(
   return { value, variant, isEnabled, track, override, reset };
 }
 
+// ── createRateLimitedFlag ──────────────────────────────────────────────
+
+export interface RateLimitedFlagOptions<T extends FlagVariant> extends FlagConfig<T> {
+  maxExposures?: number;
+  cooldownMs?:   number;
+}
+
+export function createRateLimitedFlag<T extends FlagVariant>(
+  key: string,
+  config: RateLimitedFlagOptions<T>,
+): FlagHandle<T> & { exposures: Signal<number>; resetCooldown(): void } {
+  const inner        = createFlag<T>(key, config);
+  const maxExposures = config.maxExposures ?? Infinity;
+  const cooldownMs   = config.cooldownMs   ?? 0;
+
+  const exposures    = signal<number>(0);
+  let lastExposureTs = 0;
+
+  function isEnabled(): boolean {
+    if (exposures() >= maxExposures) return false;
+    if (cooldownMs > 0 && lastExposureTs > 0 && Date.now() - lastExposureTs < cooldownMs) {
+      return false;
+    }
+    // Check underlying flag
+    if (!inner.isEnabled()) return false;
+    // Count this exposure
+    exposures.set(exposures() + 1);
+    lastExposureTs = Date.now();
+    return true;
+  }
+
+  function resetCooldown(): void {
+    lastExposureTs = 0;
+  }
+
+  return {
+    value:         inner.value,
+    variant:       inner.variant,
+    isEnabled,
+    track:         inner.track.bind(inner),
+    override:      inner.override.bind(inner),
+    reset:         inner.reset.bind(inner),
+    exposures,
+    resetCooldown,
+  };
+}
+
 // ── createFlagStore ────────────────────────────────────────────────────
 
 export function createFlagStore(flags: Record<string, FlagConfig<FlagVariant>>): {
