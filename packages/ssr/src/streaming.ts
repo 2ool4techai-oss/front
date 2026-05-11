@@ -39,7 +39,7 @@ export interface StreamResult {
 
 // ── Suspense boundary ──────────────────────────────────────────────────
 
-interface SuspenseBoundary {
+interface _InternalSuspenseBoundary {
   id:        string;
   promise:   Promise<unknown>;
   fallback:  string;
@@ -47,7 +47,7 @@ interface SuspenseBoundary {
   onReject:  (err: Error) => void;
 }
 
-let _boundaries: SuspenseBoundary[] = [];
+let _boundaries: _InternalSuspenseBoundary[] = [];
 let _boundaryCounter = 0;
 
 /**
@@ -95,7 +95,7 @@ export function _clearBoundaries(): void {
 }
 
 /** Get current boundaries (used by renderToStream) */
-export function _getBoundaries(): readonly SuspenseBoundary[] {
+export function _getBoundaries(): readonly _InternalSuspenseBoundary[] {
   return _boundaries;
 }
 
@@ -130,7 +130,7 @@ export function renderToStream(
   _setSSRMode(true);
 
   let shellHtml = '';
-  let shellBoundaries: SuspenseBoundary[] = [];
+  let shellBoundaries: _InternalSuspenseBoundary[] = [];
 
   try {
     const node = factory();
@@ -215,4 +215,84 @@ export function renderToStream(
       allReadyReject(new Error('aborted'));
     },
   };
+}
+
+// ── Suspense-aware streaming ────────────────────────────────────────────
+
+export interface SuspenseBoundary {
+  id:      string;
+  fallback: string;
+  content:  Promise<string>;
+}
+
+export function createSuspense(
+  fallback: string,
+  contentFn: () => Promise<string>,
+): SuspenseBoundary {
+  return {
+    id:      Math.random().toString(36).slice(2),
+    fallback,
+    content: contentFn(),
+  };
+}
+
+export function renderToStreamWithSuspense(
+  factory: () => unknown,
+  suspenseBoundaries: SuspenseBoundary[],
+  ctx?: SSRContext,
+): ReadableStream<string> {
+  let controller!: ReadableStreamDefaultController<string>;
+
+  const stream = new ReadableStream<string>({
+    start(c) { controller = c; },
+  });
+
+  // Get base HTML from existing renderToStream (synchronous shell)
+  const streamOpts: StreamOptions = ctx !== undefined ? { ctx } : {};
+  const { stream: baseStream, allReady } = renderToStream(factory, streamOpts);
+
+  // Read chunks from base stream and enqueue them, then handle suspense patches
+  (async () => {
+    try {
+      // Build base shell HTML by reading the base stream
+      const reader = baseStream.getReader();
+      let baseHtml = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (value !== undefined) baseHtml += value;
+      }
+
+      // Inject suspense fallback placeholders into base HTML
+      let injected = baseHtml;
+      for (const boundary of suspenseBoundaries) {
+        const placeholder = `<div id="suspense-${boundary.id}">${boundary.fallback}</div>`;
+        injected += placeholder + '\n';
+      }
+
+      controller.enqueue(injected);
+
+      // Wait for allReady to complete (base stream done)
+      await allReady.catch(() => { /* ignore abort errors */ });
+
+      // Stream each suspense boundary patch as it resolves
+      const patchPromises = suspenseBoundaries.map(async (boundary) => {
+        try {
+          const html = await boundary.content;
+          const patch = `<script>document.getElementById('suspense-${boundary.id}').outerHTML = ${JSON.stringify(html)};</script>\n`;
+          controller.enqueue(patch);
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : String(err);
+          const errPatch = `<!-- suspense error (${boundary.id}): ${msg} -->\n`;
+          controller.enqueue(errPatch);
+        }
+      });
+
+      await Promise.all(patchPromises);
+    } finally {
+      controller.close();
+    }
+  })();
+
+  return stream;
 }

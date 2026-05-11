@@ -128,3 +128,7 @@ export type { KanbanHandle, KanbanOptions, KanbanColumn, KanbanCard } from './Ka
 // ── RichTextEditor ─────────────────────────────────────────────────────
 export { createRTE } from './RichTextEditor.js';
 export type { RTEHandle, RTEOptions, RTEToolbarItem } from './RichTextEditor.js';
+
+// ── Collaborative Cursors ──────────────────────────────────────────────
+export { createCollabCursors } from './CollabCursors.js';
+export type { CollabCursorHandle, CollabCursorOptions, CursorUser } from './CollabCursors.js';

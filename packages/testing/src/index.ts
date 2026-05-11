@@ -361,3 +361,7 @@ export type { RenderResult as DomRenderResult, RenderOptions } from './render.js
 
 // ── Signal Assertions ──────────────────────────────────────────────────
 export { expectSignal, setupSignalMatchers } from './assertions.js';
+
+// ── Visual Regression ──────────────────────────────────────────────────
+export { takeSnapshot, diffSnapshots as diffVisualSnapshots, assertVisualMatch, setupVisualMatchers as setupVisualRegressionMatchers } from './visual.js';
+export type { VisualSnapshot, VisualDiff, VisualOptions } from './visual.js';

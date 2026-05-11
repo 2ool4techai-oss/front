@@ -199,3 +199,7 @@ export type { PWAHandle, PWAOptions, OfflineQueueHandle, OfflineQueueOptions } f
 // ── CSP ───────────────────────────────────────────────────────────────
 export { createCSP } from './csp.js';
 export type { CSPHandle, CSPOptions, CSPDirectives } from './csp.js';
+
+// ── Cloudflare D1/KV Signals ──────────────────────────────────────────
+export { createD1Signal, createKVSignal } from './cloudflare.js';
+export type { D1SignalHandle, D1SignalOptions, D1Database, KVSignalHandle, KVSignalOptions, KVNamespace } from './cloudflare.js';
