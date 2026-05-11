@@ -6,17 +6,20 @@
   "bin": {
     "create-drishti-app": "./dist/cli.js"
   },
-  "main": "./dist/cli.js",
+  "main": "./dist/index.js",
   "exports": {
-    ".": "./dist/cli.js"
+    ".": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "tsc -p tsconfig.json --watch"
+    "dev": "tsc -p tsconfig.json --watch",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
   },
   "keywords": ["drishti", "scaffolder", "create-app"],
   "license": "MIT"
