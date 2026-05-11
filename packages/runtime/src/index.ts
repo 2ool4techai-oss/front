@@ -151,3 +151,15 @@ export type { OptimisticHandle, OptimisticOptions } from './optimistic.js';
 // ── HMR ───────────────────────────────────────────────────────────────
 export { captureSignalState, restoreSignalState, createHMRPlugin } from './hmr.js';
 export type { HMRSignalState, HMROptions } from './hmr.js';
+
+// ── LLM Streaming ─────────────────────────────────────────────────────
+export { createLLMStream, createThinkingState, createToolCallState } from './llm.js';
+export type { LLMStreamHandle, LLMStreamOptions, LLMStatus, ThinkingState, ToolCallState, ToolCall } from './llm.js';
+
+// ── Feature Flags / A/B Testing ───────────────────────────────────────
+export { createFlag, createFlagStore } from './flags.js';
+export type { FlagHandle, FlagConfig, FlagVariant } from './flags.js';
+
+// ── Session Replay ────────────────────────────────────────────────────
+export { createSessionReplay } from './replay.js';
+export type { ReplayHandle, ReplayOptions, ReplayEvent, ReplayEventType } from './replay.js';
