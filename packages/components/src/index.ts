@@ -76,3 +76,15 @@ export type { ColorPickerProps, ColorFormat } from './ColorPicker.js';
 // ── Command ────────────────────────────────────────────────────────────
 export { CommandPalette, installCommandPalette } from './CommandPalette.js';
 export type { Command, CommandPaletteOptions, CommandPaletteHandle } from './CommandPalette.js';
+
+// ── Select ─────────────────────────────────────────────────────────────
+export { createSelect } from './Select.js';
+export type { SelectHandle, SelectOptions, SelectOption } from './Select.js';
+
+// ── Switch ─────────────────────────────────────────────────────────────
+export { createSwitch } from './Switch.js';
+export type { SwitchHandle, SwitchOptions } from './Switch.js';
+
+// ── VirtualList ────────────────────────────────────────────────────────
+export { createVirtualList } from './VirtualList.js';
+export type { VirtualListHandle, VirtualListOptions } from './VirtualList.js';
