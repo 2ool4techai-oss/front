@@ -1,8 +1,8 @@
 {
-  "name": "@drishti/vscode-extension",
+  "name": "@drishti/capacitor",
   "version": "0.1.0",
-  "description": "VS Code extension for DRISHTI — signal hover info, snippets, diagnostics",
-  "type": "commonjs",
+  "description": "Capacitor mobile adapter for DRISHTI signals",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "test": "vitest run"

@@ -1,8 +1,8 @@
 {
-  "name": "@drishti/vscode-extension",
+  "name": "@drishti/electron",
   "version": "0.1.0",
-  "description": "VS Code extension for DRISHTI — signal hover info, snippets, diagnostics",
-  "type": "commonjs",
+  "description": "Electron main/renderer signal bridge for DRISHTI",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "test": "vitest run"
