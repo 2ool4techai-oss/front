@@ -163,3 +163,19 @@ export type { FlagHandle, FlagConfig, FlagVariant } from './flags.js';
 // ── Session Replay ────────────────────────────────────────────────────
 export { createSessionReplay } from './replay.js';
 export type { ReplayHandle, ReplayOptions, ReplayEvent, ReplayEventType } from './replay.js';
+
+// ── tRPC Adapter ──────────────────────────────────────────────────────
+export { createTRPCQuery, createTRPCMutation } from './trpc.js';
+export type { TRPCQueryHandle, TRPCQueryOptions, TRPCQueryStatus, TRPCMutationHandle, TRPCMutationOptions } from './trpc.js';
+
+// ── GraphQL Adapter ───────────────────────────────────────────────────
+export { createGraphQLQuery } from './graphql.js';
+export type { GraphQLHandle, GraphQLOptions, GraphQLStatus } from './graphql.js';
+
+// ── Real User Monitoring ──────────────────────────────────────────────
+export { createRUM } from './rum.js';
+export type { RUMHandle, RUMOptions, WebVitals } from './rum.js';
+
+// ── Deploy Adapters ───────────────────────────────────────────────────
+export { generateVercelConfig, generateNetlifyConfig, generateCloudflareConfig, generateVercelJson, generateNetlifyToml, generateWranglerToml } from './deploy.js';
+export type { DeployConfig, VercelConfig, NetlifyConfig, CloudflareConfig } from './deploy.js';
