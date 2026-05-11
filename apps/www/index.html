@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DRISHTI — The Frontend Framework Built for the AI Era</title>
+  <meta name="description" content="Fine-grained signals, zero vdom, LLM streaming, AI agent control. DRISHTI is the open-source frontend framework for modern applications." />
+  <meta property="og:title" content="DRISHTI — Frontend Framework" />
+  <meta property="og:description" content="Fine-grained signals, zero vdom, LLM streaming, AI agent control." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="src/styles.css" />
+</head>
+<body>
+
+<!-- ── Navigation ─────────────────────────────────────────── -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="nav-logo-icon">DR</span>
+      DRISHTI
+    </a>
+    <div class="nav-links" role="menubar">
+      <a href="docs.html" role="menuitem">Docs</a>
+      <a href="api.html" role="menuitem">API</a>
+      <a href="examples.html" role="menuitem">Examples</a>
+      <a href="#packages" role="menuitem">Packages</a>
+    </div>
+    <div class="nav-actions">
+      <span class="nav-version">v0.1.0</span>
+      <a href="https://github.com/drishti-framework/drishti" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        GitHub
+      </a>
+      <button class="nav-mobile-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ───────────────────────────────────────────────── -->
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-badge">
+    <span class="badge">v0.1.0 — Open Source — MIT</span>
+  </div>
+  <h1 id="hero-heading">The Frontend Framework<br>Built for the AI Era</h1>
+  <p class="hero-sub">
+    Fine-grained signals, zero virtual DOM, first-class LLM streaming, and full AI agent control.
+    Build reactive apps that AI agents can read, write, and observe — all in ~8kb.
+  </p>
+  <div class="hero-actions">
+    <a href="docs.html" class="btn btn-primary btn-lg">
+      Get Started
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+    <a href="examples.html" class="btn btn-secondary btn-lg">View Examples</a>
+    <a href="https://github.com/drishti-framework/drishti" class="btn btn-ghost btn-lg" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      GitHub
+    </a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-value">974</div>
+      <div class="stat-label">Tests</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">17</div>
+      <div class="stat-label">Packages</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">~8kb</div>
+      <div class="stat-label">Core</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">0</div>
+      <div class="stat-label">Dependencies</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Install Strip ──────────────────────────────────────── -->
+<div class="install-strip">
+  <div class="install-inner">
+    <div class="install-tabs">
+      <button class="install-tab active" onclick="setInstallCmd('npm', this)">npm</button>
+      <button class="install-tab" onclick="setInstallCmd('pnpm', this)">pnpm</button>
+      <button class="install-tab" onclick="setInstallCmd('bun', this)">bun</button>
+      <button class="install-tab" onclick="setInstallCmd('yarn', this)">yarn</button>
+    </div>
+    <div class="install-cmd-wrap">
+      <code id="install-cmd">npm create drishti-app@latest my-app</code>
+      <button class="install-copy" onclick="navigator.clipboard.writeText(document.getElementById('install-cmd').textContent).then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',2000)})">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Quick Code Examples ────────────────────────────────── -->
+<section class="code-section" aria-labelledby="examples-heading">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Quick Examples</div>
+      <h2 id="examples-heading" class="section-title">Intuitive by Design</h2>
+      <p class="section-desc">From simple counters to AI streaming and realtime collaboration — DRISHTI handles it all.</p>
+    </div>
+
+    <div class="code-demo">
+      <div class="code-tabs" role="tablist">
+        <button class="code-tab active" data-panel="tab-counter" role="tab" aria-selected="true">Counter</button>
+        <button class="code-tab" data-panel="tab-todo" role="tab" aria-selected="false">Todo App</button>
+        <button class="code-tab" data-panel="tab-llm" role="tab" aria-selected="false">LLM Streaming</button>
+        <button class="code-tab" data-panel="tab-machine" role="tab" aria-selected="false">State Machine</button>
+        <button class="code-tab" data-panel="tab-collab" role="tab" aria-selected="false">Realtime Collab</button>
+      </div>
+
+      <!-- Counter -->
+      <div class="code-panel active" id="tab-counter" role="tabpanel">
+        <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+
+<span class="cmt">// Create reactive signals</span>
+<span class="kw">const</span> <span class="var">count</span> = <span class="fn">signal</span>(<span class="num">0</span>);
+<span class="kw">const</span> <span class="var">doubled</span> = <span class="fn">computed</span>(() =&gt; <span class="var">count</span>() * <span class="num">2</span>);
+<span class="kw">const</span> <span class="var">isEven</span> = <span class="fn">computed</span>(() =&gt; <span class="var">count</span>() % <span class="num">2</span> <span class="op">===</span> <span class="num">0</span>);
+
+<span class="cmt">// Build UI with h() — direct DOM, no vdom</span>
+<span class="kw">const</span> <span class="var">App</span> = () =&gt; <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'counter'</span> },
+  <span class="fn">h</span>(<span class="str">'p'</span>, {}, () =&gt; <span class="str">`Count: </span>${<span class="var">count</span>()}<span class="str"> (doubled: </span>${<span class="var">doubled</span>()}<span class="str">)`</span>),
+  <span class="fn">h</span>(<span class="str">'p'</span>, { class: () =&gt; <span class="var">isEven</span>() ? <span class="str">'even'</span> : <span class="str">'odd'</span> }, () =&gt; <span class="var">isEven</span>() ? <span class="str">'Even'</span> : <span class="str">'Odd'</span>),
+  <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: () =&gt; <span class="var">count</span>.<span class="fn">set</span>(<span class="var">count</span>() - <span class="num">1</span>) }, <span class="str">'−'</span>),
+  <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: () =&gt; <span class="var">count</span>.<span class="fn">set</span>(<span class="var">count</span>() + <span class="num">1</span>) }, <span class="str">'+'</span>),
+);
+
+<span class="fn">mountApp</span>(<span class="var">App</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>));</code></pre>
+      </div>
+
+      <!-- Todo App -->
+      <div class="code-panel" id="tab-todo" role="tabpanel">
+        <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">each</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">todos</span> = <span class="fn">signal</span>([]);
+<span class="kw">const</span> <span class="var">filter</span> = <span class="fn">signal</span>(<span class="str">'all'</span>);
+<span class="kw">const</span> <span class="var">newText</span> = <span class="fn">signal</span>(<span class="str">''</span>);
+
+<span class="kw">const</span> <span class="var">filtered</span> = <span class="fn">computed</span>(() =&gt; {
+  <span class="kw">const</span> <span class="var">f</span> = <span class="var">filter</span>();
+  <span class="kw">return</span> <span class="var">todos</span>().<span class="fn">filter</span>(<span class="var">t</span> =&gt;
+    <span class="var">f</span> <span class="op">===</span> <span class="str">'all'</span> ? <span class="kw">true</span> :
+    <span class="var">f</span> <span class="op">===</span> <span class="str">'done'</span> ? <span class="var">t</span>.done : !<span class="var">t</span>.done
+  );
+});
+
+<span class="kw">function</span> <span class="fn">addTodo</span>() {
+  <span class="kw">const</span> <span class="var">text</span> = <span class="var">newText</span>().<span class="fn">trim</span>();
+  <span class="kw">if</span> (!<span class="var">text</span>) <span class="kw">return</span>;
+  <span class="var">todos</span>.<span class="fn">set</span>([...<span class="var">todos</span>(), { id: <span class="var">Date</span>.<span class="fn">now</span>(), text, done: <span class="kw">false</span> }]);
+  <span class="var">newText</span>.<span class="fn">set</span>(<span class="str">''</span>);
+}
+
+<span class="kw">const</span> <span class="var">App</span> = () =&gt; <span class="fn">h</span>(<span class="str">'div'</span>, {},
+  <span class="fn">h</span>(<span class="str">'input'</span>, {
+    value: <span class="var">newText</span>,
+    oninput: <span class="var">e</span> =&gt; <span class="var">newText</span>.<span class="fn">set</span>(<span class="var">e</span>.target.value),
+    onkeydown: <span class="var">e</span> =&gt; <span class="var">e</span>.key <span class="op">===</span> <span class="str">'Enter'</span> <span class="op">&amp;&amp;</span> <span class="fn">addTodo</span>(),
+    placeholder: <span class="str">'Add a todo...'</span>
+  }),
+  <span class="fn">h</span>(<span class="str">'button'</span>, { onclick: <span class="fn">addTodo</span> }, <span class="str">'Add'</span>),
+  <span class="fn">each</span>(<span class="var">filtered</span>, (<span class="var">todo</span>) =&gt;
+    <span class="fn">h</span>(<span class="str">'li'</span>, { key: <span class="var">todo</span>.id },
+      <span class="fn">h</span>(<span class="str">'input'</span>, { type: <span class="str">'checkbox'</span>, checked: <span class="var">todo</span>.done,
+        onchange: () =&gt; <span class="var">todos</span>.<span class="fn">set</span>(<span class="var">todos</span>().<span class="fn">map</span>(<span class="var">t</span> =&gt;
+          <span class="var">t</span>.id <span class="op">===</span> <span class="var">todo</span>.id ? { ...<span class="var">t</span>, done: !<span class="var">t</span>.done } : <span class="var">t</span>)) }),
+      <span class="fn">h</span>(<span class="str">'span'</span>, {}, <span class="var">todo</span>.text),
+    )
+  ),
+);
+
+<span class="fn">mountApp</span>(<span class="var">App</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>));</code></pre>
+      </div>
+
+      <!-- LLM Streaming -->
+      <div class="code-panel" id="tab-llm" role="tabpanel">
+        <pre><code><span class="kw">import</span> { <span class="fn">createLLMStream</span>, <span class="fn">createThinkingState</span>, <span class="fn">h</span>, <span class="fn">show</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+
+<span class="cmt">// Create a streaming LLM connection</span>
+<span class="kw">const</span> <span class="var">stream</span> = <span class="fn">createLLMStream</span>({
+  endpoint: <span class="str">'/api/chat'</span>,
+  model: <span class="str">'claude-3-5-sonnet'</span>,
+});
+
+<span class="cmt">// Optional extended thinking visualization</span>
+<span class="kw">const</span> <span class="var">thinking</span> = <span class="fn">createThinkingState</span>();
+
+<span class="cmt">// Reactive signals updated as tokens arrive</span>
+<span class="cmt">// stream.text()   — current streamed text</span>
+<span class="cmt">// stream.status() — 'idle' | 'streaming' | 'done' | 'error'</span>
+<span class="cmt">// stream.tokens() — token count</span>
+
+<span class="kw">async function</span> <span class="fn">send</span>(<span class="var">message</span>) {
+  <span class="kw">await</span> <span class="var">stream</span>.<span class="fn">send</span>({ messages: [{ role: <span class="str">'user'</span>, content: <span class="var">message</span> }] });
+}
+
+<span class="kw">const</span> <span class="var">ChatUI</span> = () =&gt; <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'chat'</span> },
+  <span class="fn">show</span>(() =&gt; <span class="var">stream</span>.<span class="fn">status</span>() <span class="op">===</span> <span class="str">'streaming'</span>,
+    <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'thinking'</span> }, <span class="str">'AI is thinking...'</span>)
+  ),
+  <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'response'</span> }, () =&gt; <span class="var">stream</span>.<span class="fn">text</span>()),
+  <span class="fn">h</span>(<span class="str">'p'</span>, { class: <span class="str">'tokens'</span> }, () =&gt; <span class="str">`Tokens: </span>${<span class="var">stream</span>.<span class="fn">tokens</span>()}<span class="str">`</span>),
+  <span class="fn">h</span>(<span class="str">'button'</span>, {
+    onclick: () =&gt; <span class="fn">send</span>(<span class="str">'Explain fine-grained reactivity'</span>),
+    disabled: () =&gt; <span class="var">stream</span>.<span class="fn">status</span>() <span class="op">===</span> <span class="str">'streaming'</span>
+  }, <span class="str">'Ask AI'</span>),
+);</code></pre>
+      </div>
+
+      <!-- State Machine -->
+      <div class="code-panel" id="tab-machine" role="tabpanel">
+        <pre><code><span class="kw">import</span> { <span class="fn">createMachine</span>, <span class="fn">h</span>, <span class="fn">show</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+
+<span class="cmt">// XState-inspired typed state machine</span>
+<span class="kw">const</span> <span class="var">traffic</span> = <span class="fn">createMachine</span>({
+  initial: <span class="str">'red'</span>,
+  states: {
+    red:    { on: { NEXT: <span class="str">'green'</span>  }, meta: { label: <span class="str">'Stop'</span>,  color: <span class="str">'#ef4444'</span> } },
+    green:  { on: { NEXT: <span class="str">'yellow'</span> }, meta: { label: <span class="str">'Go'</span>,    color: <span class="str">'#10b981'</span> } },
+    yellow: { on: { NEXT: <span class="str">'red'</span>    }, meta: { label: <span class="str">'Slow'</span>,  color: <span class="str">'#f59e0b'</span> } },
+  },
+});
+
+<span class="cmt">// Reactive: traffic.state() updates the UI automatically</span>
+<span class="kw">const</span> <span class="var">TrafficLight</span> = () =&gt; <span class="fn">h</span>(<span class="str">'div'</span>, {},
+  <span class="fn">h</span>(<span class="str">'div'</span>, {
+    class: <span class="str">'light'</span>,
+    style: () =&gt; <span class="str">`background: </span>${<span class="var">traffic</span>.<span class="fn">state</span>().<span class="var">meta</span>.color}<span class="str">`</span>
+  }),
+  <span class="fn">h</span>(<span class="str">'p'</span>, {}, () =&gt; <span class="var">traffic</span>.<span class="fn">state</span>().<span class="var">meta</span>.label),
+  <span class="fn">h</span>(<span class="str">'button'</span>, {
+    onclick: () =&gt; <span class="var">traffic</span>.<span class="fn">send</span>(<span class="str">'NEXT'</span>)
+  }, <span class="str">'Next Phase'</span>),
+
+  <span class="cmt">// Show history with time-travel</span>
+  <span class="fn">h</span>(<span class="str">'p'</span>, {}, () =&gt; <span class="str">`Transitions: </span>${<span class="var">traffic</span>.<span class="fn">history</span>().<span class="var">length</span>}<span class="str">`</span>),
+);</code></pre>
+      </div>
+
+      <!-- Realtime Collab -->
+      <div class="code-panel" id="tab-collab" role="tabpanel">
+        <pre><code><span class="kw">import</span> { <span class="fn">createCollabSession</span>, <span class="fn">signal</span>, <span class="fn">h</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+
+<span class="cmt">// CRDT-backed collaborative session with vector clocks</span>
+<span class="kw">const</span> <span class="var">session</span> = <span class="fn">createCollabSession</span>({
+  room: <span class="str">'doc-42'</span>,
+  transport: <span class="str">'wss://collab.example.com'</span>,
+  userId: <span class="str">'user-alice'</span>,
+});
+
+<span class="cmt">// Shared signals — conflict-free across all clients</span>
+<span class="kw">const</span> <span class="var">title</span> = <span class="var">session</span>.<span class="fn">signal</span>(<span class="str">'title'</span>, <span class="str">'Untitled Document'</span>);
+<span class="kw">const</span> <span class="var">content</span> = <span class="var">session</span>.<span class="fn">signal</span>(<span class="str">'content'</span>, <span class="str">''</span>);
+
+<span class="cmt">// Presence — see who's online</span>
+<span class="cmt">// session.presence() → [{ userId, cursor, color, name }]</span>
+
+<span class="kw">const</span> <span class="var">CollabDoc</span> = () =&gt; <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'doc'</span> },
+  <span class="fn">h</span>(<span class="str">'div'</span>, { class: <span class="str">'presence'</span> },
+    () =&gt; <span class="str">`</span>${<span class="var">session</span>.<span class="fn">presence</span>().<span class="var">length</span>}<span class="str"> collaborators online`</span>
+  ),
+  <span class="fn">h</span>(<span class="str">'input'</span>, {
+    value: <span class="var">title</span>,
+    oninput: <span class="var">e</span> =&gt; <span class="var">title</span>.<span class="fn">set</span>(<span class="var">e</span>.target.value),
+    placeholder: <span class="str">'Document title...'</span>
+  }),
+  <span class="fn">h</span>(<span class="str">'textarea'</span>, {
+    value: <span class="var">content</span>,
+    oninput: <span class="var">e</span> =&gt; <span class="var">content</span>.<span class="fn">set</span>(<span class="var">e</span>.target.value),
+  }),
+  <span class="fn">h</span>(<span class="str">'span'</span>, { class: <span class="str">'status'</span> }, () =&gt; <span class="var">session</span>.<span class="fn">status</span>()),
+);</code></pre>
+      </div>
+    </div><!-- .code-demo -->
+  </div>
+</section>
+
+<!-- ── Why DRISHTI Features Grid ──────────────────────────── -->
+<section class="features" aria-labelledby="features-heading">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Why DRISHTI</div>
+      <h2 id="features-heading" class="section-title">Everything You Need</h2>
+      <p class="section-desc">One framework, zero tradeoffs. Production-ready from day one.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">⚡</span>
+        <h3 class="feature-title">Fine-Grained Signals</h3>
+        <p class="feature-desc">No virtual DOM diffing. Each signal update patches only the exact DOM nodes that depend on it. Sub-millisecond updates at any scale.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🤖</span>
+        <h3 class="feature-title">AI-Native API</h3>
+        <p class="feature-desc"><code>_setSignalWriteHook</code>, <code>_getDevSignals</code>, and <code>createIntentEngine</code> give AI agents complete observability and control of your app state.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">⏱️</span>
+        <h3 class="feature-title">Time-Travel Debugging</h3>
+        <p class="feature-desc"><code>enableTimeTravel()</code> records every signal mutation. Snapshot, restore, and replay entire application states — perfect for debugging and testing.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔄</span>
+        <h3 class="feature-title">Real-Time Collaboration</h3>
+        <p class="feature-desc">Built-in CRDT with vector clocks. <code>createCollabSession</code> delivers conflict-free shared state across any number of clients over WebSockets.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🧠</span>
+        <h3 class="feature-title">State Machines</h3>
+        <p class="feature-desc">XState-inspired typed machines via <code>createMachine</code>. Define states, transitions, guards, and actions — fully reactive with signal integration.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🎨</span>
+        <h3 class="feature-title">Figma → Code</h3>
+        <p class="feature-desc">Export designs as <code>.dr</code> single-file components directly from Figma. Design tokens, genome palettes, and emotion-adaptive theming built in.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🏝️</span>
+        <h3 class="feature-title">Islands Architecture</h3>
+        <p class="feature-desc"><code>defineIsland</code> and <code>hydrateIslands</code> support 4 hydration strategies: eager, lazy, viewport, and idle — ship minimal JS to the client.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔒</span>
+        <h3 class="feature-title">Production Security</h3>
+        <p class="feature-desc">HIPAA mode, CSP generation, GDPR consent management, and Zero-Trust mesh. <code>sanitizeHTML</code>, <code>sanitizeURL</code>, and audit logging built in.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📦</span>
+        <h3 class="feature-title">Deploy Anywhere</h3>
+        <p class="feature-desc">First-class adapters for Vercel, Netlify, Cloudflare Workers, and edge runtimes. Generate config with a single function call.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Packages Section ───────────────────────────────────── -->
+<section id="packages" class="packages" aria-labelledby="packages-heading">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Ecosystem</div>
+      <h2 id="packages-heading" class="section-title">12 Official Packages</h2>
+      <p class="section-desc">Everything from the runtime core to CLI, Figma plugin, and mobile adapters.</p>
+    </div>
+
+    <div class="packages-grid">
+      <div class="pkg-card">
+        <div class="pkg-name">@drishti/runtime</div>
+        <div class="pkg-desc">Core signals, renderer, state machines, LLM streaming, and all runtime primitives. Zero dependencies.</div>
+        <div class="pkg-install">npm i @drishti/runtime</div>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-name">@drishti/components</div>
+        <div class="pkg-desc">Accessible UI component library built with DRISHTI signals. Buttons, forms, dialogs, and more.</div>
+        <div class="pkg-install">npm i @drishti/components</div>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-name">@drishti/vite-plugin</div>
+        <div class="pkg-desc">Vite integration with HMR, <code>.dr</code> file support, island extraction, and optimized builds.</div>
+        <div class="pkg-install">npm i -D @drishti/vite-plugin</div>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-name">@drishti/testing</div>
+        <div class="pkg-desc">Testing utilities: <code>render()</code>, <code>auditA11y()</code>, <code>takeSnapshot()</code>, <code>expectSignal()</code> for vitest/jest.</div>
+        <div class="pkg-install">npm i -D @drishti/testing</div>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-name">@drishti/ssr</div>
+        <div class="pkg-desc">Server-side rendering with streaming HTML, island hydration, and edge-compatible rendering.</div>
+        <div class="pkg-install">npm i @drishti/ssr</div>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-name">@drishti/cli</div>
+        <div class="pkg-desc">Project scaffolding, code generation, migrations, and build tooling from the command line.</div>
+        <div class="pkg-install">npm i -g @drishti/cli</div>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-name">@drishti/figma-plugin</div>
+        <div class="pkg-desc">Export Figma components as <code>.dr</code> files with design tokens, genome palettes, and auto-layout.</div>
+        <div class="pkg-install">npm i @drishti/figma-plugin</div>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-name">@drishti/electron</div>
+        <div class="pkg-desc">Electron adapter with IPC signal bridge — share reactive state between main and renderer processes.</div>
+        <div class="pkg-install">npm i @drishti/electron</div>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-name">@drishti/capacitor</div>
+        <div class="pkg-desc">Capacitor/Ionic adapter for native iOS and Android apps using DRISHTI signals.</div>
+        <div class="pkg-install">npm i @drishti/capacitor</div>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-name">@drishti/eslint-plugin</div>
+        <div class="pkg-desc">ESLint rules for signal best practices: exhaustive deps, no async effects, and label enforcement.</div>
+        <div class="pkg-install">npm i -D @drishti/eslint-plugin</div>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-name">@drishti/migrate</div>
+        <div class="pkg-desc">Automated codemods to migrate from React, Vue, Svelte, or Solid to DRISHTI syntax.</div>
+        <div class="pkg-install">npm i -D @drishti/migrate</div>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-name">create-drishti-app</div>
+        <div class="pkg-desc">Official project scaffold. TypeScript, Vite, testing, and optional SSR — zero config to start.</div>
+        <div class="pkg-install">npm create drishti-app@latest</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AI Section ─────────────────────────────────────────── -->
+<section class="ai-section" aria-labelledby="ai-heading">
+  <div class="ai-inner">
+    <div class="ai-text">
+      <div class="badge" style="margin-bottom:16px">AI-Native</div>
+      <h2 id="ai-heading">Built for the<br>Age of AI Agents</h2>
+      <p>DRISHTI is the first framework designed from the ground up for AI agent interaction. Give your AI assistant full observability and control of your entire application state.</p>
+      <p>No scraping the DOM. No heuristics. Pure reactive signals with direct read/write access — exactly how an AI agent needs to work.</p>
+      <div class="ai-feature-list">
+        <div class="ai-feature-item">Read the entire app state with a single call to <code>_getDevSignals()</code></div>
+        <div class="ai-feature-item">Write to any signal directly — UI updates instantly</div>
+        <div class="ai-feature-item">Observe every state change in real time with <code>_setSignalWriteHook</code></div>
+        <div class="ai-feature-item">Understand user intent with <code>createIntentEngine</code></div>
+        <div class="ai-feature-item">Stream LLM responses directly into reactive signals</div>
+      </div>
+    </div>
+    <div class="ai-code">
+      <pre><code><span class="cmt">// AI agent gets full app state snapshot</span>
+<span class="kw">const</span> <span class="var">snapshot</span> = <span class="fn">_getDevSignals</span>();
+<span class="cmt">// { count: 0, filter: 'all', todos: [...], ... }</span>
+
+<span class="cmt">// AI writes directly to any signal</span>
+<span class="var">snapshot</span>[<span class="str">'filter'</span>].<span class="fn">set</span>(<span class="str">'completed'</span>);
+<span class="cmt">// → UI updates instantly, no rerender needed</span>
+
+<span class="cmt">// Observe every state change in real time</span>
+<span class="fn">_setSignalWriteHook</span>((<span class="var">label</span>, <span class="var">prev</span>, <span class="var">next</span>) =&gt; {
+  <span class="var">aiAgent</span>.<span class="fn">observe</span>({ <span class="var">label</span>, <span class="var">prev</span>, <span class="var">next</span>, ts: <span class="var">Date</span>.<span class="fn">now</span>() });
+});
+
+<span class="cmt">// Understand what the user is trying to do</span>
+<span class="kw">const</span> <span class="var">intent</span> = <span class="fn">createIntentEngine</span>({
+  signals: <span class="fn">_getDevSignals</span>(),
+  onIntent: (<span class="var">intent</span>) =&gt; <span class="var">aiAgent</span>.<span class="fn">suggest</span>(<span class="var">intent</span>),
+});
+
+<span class="cmt">// Time-travel: let AI replay any past state</span>
+<span class="kw">const</span> <span class="var">tt</span> = <span class="fn">enableTimeTravel</span>();
+<span class="var">tt</span>.<span class="fn">restore</span>(<span class="var">tt</span>.<span class="fn">entries</span>()[<span class="num">0</span>]);
+<span class="cmt">// → app jumps back to initial state</span></code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="text-decoration:none">
+          <span class="nav-logo-icon">DR</span>
+          DRISHTI
+        </a>
+        <p>The frontend framework built for the AI era. Fine-grained signals, zero vdom, and first-class AI agent control.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Framework</h4>
+        <ul>
+          <li><a href="docs.html#installation">Getting Started</a></li>
+          <li><a href="docs.html#signals">Signals</a></li>
+          <li><a href="docs.html#rendering">Rendering</a></li>
+          <li><a href="docs.html#state-machines">State Machines</a></li>
+          <li><a href="docs.html#llm-streaming">LLM Streaming</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="api.html">API Reference</a></li>
+          <li><a href="examples.html">Examples</a></li>
+          <li><a href="docs.html#deployment">Deployment</a></li>
+          <li><a href="docs.html#testing">Testing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <ul>
+          <li><a href="https://github.com/drishti-framework/drishti" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://discord.gg/drishti" target="_blank" rel="noopener">Discord</a></li>
+          <li><a href="https://twitter.com/drishtifw" target="_blank" rel="noopener">Twitter/X</a></li>
+          <li><a href="https://github.com/drishti-framework/drishti/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 DRISHTI Framework. Released under the MIT License.</p>
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="https://github.com/drishti-framework/drishti" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="src/nav.js"></script>
+<script src="src/copy.js"></script>
+</body>
+</html>
