@@ -116,3 +116,15 @@ export type { StepperHandle, StepperOptions, StepConfig } from './Stepper.js';
 // ── NotificationCenter ─────────────────────────────────────────────────
 export { createNotificationCenter } from './NotificationCenter.js';
 export type { NotificationCenterHandle, NotificationCenterOptions, Notification } from './NotificationCenter.js';
+
+// ── InfiniteScroll ─────────────────────────────────────────────────────
+export { createInfiniteScroll } from './InfiniteScroll.js';
+export type { InfiniteScrollHandle, InfiniteScrollOptions } from './InfiniteScroll.js';
+
+// ── Kanban ─────────────────────────────────────────────────────────────
+export { createKanban } from './Kanban.js';
+export type { KanbanHandle, KanbanOptions, KanbanColumn, KanbanCard } from './Kanban.js';
+
+// ── RichTextEditor ─────────────────────────────────────────────────────
+export { createRTE } from './RichTextEditor.js';
+export type { RTEHandle, RTEOptions, RTEToolbarItem } from './RichTextEditor.js';
