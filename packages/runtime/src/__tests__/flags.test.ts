@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createFlag, createFlagStore } from '../flags.js';
+import type { FlagVariant } from '../flags.js';
 
 // Provide a simple localStorage mock for tests
 const localStorageStore: Record<string, string> = {};
@@ -38,18 +39,18 @@ describe('createFlag', () => {
   });
 
   it('override() changes value', () => {
-    const flag = createFlag('ov-flag', { defaultValue: false });
-    expect(flag.value()).toBe(false);
-    flag.override(true);
-    expect(flag.value()).toBe(true);
+    const flag = createFlag<string>('ov-flag', { defaultValue: 'off' });
+    expect(flag.value()).toBe('off');
+    flag.override('on');
+    expect(flag.value()).toBe('on');
   });
 
   it('reset() removes override', () => {
-    const flag = createFlag('reset-flag', { defaultValue: false });
-    flag.override(true);
-    expect(flag.value()).toBe(true);
+    const flag = createFlag<string>('reset-flag', { defaultValue: 'off' });
+    flag.override('on');
+    expect(flag.value()).toBe('on');
     flag.reset();
-    expect(flag.value()).toBe(false);
+    expect(flag.value()).toBe('off');
   });
 
   it('deterministic: same userId+key always same result', () => {
@@ -88,8 +89,8 @@ describe('createFlagStore', () => {
 
   it('getAll() returns all values', () => {
     const store = createFlagStore({
-      flagA: { defaultValue: true },
-      flagB: { defaultValue: 42 },
+      flagA: { defaultValue: true  as boolean },
+      flagB: { defaultValue: 42   as number },
     });
     const all = store.getAll();
     expect(all['flagA']).toBe(true);

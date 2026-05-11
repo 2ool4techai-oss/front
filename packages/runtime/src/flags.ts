@@ -7,7 +7,7 @@ export type FlagVariant = string | boolean | number;
 
 export interface FlagConfig<T extends FlagVariant = boolean> {
   defaultValue: T;
-  variants?:    T[];
+  variants?:    readonly T[];
   rollout?:     number;
   userId?:      string;
   override?:    T;
@@ -139,7 +139,7 @@ export function createFlag<T extends FlagVariant>(
 
 // ── createFlagStore ────────────────────────────────────────────────────
 
-export function createFlagStore(flags: Record<string, FlagConfig>): {
+export function createFlagStore(flags: Record<string, FlagConfig<FlagVariant>>): {
   get<T extends FlagVariant>(key: string): FlagHandle<T>;
   getAll(): Record<string, FlagVariant>;
   setUserId(id: string): void;
