@@ -131,3 +131,23 @@ export type { ConsentHandle, ConsentState, ConsentOptions, ConsentCategory } fro
 // ── Server Signals ────────────────────────────────────────────────────
 export { createServerSignal, createSSESignal } from './server-signal.js';
 export type { ServerSignalHandle, ServerSignalState, ServerSignalOptions, ServerSignalStatus, SSESignalHandle, SSESignalOptions } from './server-signal.js';
+
+// ── File Router ───────────────────────────────────────────────────────
+export { createFileRouter } from './file-router.js';
+export type { FileRoute, FileRouterOptions, FileRouterHandle } from './file-router.js';
+
+// ── Server Functions ──────────────────────────────────────────────────
+export { createServerFn } from './server-fn.js';
+export type { ServerFnOptions, ServerFnHandle } from './server-fn.js';
+
+// ── Edge Runtime ──────────────────────────────────────────────────────
+export { detectPlatform, createEdgeHandler, injectState, mergeHeaders } from './edge.js';
+export type { EdgeContext, EdgeRenderOptions } from './edge.js';
+
+// ── Optimistic Updates ────────────────────────────────────────────────
+export { createOptimistic } from './optimistic.js';
+export type { OptimisticHandle, OptimisticOptions } from './optimistic.js';
+
+// ── HMR ───────────────────────────────────────────────────────────────
+export { captureSignalState, restoreSignalState, createHMRPlugin } from './hmr.js';
+export type { HMRSignalState, HMROptions } from './hmr.js';
