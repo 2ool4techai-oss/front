@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DRISHTI — AI-Native Frontend Framework</title>
-  <meta name="description" content="The first frontend framework built for the AI era. Fine-grained signals, zero virtual DOM, LLM streaming, and AI agent control.">
-  <meta property="og:title" content="DRISHTI — AI-Native Frontend Framework">
-  <meta property="og:description" content="950 tests. 81 test files. 44 novel features. Built for AI agents and humans alike.">
+  <title>DRISHTI — The Frontend Runtime for AI Agents</title>
+  <meta name="description" content="The frontend runtime for AI agents. Read and write your entire app state with one API call. Fine-grained signals, zero virtual DOM, LLM streaming built-in.">
+  <meta property="og:title" content="DRISHTI — The Frontend Runtime for AI Agents">
+  <meta property="og:description" content="The only runtime where AI agents can read, write, and observe your entire application state with a single API call. Zero dependencies. ~8kb.">"
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,9 +44,9 @@
   <div class="hero-badge">
     <span class="badge">v0.3.1</span>
   </div>
-  <h1 id="hero-heading">The Frontend Framework<br><span>Built for the AI Era</span></h1>
+  <h1 id="hero-heading">The Frontend Runtime<br><span>for AI Agents</span></h1>
   <p class="hero-sub">
-    Fine-grained signals. Zero virtual DOM. LLM streaming built-in. An AI agent can read and write your entire app state with one API call.
+    The only runtime where an AI agent can read, write, and observe your entire application state with a single API call. Fine-grained signals. Zero virtual DOM. No dependencies.
   </p>
   <div class="hero-actions">
     <a href="docs.html" class="btn btn-primary btn-lg">
@@ -141,24 +141,6 @@
         <p>Every signal write is captured automatically. Replay any past state, undo any action, or snapshot your app at any moment — without writing a single line of history code.</p>
         <div class="best-proof">
           <code>enableTimeTravel()<br>tt.restore(index) <span class="proof-comment">// jump to any moment</span></code>
-        </div>
-      </div>
-
-      <div class="best-card">
-        <div class="best-icon">🧩</div>
-        <h3>Zero Dependencies, Forever</h3>
-        <p>The entire runtime is self-contained. No ecosystem churn, no peer dependency conflicts, no supply chain risk. Ship it and it stays working.</p>
-        <div class="best-proof">
-          <code>npm install @nexoraaidrishti/runtime<br><span class="proof-comment">// 0 dependencies. ~8kb. done.</span></code>
-        </div>
-      </div>
-
-      <div class="best-card">
-        <div class="best-icon">🔬</div>
-        <h3>State Machines Without the Boilerplate</h3>
-        <p>Define typed state machines in plain objects. Transitions, guards, history — all reactive. Your UI reacts to state changes automatically, no subscription code needed.</p>
-        <div class="best-proof">
-          <code>const light = createMachine({<br>&nbsp;&nbsp;initial: 'red',<br>&nbsp;&nbsp;states: { red: { on: { NEXT: 'green' } } }<br>})</code>
         </div>
       </div>
 
@@ -310,75 +292,32 @@
   </div>
 </section>
 
-<!-- ── Why DRISHTI ───────────────────────────────────────────── -->
-<section class="features" aria-labelledby="features-heading">
+<!-- ── Category Statement ────────────────────────────────────── -->
+<section class="category-statement" aria-labelledby="category-heading">
   <div class="container">
-    <div class="section-header">
-      <div class="section-label">Why DRISHTI</div>
-      <h2 id="features-heading" class="section-title">Everything You Need, Nothing You Don't</h2>
-      <p class="section-desc">One framework for signals, AI streaming, collaboration, state machines, and production observability.</p>
-    </div>
-
-    <div class="features-grid">
-      <div class="feature-card">
-        <span class="feature-icon">⚡</span>
-        <h3 class="feature-title">Fine-Grained Signals</h3>
-        <p class="feature-desc">No VDOM. Direct DOM writes. Each signal update touches exactly the nodes that depend on it — sub-millisecond patches at any scale.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🤖</span>
-        <h3 class="feature-title">AI-Native</h3>
-        <p class="feature-desc"><code>_getDevSignals()</code> gives any AI agent a live read/write map of your entire app state. No DOM scraping, no heuristics.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">⏱️</span>
-        <h3 class="feature-title">Time-Travel Debug</h3>
-        <p class="feature-desc">Every write is captured. <code>enableTimeTravel()</code> adds undo/redo/replay with zero config — perfect for debugging and AI-assisted testing.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🔄</span>
-        <h3 class="feature-title">CRDT Collaboration</h3>
-        <p class="feature-desc">Vector-clock signals. Share state conflict-free across users with <code>createCollabSession()</code>. No operational transforms required.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🧠</span>
-        <h3 class="feature-title">State Machines</h3>
-        <p class="feature-desc">Typed XState-inspired machines. Transitions, guards, entry/exit hooks — all reactive via signals. <code>createMachine()</code> in 5 lines.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🎨</span>
-        <h3 class="feature-title">Figma → .dr</h3>
-        <p class="feature-desc">Export Figma frames as <code>.dr</code> single-file components. Design tokens, genome palettes, and emotion-adaptive theming — one source of truth.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🏝️</span>
-        <h3 class="feature-title">Islands Architecture</h3>
-        <p class="feature-desc">4 hydration strategies: eager, visible, idle, interaction. Ship zero JS for static pages. <code>defineIsland()</code> and <code>hydrateIslands()</code> built in.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🚀</span>
-        <h3 class="feature-title">Edge-First SSR</h3>
-        <p class="feature-desc">Streaming SSR with suspend boundaries. One codebase for Vercel, Netlify, and Cloudflare Workers. <code>generateVercelConfig()</code> in one call.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🔒</span>
-        <h3 class="feature-title">Security-Native Signals</h3>
-        <p class="feature-desc">XSS guard, rate limiting, HMAC integrity, PII auto-redaction — all in the signal layer. <code>privateSignal()</code>, <code>xssGuardSignal()</code>, <code>anomalySignal()</code> ship ready.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">⏳</span>
-        <h3 class="feature-title">Adaptive That Forgets</h3>
-        <p class="feature-desc">Decaying preference signals. Confidence halves over time — stale choices never lock the UI. Context-aware profiles switch automatically between mobile/desktop/morning/evening.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🔧</span>
-        <h3 class="feature-title">Self-Healing &amp; Auto-Fix</h3>
-        <p class="feature-desc">Type coercion, bounded arrays, circular dependency detection, dead signal scanning. Catches bad patterns at runtime — before they become bugs in production.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🎤</span>
-        <h3 class="feature-title">Voice + Multi-Modal</h3>
-        <p class="feature-desc"><code>createVoiceSignal()</code> turns Web Speech into a reactive signal. <code>createMultiModalInput()</code> detects touch/keyboard/voice and adapts layout automatically.</p>
+    <div class="category-inner">
+      <div class="category-label">A New Category</div>
+      <h2 id="category-heading">Not a React competitor.<br>An AI-operable runtime layer.</h2>
+      <p>Most frameworks optimize for developer ergonomics, rendering performance, and bundle size.<br>
+      DRISHTI optimizes for <strong>machine operability</strong>, <strong>deterministic AI interaction</strong>, and <strong>runtime observability</strong>.<br>
+      That is a fundamentally different direction — and a more future-oriented one.</p>
+      <div class="category-compare">
+        <div class="compare-col">
+          <div class="compare-heading">Today — AI browser agents</div>
+          <div class="compare-item bad">🔴 Fragile DOM selectors</div>
+          <div class="compare-item bad">🔴 Heuristic state inference</div>
+          <div class="compare-item bad">🔴 Breaks on layout changes</div>
+          <div class="compare-item bad">🔴 No semantic understanding</div>
+          <div class="compare-item bad">🔴 No replay or audit trail</div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-heading">DRISHTI — native AI access</div>
+          <div class="compare-item good">🟢 Semantic signal map</div>
+          <div class="compare-item good">🟢 Deterministic state reads</div>
+          <div class="compare-item good">🟢 Direct writes, instant UI</div>
+          <div class="compare-item good">🟢 Observable transitions</div>
+          <div class="compare-item good">🟢 Full replayable history</div>
+        </div>
       </div>
     </div>
   </div>
@@ -462,10 +401,10 @@
 <section class="ai-section" aria-labelledby="ai-heading">
   <div class="ai-inner">
     <div class="ai-text">
-      <div class="badge" style="margin-bottom:16px">AI-Native</div>
-      <h2 id="ai-heading">Built for the<br>Age of AI Agents</h2>
-      <p>DRISHTI is the first framework designed from the ground up for AI agent interaction. Give any AI assistant full observability and direct write access to your entire application state.</p>
-      <p>No DOM scraping. No heuristics. Pure reactive signals with a clean read/write API — exactly how an AI agent needs to operate.</p>
+      <div class="badge" style="margin-bottom:16px">The Moat</div>
+      <h2 id="ai-heading">Your most valuable<br>API: <code style="font-size:0.85em">_getDevSignals()</code></h2>
+      <p>One call. Every signal in your app — labeled, typed, readable, writable. AI agents get a live semantic map of your entire application state without DOM scraping, without selectors, without heuristics.</p>
+      <p>This is what makes DRISHTI different from every other framework. Not the renderer. Not the signals. <strong>The machine-operable state layer.</strong></p>
       <div class="ai-feature-list">
         <div class="ai-feature-item">Read the entire app state with a single call to <code>_getDevSignals()</code></div>
         <div class="ai-feature-item">Write to any signal directly — UI updates instantly, no REST API needed</div>
@@ -515,7 +454,7 @@
           <span class="nav-logo-icon">DR</span>
           DRISHTI
         </a>
-        <p>The frontend framework built for the AI era. Fine-grained signals, zero virtual DOM, and first-class AI agent control.</p>
+        <p>The frontend runtime for AI agents. Semantic state, deterministic writes, replayable history — built for a world where AI operates your UI.</p>
       </div>
       <div class="footer-col">
         <h4>Framework</h4>
