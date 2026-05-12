@@ -179,33 +179,46 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); over
 .collab-user-count { text-align: center; margin-bottom: 16px; font-size: 0.85rem; color: var(--muted); }
 .collab-user-count strong { color: var(--green); }
 
-/* Adaptive UI */
-.adaptive-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-@media(max-width:700px) { .adaptive-grid { grid-template-columns: 1fr; } }
-.adaptive-buttons { display: flex; flex-direction: column; gap: 10px; }
-.adaptive-btn {
-  padding: 12px 20px; border-radius: 10px; font-family: var(--sans); font-weight: 700;
-  cursor: pointer; border: 2px solid transparent; transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-  text-align: left; position: relative; overflow: hidden;
-}
-.adaptive-btn .ab-label { display: block; font-size: 0.9rem; }
-.adaptive-btn .ab-meta  { font-size: 0.72rem; font-weight: 400; opacity: 0.7; margin-top: 2px; display: block; }
-.adaptive-btn.size-sm  { font-size: 0.8rem;  padding: 8px 14px;  }
-.adaptive-btn.size-md  { font-size: 0.9rem;  padding: 12px 20px; }
-.adaptive-btn.size-lg  { font-size: 1rem;    padding: 16px 26px; }
-.adaptive-btn.size-xl  { font-size: 1.15rem; padding: 20px 32px; box-shadow: 0 0 30px rgba(99,102,241,0.35); }
-.adaptive-btn.hot  { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border-color: transparent; }
-.adaptive-btn.warm { background: rgba(99,102,241,0.15); color: var(--accent); border-color: rgba(99,102,241,0.35); }
-.adaptive-btn.cool { background: var(--card); color: var(--muted); border-color: var(--border); }
-.adaptive-btn.cold { background: transparent; color: var(--muted); border-color: rgba(255,255,255,0.05); opacity: 0.5; }
-.heat-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-.heat-label { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); width: 100px; flex-shrink: 0; }
-.heat-bar-outer { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+/* Adaptive Retail UI */
+.shop-layout { display: grid; grid-template-columns: 1fr 280px; gap: 24px; }
+@media(max-width:900px) { .shop-layout { grid-template-columns: 1fr; } }
+.shop-main { display: flex; flex-direction: column; gap: 16px; }
+.shop-sidebar { padding: 20px; }
+.shop-topbar { display: flex; align-items: center; justify-content: space-between; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 18px; }
+.shop-brand { font-weight: 900; font-size: 1rem; letter-spacing: -0.5px; }
+.shop-topbar-right { display: flex; gap: 16px; }
+.cart-badge, .wish-badge { font-size: 0.8rem; color: var(--muted); background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); cursor: pointer; transition: all 0.15s; }
+.cart-badge:hover, .wish-badge:hover { border-color: var(--accent); color: var(--accent); }
+.shop-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.shop-tab { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card); color: var(--muted); font-family: var(--sans); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+.shop-tab:hover { border-color: var(--cat-color, var(--accent)); color: var(--cat-color, var(--accent)); }
+.shop-tab.active { background: var(--cat-color, var(--accent)); border-color: var(--cat-color, var(--accent)); color: #fff; transform: scale(1.05); box-shadow: 0 0 16px color-mix(in srgb, var(--cat-color, var(--accent)) 40%, transparent); }
+.shop-tab.pinned { border-width: 2px; }
+.tab-pin { font-size: 0.65rem; color: gold; }
+.shop-products { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+@media(max-width:700px) { .shop-products { grid-template-columns: repeat(2, 1fr); } }
+.shop-product-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: all 0.2s; }
+.shop-product-card:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+.product-img { height: 80px; display: flex; align-items: center; justify-content: center; position: relative; }
+.product-badge { position: absolute; top: 6px; right: 6px; background: var(--accent); color: #fff; font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 8px; }
+.product-info { padding: 10px 10px 6px; }
+.product-name { font-size: 0.75rem; font-weight: 600; color: var(--text); line-height: 1.3; margin-bottom: 4px; }
+.product-price { font-size: 0.85rem; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+.product-rating { display: flex; align-items: center; gap: 3px; }
+.stars { font-size: 0.65rem; }
+.rating-num { font-size: 0.68rem; color: var(--muted); }
+.product-actions { display: flex; gap: 6px; padding: 0 10px 10px; }
+.btn-cart { flex: 1; padding: 6px 0; border-radius: 6px; border: none; color: #fff; font-size: 0.75rem; font-weight: 700; font-family: var(--sans); cursor: pointer; transition: all 0.15s; opacity: 0.9; }
+.btn-cart:hover { opacity: 1; transform: scale(1.03); }
+.btn-wish { padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 0.85rem; cursor: pointer; transition: all 0.15s; }
+.btn-wish.wishlisted { color: #ef4444; border-color: #ef4444; }
+.heat-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.heat-label { font-size: 0.72rem; color: var(--muted); width: 90px; flex-shrink: 0; }
+.heat-bar-outer { flex: 1; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
 .heat-bar-inner { height: 100%; border-radius: 3px; transition: width 0.5s cubic-bezier(0.16,1,0.3,1); }
-.heat-count { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); width: 28px; text-align: right; }
-.adaptive-insight { margin-top: 16px; padding: 12px 16px; border-radius: 10px; background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2); font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
-.adaptive-insight strong { color: var(--accent); }
-.adaptive-reset { margin-top: 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-family: var(--sans); transition: all 0.15s; }
+.heat-count { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); width: 20px; text-align: right; }
+.adaptive-insight { padding: 12px 16px; border-radius: 10px; background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2); font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+.adaptive-reset { margin-top: 16px; width: 100%; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 8px; border-radius: 8px; cursor: pointer; font-size: 0.78rem; font-family: var(--sans); transition: all 0.15s; }
 .adaptive-reset:hover { border-color: var(--accent); color: var(--accent); } text-align: center; padding: 60px 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.875rem; }
 .showcase-footer strong { color: var(--text); }
 .showcase-footer a { color: var(--accent); text-decoration: none; }
@@ -990,165 +1003,221 @@ function CollabSection(): HTMLElement {
 
 // ── Adaptive UI ───────────────────────────────────────────────────────
 function AdaptiveUISection(): HTMLElement {
-  interface ActionDef { id: string; label: string; desc: string; }
+  interface CategoryDef { id: string; emoji: string; label: string; color: string; products: ProductDef[]; }
+  interface ProductDef   { name: string; price: string; rating: number; badge?: string; }
 
-  const actions: ActionDef[] = [
-    { id: 'deploy',   label: '🚀 Deploy',         desc: 'Push to production' },
-    { id: 'invite',   label: '👥 Invite Team',     desc: 'Add collaborators'  },
-    { id: 'export',   label: '📦 Export Data',     desc: 'Download CSV/JSON'  },
-    { id: 'settings', label: '⚙️ Settings',        desc: 'Configure workspace'},
-    { id: 'archive',  label: '🗄️ Archive',         desc: 'Move to archive'    },
-    { id: 'delete',   label: '🗑️ Delete',          desc: 'Remove permanently' },
+  const categories: CategoryDef[] = [
+    { id: 'electronics', emoji: '📱', label: 'Electronics', color: '#6366f1', products: [
+      { name: 'Wireless Earbuds Pro', price: '₹2,499', rating: 4.8, badge: 'Bestseller' },
+      { name: 'Smart Watch Series 5', price: '₹8,999', rating: 4.6 },
+      { name: '4K Action Camera',     price: '₹5,299', rating: 4.5, badge: 'New' },
+      { name: 'Bluetooth Speaker',    price: '₹1,799', rating: 4.7 },
+    ]},
+    { id: 'fashion', emoji: '👗', label: 'Fashion', color: '#ec4899', products: [
+      { name: 'Ethnic Kurta Set',     price: '₹1,299', rating: 4.5, badge: 'Trending' },
+      { name: 'Slim Fit Chinos',      price: '₹899',  rating: 4.3 },
+      { name: 'Floral Maxi Dress',    price: '₹1,499', rating: 4.6, badge: 'New' },
+      { name: 'Casual Sneakers',      price: '₹2,199', rating: 4.7 },
+    ]},
+    { id: 'beauty', emoji: '💄', label: 'Beauty', color: '#f59e0b', products: [
+      { name: 'Vitamin C Serum',      price: '₹599',  rating: 4.8, badge: 'Top Rated' },
+      { name: 'Matte Lipstick Set',   price: '₹449',  rating: 4.5 },
+      { name: 'Hair Growth Oil',      price: '₹349',  rating: 4.6, badge: 'Bestseller' },
+      { name: 'Sunscreen SPF 50',     price: '₹299',  rating: 4.7 },
+    ]},
+    { id: 'sports', emoji: '⚽', label: 'Sports', color: '#10b981', products: [
+      { name: 'Yoga Mat Premium',     price: '₹799',  rating: 4.6, badge: 'Top Pick' },
+      { name: 'Running Shoes',        price: '₹3,499', rating: 4.7 },
+      { name: 'Resistance Bands Set', price: '₹399',  rating: 4.5 },
+      { name: 'Protein Shaker',       price: '₹249',  rating: 4.4, badge: 'New' },
+    ]},
+    { id: 'home', emoji: '🏠', label: 'Home', color: '#8b5cf6', products: [
+      { name: 'Air Purifier 360',     price: '₹6,999', rating: 4.7, badge: 'Bestseller' },
+      { name: 'LED Fairy Lights',     price: '₹299',  rating: 4.5 },
+      { name: 'Bamboo Organizer',     price: '₹449',  rating: 4.4, badge: 'Eco' },
+      { name: 'Scented Candle Set',   price: '₹599',  rating: 4.8 },
+    ]},
+    { id: 'food', emoji: '🍕', label: 'Food', color: '#ef4444', products: [
+      { name: 'Organic Honey 500g',   price: '₹349',  rating: 4.9, badge: 'Organic' },
+      { name: 'Trail Mix Snack Box',  price: '₹599',  rating: 4.6 },
+      { name: 'Green Tea 100 Bags',   price: '₹249',  rating: 4.7, badge: 'Bestseller' },
+      { name: 'Multigrain Atta 5kg',  price: '₹449',  rating: 4.5 },
+    ]},
   ];
 
-  const clicks = signal<Record<string, number>>(
-    Object.fromEntries(actions.map(a => [a.id, 0]))
-  );
-  const total  = computed(() => Object.values(clicks()).reduce((s, v) => s + v, 0));
-  const insight = signal('Click buttons to teach the UI what matters to you.');
+  // Reuse same logic but domain is shopping categories
+  const actions = categories.map(c => ({ id: c.id, label: `${c.emoji} ${c.label}`, desc: '' }));
 
-  const HEAT_LEVELS = ['cold', 'cool', 'warm', 'hot'] as const;
-  const SIZE_LEVELS = ['size-sm', 'size-md', 'size-lg', 'size-xl'] as const;
+  const clicks   = signal<Record<string, number>>(Object.fromEntries(categories.map(c => [c.id, 0])));
+  const total     = computed(() => Object.values(clicks()).reduce((s, v) => s + v, 0));
+  const activeTab = signal(categories[0].id);
+  const cartCount = signal(0);
+  const wishlist  = signal<string[]>([]);
+  const insight   = signal('Browse categories — the store learns your taste and personalises in real time.');
 
-  function getHeat(id: string): string {
+  function getWeight(id: string): number {
     const t = total();
-    if (t === 0) return 'cool';
-    const max = Math.max(...Object.values(clicks()));
-    if (max === 0) return 'cool';
-    const ratio = clicks()[id] / max;
-    if (ratio > 0.75) return HEAT_LEVELS[3];
-    if (ratio > 0.4)  return HEAT_LEVELS[2];
-    if (ratio > 0.1)  return HEAT_LEVELS[1];
-    return HEAT_LEVELS[0];
+    if (t === 0) return 0;
+    const max = Math.max(...Object.values(clicks()), 1);
+    return clicks()[id] / max;
   }
 
-  function getSize(id: string): string {
+  function updateInsight(id: string): void {
+    const cat = categories.find(c => c.id === id)!;
     const t = total();
-    if (t === 0) return SIZE_LEVELS[1];
-    const max = Math.max(...Object.values(clicks()));
-    if (max === 0) return SIZE_LEVELS[1];
-    const ratio = clicks()[id] / max;
-    if (ratio > 0.75) return SIZE_LEVELS[3];
-    if (ratio > 0.4)  return SIZE_LEVELS[2];
-    if (ratio > 0.1)  return SIZE_LEVELS[1];
-    return SIZE_LEVELS[0];
+    if (t < 2) { insight.set(`Browsing ${cat.label}… keep exploring to personalise your store.`); return; }
+    const sorted = [...categories].sort((a, b) => clicks()[b.id] - clicks()[a.id]);
+    const top2 = sorted.slice(0, 2).map(c => c.label);
+    insight.set(`You love ${top2[0]} ${sorted[0].emoji || ''} — it's pinned to the top. Recommendations and deals are now tailored to you.`);
   }
 
-  function updateInsight(): void {
-    const sorted = [...actions].sort((a, b) => clicks()[b.id] - clicks()[a.id]);
-    const top = sorted[0];
-    const t = total();
-    if (t === 0) { insight.set('Click buttons to teach the UI what matters to you.'); return; }
-    if (t < 3)   { insight.set(`Learning… keep clicking to see the UI adapt in real time.`); return; }
-    const least = sorted[sorted.length - 1];
-    insight.set(
-      `You use "${top.label}" most — it's now larger and more prominent. ` +
-      `"${least.label}" is fading away. The UI is learning your workflow.`
-    );
-  }
-
-  function handleClick(id: string): void {
+  function browseCategory(id: string): void {
     const cur = { ...clicks() };
     cur[id] = (cur[id] ?? 0) + 1;
     clicks.set(cur);
-    updateInsight();
+    activeTab.set(id);
+    updateInsight(id);
   }
 
-  // Build button elements
-  const btnEls: Record<string, HTMLElement> = {};
-  actions.forEach(a => {
-    const btn = h('button', {
-      class: `adaptive-btn ${getSize(a.id)} ${getHeat(a.id)}`,
-      onclick: () => handleClick(a.id),
-    },
-      h('span', { class: 'ab-label' }, a.label),
-      h('span', { class: 'ab-meta'  }, a.desc),
-    );
-    btnEls[a.id] = btn;
-  });
-
-  // Reactive style updates
+  // ── Category tab strip (sorted by weight after first interaction) ──
+  const tabStrip = h('div', { class: 'shop-tabs' });
   effect(() => {
-    actions.forEach(a => {
-      const el = btnEls[a.id];
-      if (!el) return;
-      const heat = getHeat(a.id);
-      const size = getSize(a.id);
-      el.className = `adaptive-btn ${size} ${heat}`;
+    const c = clicks();
+    const t = total();
+    const sorted = t === 0
+      ? [...categories]
+      : [...categories].sort((a, b) => (c[b.id] ?? 0) - (c[a.id] ?? 0));
+    tabStrip.innerHTML = '';
+    sorted.forEach(cat => {
+      const w = getWeight(cat.id);
+      const isActive = activeTab() === cat.id;
+      const tab = h('button', {
+        class: `shop-tab${isActive ? ' active' : ''}${w > 0.7 ? ' pinned' : ''}`,
+        style: `--cat-color:${cat.color}`,
+        onclick: () => browseCategory(cat.id),
+      },
+        h('span', { class: 'tab-emoji' }, cat.emoji),
+        h('span', { class: 'tab-label' }, cat.label),
+        w > 0.7 ? h('span', { class: 'tab-pin' }, '★') : h('span', {}),
+      );
+      tabStrip.appendChild(tab);
     });
   });
 
-  // Heat bars
-  const barEls: Record<string, HTMLElement> = {};
-  const countEls: Record<string, HTMLElement> = {};
-  const heatColors: Record<string, string> = {
-    deploy: '#6366f1', invite: '#8b5cf6', export: '#10b981',
-    settings: '#f59e0b', archive: '#64748b', delete: '#ef4444',
-  };
+  // ── Product grid ──
+  const productGrid = h('div', { class: 'shop-products' });
+  effect(() => {
+    const cat = categories.find(c => c.id === activeTab())!;
+    productGrid.innerHTML = '';
+    cat.products.forEach(p => {
+      const inWishlist = wishlist().includes(p.name);
+      const stars = '★'.repeat(Math.floor(p.rating)) + (p.rating % 1 ? '½' : '');
+      const card = h('div', { class: 'shop-product-card' },
+        h('div', { class: 'product-img', style: `background:linear-gradient(135deg,${cat.color}22,${cat.color}44)` },
+          h('span', { style: 'font-size:2rem' }, cat.emoji),
+          p.badge ? h('span', { class: 'product-badge' }, p.badge) : h('span', {}),
+        ),
+        h('div', { class: 'product-info' },
+          h('div', { class: 'product-name' }, p.name),
+          h('div', { class: 'product-price' }, p.price),
+          h('div', { class: 'product-rating' },
+            h('span', { class: 'stars', style: `color:${cat.color}` }, stars),
+            h('span', { class: 'rating-num' }, ` ${p.rating}`),
+          ),
+        ),
+        h('div', { class: 'product-actions' },
+          h('button', {
+            class: 'btn-cart',
+            style: `background:${cat.color}`,
+            onclick: () => { cartCount.set(cartCount() + 1); },
+          }, '+ Cart'),
+          h('button', {
+            class: `btn-wish${inWishlist ? ' wishlisted' : ''}`,
+            onclick: () => {
+              const w = wishlist();
+              wishlist.set(inWishlist ? w.filter(x => x !== p.name) : [...w, p.name]);
+            },
+          }, inWishlist ? '♥' : '♡'),
+        ),
+      );
+      productGrid.appendChild(card);
+    });
+  });
 
-  const heatRows = actions.map(a => {
-    const bar   = h('div', { class: 'heat-bar-inner', style: `background:${heatColors[a.id]};width:0%` });
+  // ── Preference heatmap sidebar ──
+  const heatRows = categories.map(cat => {
+    const bar   = h('div', { class: 'heat-bar-inner', style: `background:${cat.color};width:0%` });
     const count = h('span', { class: 'heat-count' }, '0');
-    barEls[a.id]   = bar;
-    countEls[a.id] = count;
+    effect(() => {
+      const c = clicks();
+      const max = Math.max(...Object.values(c), 1);
+      bar.style.width   = `${Math.round((c[cat.id] / max) * 100)}%`;
+      count.textContent = String(c[cat.id] ?? 0);
+    });
     return h('div', { class: 'heat-bar-row' },
-      h('span', { class: 'heat-label' }, a.label),
+      h('span', { class: 'heat-label' }, `${cat.emoji} ${cat.label}`),
       h('div',  { class: 'heat-bar-outer' }, bar),
       count,
     );
   });
 
-  effect(() => {
-    const c = clicks();
-    const max = Math.max(...Object.values(c), 1);
-    actions.forEach(a => {
-      const pct = Math.round((c[a.id] / max) * 100);
-      if (barEls[a.id])   barEls[a.id].style.width = `${pct}%`;
-      if (countEls[a.id]) countEls[a.id].textContent = String(c[a.id]);
-    });
-  });
-
-  const insightEl = h('div', { class: 'adaptive-insight' },
-    () => insight(),
-  );
-
-  const section = h('section', { class: 'section section-bg-alt', id: 'adaptive' },
+  const section = h('section', { class: 'section', id: 'adaptive' },
     h('div', { class: 'section-header' },
-      h('div', { class: 'section-tag' }, 'ADAPTIVE UI'),
-      h('h2', { class: 'section-title' }, 'UI That Learns You'),
+      h('div', { class: 'section-tag' }, 'ADAPTIVE RETAIL UI'),
+      h('h2', { class: 'section-title' }, 'Store That Learns You'),
       h('p', { class: 'section-sub' },
-        'Components observe your behavior and reshape themselves. The more you use something, the more prominent it becomes — automatically.',
+        'Browse categories and watch the store personalise itself — top categories pin to front, products adapt, recommendations update live.',
       ),
     ),
-    h('div', { class: 'adaptive-grid' },
-      h('div', { class: 'card card-glow' },
-        h('div', { style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;' },
-          h('strong', { style: 'font-size:0.9rem;' }, 'Your Actions'),
-          h('span', { class: 'live-indicator' },
-            h('span', { class: 'live-dot' }),
-            () => `${total()} interactions`,
+    h('div', { class: 'shop-layout' },
+      h('div', { class: 'shop-main' },
+        h('div', { class: 'shop-topbar' },
+          h('div', { class: 'shop-brand' }, '🛍️ DRISHTI Store'),
+          h('div', { class: 'shop-topbar-right' },
+            h('span', { class: 'cart-badge' },
+              '🛒 ',
+              () => cartCount() > 0 ? `${cartCount()} items` : 'Cart',
+            ),
+            h('span', { class: 'wish-badge' },
+              '♥ ',
+              () => wishlist().length > 0 ? `${wishlist().length} saved` : 'Wishlist',
+            ),
           ),
         ),
-        h('div', { class: 'adaptive-buttons' },
-          ...actions.map(a => btnEls[a.id]),
-        ),
+        tabStrip,
+        productGrid,
+        h('div', { class: 'adaptive-insight' }, () => insight()),
       ),
-      h('div', { class: 'card card-glow' },
-        h('div', { style: 'margin-bottom:16px;' },
-          h('strong', { style: 'font-size:0.9rem;' }, 'Behavior Heatmap'),
-          h('p', { style: 'font-size:0.78rem;color:var(--muted);margin-top:6px;' },
-            'Usage frequency drives size, color, and prominence in real time.',
+      h('div', { class: 'shop-sidebar card card-glow' },
+        h('div', { style: 'margin-bottom:14px;' },
+          h('strong', { style: 'font-size:0.88rem;' }, '📊 Your Taste Profile'),
+          h('p', { style: 'font-size:0.75rem;color:var(--muted);margin-top:4px;' },
+            'Signals track every browse. Categories you love float to the top.',
           ),
         ),
         ...heatRows,
-        insightEl,
+        h('div', { style: 'margin-top:16px;padding-top:14px;border-top:1px solid var(--border);' },
+          h('div', { style: 'font-size:0.78rem;color:var(--muted);margin-bottom:8px;font-weight:600;' }, 'SESSION STATS'),
+          h('div', { style: 'font-size:0.82rem;color:var(--text);' },
+            () => `👁️ ${total()} categories browsed`,
+          ),
+          h('div', { style: 'font-size:0.82rem;color:var(--text);margin-top:4px;' },
+            () => `🛒 ${cartCount()} items in cart`,
+          ),
+          h('div', { style: 'font-size:0.82rem;color:var(--text);margin-top:4px;' },
+            () => `♥ ${wishlist().length} wishlisted`,
+          ),
+        ),
         h('button', {
           class: 'adaptive-reset',
           onclick: () => {
-            clicks.set(Object.fromEntries(actions.map(a => [a.id, 0])));
-            insight.set('Click buttons to teach the UI what matters to you.');
+            clicks.set(Object.fromEntries(categories.map(c => [c.id, 0])));
+            cartCount.set(0);
+            wishlist.set([]);
+            activeTab.set(categories[0].id);
+            insight.set('Browse categories — the store learns your taste and personalises in real time.');
           },
-        }, '↺ Reset learning'),
+        }, '↺ Reset & start over'),
       ),
     ),
   );
