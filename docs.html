@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DRISHTI — Documentation</title>
+  <meta name="description" content="Full documentation for the DRISHTI AI-native frontend framework. Signals, computed, effects, state machines, LLM streaming, and more.">
+  <meta property="og:title" content="DRISHTI Documentation">
+  <meta property="og:description" content="Complete API docs and guides for DRISHTI — the AI-native frontend framework.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<!-- ── Navigation ───────────────────────────────────────────── -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="nav-logo-icon">DR</span>
+      DRISHTI
+    </a>
+    <div class="nav-links" role="menubar">
+      <a href="docs.html" class="active" role="menuitem">Docs</a>
+      <a href="api.html" role="menuitem">API</a>
+      <a href="examples.html" role="menuitem">Examples</a>
+      <a href="index.html#packages" role="menuitem">Packages</a>
+      <a href="https://github.com/2ool4techai-oss/front" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" role="menuitem">GitHub &rarr;</a>
+    </div>
+    <div class="nav-actions">
+      <span class="nav-version">v0.1.0</span>
+      <button class="nav-mobile-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Docs Layout ───────────────────────────────────────────── -->
+<div class="docs-layout">
+
+  <!-- Sidebar -->
+  <aside class="docs-sidebar" aria-label="Documentation navigation">
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">Getting Started</div>
+      <a class="sidebar-link" data-section="installation">Installation</a>
+      <a class="sidebar-link" data-section="quickstart">Quick Start</a>
+      <a class="sidebar-link" data-section="vite-setup">Vite Setup</a>
+      <a class="sidebar-link" data-section="dr-templates">.dr Templates</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">Core</div>
+      <a class="sidebar-link" data-section="signals">Signals</a>
+      <a class="sidebar-link" data-section="computed">Computed</a>
+      <a class="sidebar-link" data-section="effects">Effects</a>
+      <a class="sidebar-link" data-section="batch">Batch</a>
+      <a class="sidebar-link" data-section="stores">Stores</a>
+      <a class="sidebar-link" data-section="labels">Labels</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">Rendering</div>
+      <a class="sidebar-link" data-section="renderer">Renderer (h)</a>
+      <a class="sidebar-link" data-section="show-each">show / each</a>
+      <a class="sidebar-link" data-section="portals">Portals</a>
+      <a class="sidebar-link" data-section="mountapp">mountApp</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">State</div>
+      <a class="sidebar-link" data-section="machines">State Machines</a>
+      <a class="sidebar-link" data-section="timetravel">Time Travel</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">Data</div>
+      <a class="sidebar-link" data-section="resources">Resources</a>
+      <a class="sidebar-link" data-section="query">Query</a>
+      <a class="sidebar-link" data-section="forms">Forms</a>
+      <a class="sidebar-link" data-section="persistence">Persistence</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">Real-time</div>
+      <a class="sidebar-link" data-section="collab">Collaboration</a>
+      <a class="sidebar-link" data-section="ws-signal">WS Signal</a>
+      <a class="sidebar-link" data-section="llm-stream">LLM Streaming</a>
+      <a class="sidebar-link" data-section="server-signal">Server Signal</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">Production</div>
+      <a class="sidebar-link" data-section="audit">Audit Log</a>
+      <a class="sidebar-link" data-section="hipaa">HIPAA</a>
+      <a class="sidebar-link" data-section="consent">GDPR Consent</a>
+      <a class="sidebar-link" data-section="csp">CSP</a>
+      <a class="sidebar-link" data-section="rum">RUM</a>
+      <a class="sidebar-link" data-section="otel">OpenTelemetry</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">Testing</div>
+      <a class="sidebar-link" data-section="testing-render">Render &amp; Events</a>
+      <a class="sidebar-link" data-section="a11y">Accessibility</a>
+      <a class="sidebar-link" data-section="visual">Visual Regression</a>
+      <a class="sidebar-link" data-section="signal-assertions">Signal Assertions</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">Deployment</div>
+      <a class="sidebar-link" data-section="vercel">Vercel</a>
+      <a class="sidebar-link" data-section="netlify">Netlify</a>
+      <a class="sidebar-link" data-section="cloudflare">Cloudflare</a>
+      <a class="sidebar-link" data-section="edge">Edge Runtime</a>
+    </div>
+
+  </aside>
+
+  <!-- Main Content -->
+  <main class="docs-content" id="docs-main" role="main">
+
+    <!-- ── installation ──────────────────────────────────────── -->
+    <section class="docs-section active" id="installation">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Getting Started</div>
+        <h1>Installation</h1>
+        <p>DRISHTI is a TypeScript-first framework with zero external runtime dependencies.</p>
+      </div>
+
+      <h2>Create a new project</h2>
+      <p>The fastest way to start — scaffolds a full TypeScript app with Vite, HMR, and testing pre-configured:</p>
+      <pre><code>npm create drishti-app@latest my-app
+cd my-app
+npm install
+npm run dev</code></pre>
+
+      <h2>Add to existing project</h2>
+      <p>Install only what you need. The runtime is the only required package — everything else is optional:</p>
+      <pre><code>npm install @nexoraaidrishti/runtime
+<span class="cmt"># Optional packages:</span>
+npm install @nexoraaidrishti/components       <span class="cmt"># UI components</span>
+npm install -D @nexoraaidrishti/vite-plugin   <span class="cmt"># .dr file support</span>
+npm install -D @nexoraaidrishti/testing       <span class="cmt"># testing utilities</span></code></pre>
+
+      <h2>Manual Vite setup</h2>
+      <p>If you're adding to an existing Vite project, configure the plugin to enable <code>.dr</code> single-file components and HMR signal preservation:</p>
+      <pre><code><span class="cmt">// vite.config.ts</span>
+<span class="kw">import</span> { <span class="fn">defineConfig</span> } <span class="kw">from</span> <span class="str">'vite'</span>;
+<span class="kw">import</span> { <span class="fn">drishti</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/vite-plugin'</span>;
+
+<span class="kw">export default</span> <span class="fn">defineConfig</span>({
+  <span class="attr">plugins</span>: [<span class="fn">drishti</span>()],
+});</code></pre>
+
+      <h2>TypeScript configuration</h2>
+      <p>DRISHTI requires TypeScript 5.0+. Recommended <code>tsconfig.json</code> settings for optimal type inference:</p>
+      <pre><code>{
+  <span class="str">"compilerOptions"</span>: {
+    <span class="str">"strict"</span>: <span class="kw">true</span>,
+    <span class="str">"exactOptionalPropertyTypes"</span>: <span class="kw">true</span>,
+    <span class="str">"moduleResolution"</span>: <span class="str">"bundler"</span>,
+    <span class="str">"target"</span>: <span class="str">"ES2022"</span>
+  }
+}</code></pre>
+
+      <div class="callout callout-tip">
+        <strong>Tip:</strong> Run <code>npx @nexoraaidrishti/cli doctor</code> to verify your setup and diagnose any configuration issues.
+      </div>
+    </section>
+
+    <!-- ── quickstart ────────────────────────────────────────── -->
+    <section class="docs-section" id="quickstart">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Getting Started</div>
+        <h1>Quick Start</h1>
+        <p>Build your first reactive app in under 5 minutes.</p>
+      </div>
+
+      <h2>Your first signal</h2>
+      <p>Signals are the foundation of DRISHTI. A signal holds a value and notifies all subscribers when it changes. Read by calling it as a function, write with <code>.set()</code>:</p>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">effect</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">name</span> = <span class="fn">signal</span>(<span class="str">'world'</span>);
+
+<span class="fn">effect</span>(() <span class="op">=&gt;</span> {
+  console.<span class="fn">log</span>(<span class="str">`Hello, </span>${<span class="var">name</span>()}<span class="str">!`</span>);
+});
+<span class="cmt">// logs: Hello, world!</span>
+
+<span class="var">name</span>.<span class="fn">set</span>(<span class="str">'DRISHTI'</span>);
+<span class="cmt">// logs: Hello, DRISHTI!</span></code></pre>
+
+      <h2>Your first component</h2>
+      <p>Components are plain functions that return DOM nodes via <code>h()</code>. Reactive expressions in children re-run automatically when signals change:</p>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">count</span> = <span class="fn">signal</span>(<span class="num">0</span>);
+<span class="kw">const</span> <span class="var">noun</span>  = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">count</span>() <span class="op">===</span> <span class="num">1</span> ? <span class="str">'click'</span> : <span class="str">'clicks'</span>);
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, {},
+    <span class="fn">h</span>(<span class="str">'p'</span>, {}, () <span class="op">=&gt;</span> <span class="str">`</span>${<span class="var">count</span>()}<span class="str"> </span>${<span class="var">noun</span>()}<span class="str">`</span>),
+    <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">count</span>.<span class="fn">set</span>(<span class="var">count</span>() <span class="op">+</span> <span class="num">1</span>) }, <span class="str">'Click me'</span>),
+  );
+}
+
+<span class="fn">mountApp</span>(<span class="type">App</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
+    </section>
+
+    <!-- ── vite-setup ────────────────────────────────────────── -->
+    <section class="docs-section" id="vite-setup">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Getting Started</div>
+        <h1>Vite Setup</h1>
+        <p>Configure Vite for the best DRISHTI development experience with HMR, .dr files, and island extraction.</p>
+      </div>
+
+      <h2>Plugin options</h2>
+      <p>The <code>@nexoraaidrishti/vite-plugin</code> extends Vite with <code>.dr</code> file support, HMR-safe signal preservation, automatic island detection, and optimized production builds:</p>
+      <pre><code><span class="kw">import</span> { <span class="fn">defineConfig</span> } <span class="kw">from</span> <span class="str">'vite'</span>;
+<span class="kw">import</span> { <span class="fn">drishti</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/vite-plugin'</span>;
+
+<span class="kw">export default</span> <span class="fn">defineConfig</span>({
+  <span class="attr">plugins</span>: [
+    <span class="fn">drishti</span>({
+      <span class="attr">dr</span>:      <span class="kw">true</span>,   <span class="cmt">// enable .dr file support</span>
+      <span class="attr">islands</span>: <span class="kw">true</span>,   <span class="cmt">// extract islands for SSR</span>
+      <span class="attr">hmr</span>:     <span class="kw">true</span>,   <span class="cmt">// preserve signal state on HMR</span>
+      <span class="attr">devtools</span>:<span class="kw">true</span>,   <span class="cmt">// inject devtools panel</span>
+    })
+  ],
+});</code></pre>
+    </section>
+
+    <!-- ── dr-templates ──────────────────────────────────────── -->
+    <section class="docs-section" id="dr-templates">
+      <div class="docs-page-header">
+        <div class="tag tag-beta">Beta</div>
+        <h1>.dr Single-File Components</h1>
+        <p>Collocate script, template, and style in a single .dr file — compiled to pure signal calls at build time.</p>
+      </div>
+
+      <h2>Example .dr file</h2>
+      <p>A <code>.dr</code> file has three optional blocks: <code>&lt;script&gt;</code>, <code>&lt;template&gt;</code>, and <code>&lt;style&gt;</code>. The template is compiled to <code>h()</code> calls at build time:</p>
+      <pre><code><span class="cmt">&lt;!-- Counter.dr --&gt;</span>
+<span class="kw">&lt;script&gt;</span>
+<span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+<span class="kw">const</span> <span class="var">count</span>   = <span class="fn">signal</span>(<span class="num">0</span>);
+<span class="kw">const</span> <span class="var">doubled</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">count</span>() <span class="op">*</span> <span class="num">2</span>);
+<span class="kw">&lt;/script&gt;</span>
+
+<span class="kw">&lt;template&gt;</span>
+  &lt;div class="counter"&gt;
+    &lt;button :onclick="() =&gt; count.set(count() - 1)"&gt;-&lt;/button&gt;
+    &lt;span&gt;{{ count() }} (doubled: {{ doubled() }})&lt;/span&gt;
+    &lt;button :onclick="() =&gt; count.set(count() + 1)"&gt;+&lt;/button&gt;
+  &lt;/div&gt;
+<span class="kw">&lt;/template&gt;</span>
+
+<span class="kw">&lt;style scoped&gt;</span>
+.counter { display: flex; gap: 8px; align-items: center; }
+<span class="kw">&lt;/style&gt;</span></code></pre>
+    </section>
+
+    <!-- ── signals ───────────────────────────────────────────── -->
+    <section class="docs-section" id="signals">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Core</div>
+        <h1>Signals</h1>
+        <p>The reactive primitive at the heart of DRISHTI. Signals hold values and notify dependents synchronously when they change.</p>
+      </div>
+
+      <h2>Creating signals</h2>
+      <p>Call <code>signal(initialValue)</code> to create a reactive container. TypeScript infers the type from the initial value:</p>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">count</span>   = <span class="fn">signal</span>(<span class="num">0</span>);
+<span class="kw">const</span> <span class="var">name</span>    = <span class="fn">signal</span>(<span class="str">'Alice'</span>);
+<span class="kw">const</span> <span class="var">items</span>   = <span class="fn">signal</span><span class="op">&lt;</span><span class="type">string</span>[]<span class="op">&gt;</span>([]);
+<span class="kw">const</span> <span class="var">user</span>    = <span class="fn">signal</span><span class="op">&lt;</span>{ <span class="attr">id</span>: <span class="type">number</span>; <span class="attr">role</span>: <span class="type">string</span> } <span class="op">|</span> <span class="kw">null</span><span class="op">&gt;</span>(<span class="kw">null</span>);</code></pre>
+
+      <h2>Reading and writing</h2>
+      <p>Read a signal by calling it as a function. Reads inside <code>effect()</code> or <code>computed()</code> are automatically tracked:</p>
+      <pre><code><span class="cmt">// Read</span>
+console.<span class="fn">log</span>(<span class="var">count</span>());     <span class="cmt">// 0</span>
+
+<span class="cmt">// Write with a new value</span>
+<span class="var">count</span>.<span class="fn">set</span>(<span class="num">42</span>);
+
+<span class="cmt">// Functional update — read + write atomically</span>
+<span class="var">count</span>.<span class="fn">set</span>(<span class="var">prev</span> <span class="op">=&gt;</span> <span class="var">prev</span> <span class="op">+</span> <span class="num">1</span>);
+<span class="var">items</span>.<span class="fn">set</span>(<span class="var">prev</span> <span class="op">=&gt;</span> [...<span class="var">prev</span>, <span class="str">'new item'</span>]);</code></pre>
+
+      <h2>Subscribing manually</h2>
+      <p>For non-reactive contexts (analytics, logging), subscribe directly. Returns an unsubscribe function:</p>
+      <pre><code><span class="kw">const</span> <span class="var">unsub</span> = <span class="var">count</span>.<span class="fn">subscribe</span>((<span class="var">value</span>) <span class="op">=&gt;</span> {
+  console.<span class="fn">log</span>(<span class="str">'count changed to'</span>, <span class="var">value</span>);
+});
+
+<span class="fn">unsub</span>(); <span class="cmt">// stop listening</span></code></pre>
+
+      <h2>Untracked reads</h2>
+      <p>Read a signal inside an effect without creating a dependency using <code>untrack()</code>:</p>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">effect</span>, <span class="fn">untrack</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="fn">effect</span>(() <span class="op">=&gt;</span> {
+  <span class="cmt">// re-runs when `a` changes, NOT when `b` changes</span>
+  <span class="var">a</span>();
+  <span class="kw">const</span> <span class="var">bVal</span> = <span class="fn">untrack</span>(() <span class="op">=&gt;</span> <span class="var">b</span>());
+  console.<span class="fn">log</span>(<span class="var">bVal</span>);
+});</code></pre>
+    </section>
+
+    <!-- ── computed ───────────────────────────────────────────── -->
+    <section class="docs-section" id="computed">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Core</div>
+        <h1>Computed Signals</h1>
+        <p>Derived reactive values that automatically update when their dependencies change. Results are memoized — the function only re-runs when inputs change.</p>
+      </div>
+
+      <h2>Basic derived value</h2>
+      <p>Pass a function to <code>computed()</code>. Any signal reads inside become dependencies. The result is lazily evaluated and cached:</p>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">firstName</span> = <span class="fn">signal</span>(<span class="str">'Jane'</span>);
+<span class="kw">const</span> <span class="var">lastName</span>  = <span class="fn">signal</span>(<span class="str">'Doe'</span>);
+<span class="kw">const</span> <span class="var">fullName</span>  = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="str">`</span>${<span class="var">firstName</span>()}<span class="str"> </span>${<span class="var">lastName</span>()}<span class="str">`</span>);
+
+console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span class="cmt">// 'Jane Doe'</span>
+<span class="var">firstName</span>.<span class="fn">set</span>(<span class="str">'John'</span>);
+console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span class="cmt">// 'John Doe'</span></code></pre>
+
+      <h2>Chained computeds</h2>
+      <p>Computeds can depend on other computeds. Dependency graphs propagate efficiently — only stale branches re-evaluate:</p>
+      <pre><code><span class="kw">const</span> <span class="var">todos</span>     = <span class="fn">signal</span>([{ <span class="attr">text</span>: <span class="str">'Buy milk'</span>, <span class="attr">done</span>: <span class="kw">false</span> }]);
+<span class="kw">const</span> <span class="var">filter</span>    = <span class="fn">signal</span>(<span class="str">'all'</span>);
+<span class="kw">const</span> <span class="var">pending</span>   = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">todos</span>().<span class="fn">filter</span>(<span class="var">t</span> <span class="op">=&gt;</span> <span class="op">!</span><span class="var">t</span>.done));
+<span class="kw">const</span> <span class="var">completed</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">todos</span>().<span class="fn">filter</span>(<span class="var">t</span> <span class="op">=&gt;</span> <span class="var">t</span>.done));
+<span class="kw">const</span> <span class="var">visible</span>   = <span class="fn">computed</span>(() <span class="op">=&gt;</span>
+  <span class="var">filter</span>() <span class="op">===</span> <span class="str">'pending'</span>   ? <span class="var">pending</span>()   :
+  <span class="var">filter</span>() <span class="op">===</span> <span class="str">'completed'</span> ? <span class="var">completed</span>() :
+  <span class="var">todos</span>()
+);</code></pre>
+    </section>
+
+    <!-- ── effects ───────────────────────────────────────────── -->
+    <section class="docs-section" id="effects">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Core</div>
+        <h1>Effects</h1>
+        <p>Side-effectful code that runs whenever its signal dependencies change. Use for DOM side effects, analytics, subscriptions, and network requests.</p>
+      </div>
+
+      <h2>Basic effect</h2>
+      <p>An effect runs immediately on creation, then re-runs whenever a signal it reads changes. Dependencies are tracked automatically:</p>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">effect</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">theme</span> = <span class="fn">signal</span>(<span class="str">'dark'</span>);
+
+<span class="fn">effect</span>(() <span class="op">=&gt;</span> {
+  document.documentElement.dataset.theme = <span class="var">theme</span>();
+});
+<span class="cmt">// Runs immediately, then re-runs on every theme change</span></code></pre>
+
+      <h2>Cleanup</h2>
+      <p>Return a cleanup function from an effect to run before the next re-execution or when the effect is disposed:</p>
+      <pre><code><span class="kw">const</span> <span class="var">query</span> = <span class="fn">signal</span>(<span class="str">'drishti'</span>);
+<span class="kw">const</span> <span class="var">results</span> = <span class="fn">signal</span>([]);
+
+<span class="kw">const</span> <span class="var">dispose</span> = <span class="fn">effect</span>(() <span class="op">=&gt;</span> {
+  <span class="kw">const</span> <span class="var">ctrl</span> = <span class="kw">new</span> <span class="type">AbortController</span>();
+
+  <span class="fn">fetch</span>(<span class="str">`/api/search?q=</span>${<span class="var">query</span>()}<span class="str">`</span>, { <span class="attr">signal</span>: <span class="var">ctrl</span>.signal })
+    .<span class="fn">then</span>(<span class="var">r</span> <span class="op">=&gt;</span> <span class="var">r</span>.<span class="fn">json</span>())
+    .<span class="fn">then</span>(<span class="var">data</span> <span class="op">=&gt;</span> <span class="var">results</span>.<span class="fn">set</span>(<span class="var">data</span>));
+
+  <span class="kw">return</span> () <span class="op">=&gt;</span> <span class="var">ctrl</span>.<span class="fn">abort</span>(); <span class="cmt">// cancels on re-run</span>
+});
+
+<span class="fn">dispose</span>(); <span class="cmt">// stop the effect entirely</span></code></pre>
+    </section>
+
+    <!-- ── batch ──────────────────────────────────────────────── -->
+    <section class="docs-section" id="batch">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Core</div>
+        <h1>Batch</h1>
+        <p>Group multiple signal writes into a single atomic update. All effects and computed signals re-evaluate once, after the batch completes.</p>
+      </div>
+
+      <h2>Batching multiple writes</h2>
+      <p>Without batching, each <code>.set()</code> triggers an immediate flush. Wrapping in <code>batch()</code> defers all notifications until the block returns:</p>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">effect</span>, <span class="fn">batch</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">x</span>   = <span class="fn">signal</span>(<span class="num">1</span>);
+<span class="kw">const</span> <span class="var">y</span>   = <span class="fn">signal</span>(<span class="num">2</span>);
+<span class="kw">const</span> <span class="var">z</span>   = <span class="fn">signal</span>(<span class="num">3</span>);
+<span class="kw">const</span> <span class="var">sum</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">x</span>() <span class="op">+</span> <span class="var">y</span>() <span class="op">+</span> <span class="var">z</span>());
+
+<span class="fn">effect</span>(() <span class="op">=&gt;</span> console.<span class="fn">log</span>(<span class="str">'sum:'</span>, <span class="var">sum</span>())); <span class="cmt">// sum: 6</span>
+
+<span class="fn">batch</span>(() <span class="op">=&gt;</span> {
+  <span class="var">x</span>.<span class="fn">set</span>(<span class="num">10</span>); <span class="cmt">// no flush yet</span>
+  <span class="var">y</span>.<span class="fn">set</span>(<span class="num">20</span>); <span class="cmt">// no flush yet</span>
+  <span class="var">z</span>.<span class="fn">set</span>(<span class="num">30</span>); <span class="cmt">// no flush yet</span>
+});
+<span class="cmt">// effect re-runs exactly once: sum: 60</span></code></pre>
+    </section>
+
+    <!-- ── stores ─────────────────────────────────────────────── -->
+    <section class="docs-section" id="stores">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Core</div>
+        <h1>Stores</h1>
+        <p>Object-shaped reactive state with fine-grained per-property tracking. Only effects that read a changed property re-run.</p>
+      </div>
+
+      <h2>createStore</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createStore</span>, <span class="fn">effect</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">user</span> = <span class="fn">createStore</span>({
+  <span class="attr">name</span>: <span class="str">'Alice'</span>,
+  <span class="attr">age</span>:  <span class="num">30</span>,
+  <span class="attr">role</span>: <span class="str">'admin'</span>,
+});
+
+<span class="fn">effect</span>(() <span class="op">=&gt;</span> console.<span class="fn">log</span>(<span class="str">'name:'</span>, <span class="var">user</span>.name)); <span class="cmt">// only re-runs when name changes</span>
+<span class="fn">effect</span>(() <span class="op">=&gt;</span> console.<span class="fn">log</span>(<span class="str">'age:'</span>,  <span class="var">user</span>.age));  <span class="cmt">// only re-runs when age changes</span>
+
+<span class="var">user</span>.age = <span class="num">31</span>; <span class="cmt">// triggers only the second effect</span></code></pre>
+    </section>
+
+    <!-- ── labels ─────────────────────────────────────────────── -->
+    <section class="docs-section" id="labels">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Core</div>
+        <h1>Signal Labels</h1>
+        <p>Attach a human-readable name to a signal for devtools, AI agent observability, and audit logs.</p>
+      </div>
+
+      <h2>Labeling signals</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">label</span>, <span class="fn">_getDevSignals</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">count</span>  = <span class="fn">label</span>(<span class="fn">signal</span>(<span class="num">0</span>),    <span class="str">'counter/count'</span>);
+<span class="kw">const</span> <span class="var">filter</span> = <span class="fn">label</span>(<span class="fn">signal</span>(<span class="str">'all'</span>), <span class="str">'todos/filter'</span>);
+
+<span class="cmt">// AI agents discover signals by name</span>
+<span class="kw">const</span> <span class="var">all</span> = <span class="fn">_getDevSignals</span>();
+<span class="cmt">// { 'counter/count': Signal&lt;0&gt;, 'todos/filter': Signal&lt;'all'&gt; }</span></code></pre>
+    </section>
+
+    <!-- ── renderer ───────────────────────────────────────────── -->
+    <section class="docs-section" id="renderer">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Rendering</div>
+        <h1>Renderer</h1>
+        <p>DRISHTI renders directly to the DOM — no virtual DOM, no diffing. <code>h()</code> creates live elements that update in place.</p>
+      </div>
+
+      <h2>The h() function</h2>
+      <p><code>h(tag, attrs, ...children)</code> creates a DOM node. Attribute values and children can be signals or reactive functions — they patch the DOM directly when dependencies change:</p>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">active</span>    = <span class="fn">signal</span>(<span class="kw">false</span>);
+<span class="kw">const</span> <span class="var">labelText</span> = <span class="fn">signal</span>(<span class="str">'Click me'</span>);
+
+<span class="kw">const</span> <span class="var">btn</span> = <span class="fn">h</span>(<span class="str">'button'</span>, {
+  <span class="attr">class</span>:   () <span class="op">=&gt;</span> <span class="var">active</span>() ? <span class="str">'btn active'</span> : <span class="str">'btn'</span>,
+  <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">active</span>.<span class="fn">set</span>(<span class="op">!</span><span class="var">active</span>()),
+},
+  () <span class="op">=&gt;</span> <span class="var">labelText</span>(),
+);</code></pre>
+    </section>
+
+    <!-- ── show-each ──────────────────────────────────────────── -->
+    <section class="docs-section" id="show-each">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Rendering</div>
+        <h1>show / each</h1>
+        <p>Conditional rendering with <code>show()</code> and efficient keyed list rendering with <code>each()</code>.</p>
+      </div>
+
+      <h2>show() — conditional rendering</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">show</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">isLoggedIn</span> = <span class="fn">signal</span>(<span class="kw">false</span>);
+
+<span class="kw">const</span> <span class="var">view</span> = <span class="fn">show</span>(
+  () <span class="op">=&gt;</span> <span class="var">isLoggedIn</span>(),
+  () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'dashboard'</span> }, <span class="str">'Welcome back!'</span>),
+  () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'login'</span> }, <span class="str">'Please sign in'</span>),
+);</code></pre>
+
+      <h2>each() — keyed list rendering</h2>
+      <p>Efficiently re-renders only the items that changed. Provide a key function to identify stable items:</p>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">each</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">items</span> = <span class="fn">signal</span>([
+  { <span class="attr">id</span>: <span class="num">1</span>, <span class="attr">name</span>: <span class="str">'Alpha'</span> },
+  { <span class="attr">id</span>: <span class="num">2</span>, <span class="attr">name</span>: <span class="str">'Beta'</span>  },
+]);
+
+<span class="kw">const</span> <span class="var">list</span> = <span class="fn">each</span>(
+  () <span class="op">=&gt;</span> <span class="var">items</span>(),
+  (<span class="var">item</span>) <span class="op">=&gt;</span> <span class="var">item</span>.id,
+  (<span class="var">item</span>, <span class="var">idx</span>) <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'li'</span>, {}, () <span class="op">=&gt;</span> <span class="var">item</span>.name)
+);</code></pre>
+    </section>
+
+    <!-- ── portals ────────────────────────────────────────────── -->
+    <section class="docs-section" id="portals">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Rendering</div>
+        <h1>Portals</h1>
+        <p>Render content into a DOM node outside the component tree — ideal for modals, tooltips, and notification toasts.</p>
+      </div>
+
+      <h2>Using portal()</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">portal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">open</span> = <span class="fn">signal</span>(<span class="kw">false</span>);
+
+<span class="kw">const</span> <span class="var">modal</span> = <span class="fn">portal</span>(
+  () <span class="op">=&gt;</span> <span class="fn">show</span>(
+    () <span class="op">=&gt;</span> <span class="var">open</span>(),
+    () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'modal'</span> }, <span class="str">'Modal content'</span>)
+  ),
+  document.<span class="fn">getElementById</span>(<span class="str">'modal-root'</span>) ?? document.body
+);</code></pre>
+    </section>
+
+    <!-- ── mountapp ───────────────────────────────────────────── -->
+    <section class="docs-section" id="mountapp">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Rendering</div>
+        <h1>mountApp</h1>
+        <p>Mount a root component into a container. Returns a dispose function for clean teardown.</p>
+      </div>
+
+      <h2>Mounting and unmounting</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+<span class="kw">import</span> { <span class="type">App</span> } <span class="kw">from</span> <span class="str">'./App'</span>;
+
+<span class="kw">const</span> <span class="var">dispose</span> = <span class="fn">mountApp</span>(<span class="type">App</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);
+
+<span class="cmt">// Clean teardown — stops all effects and removes DOM nodes</span>
+<span class="fn">dispose</span>();</code></pre>
+    </section>
+
+    <!-- ── machines ───────────────────────────────────────────── -->
+    <section class="docs-section" id="machines">
+      <div class="docs-page-header">
+        <div class="tag tag-new">State</div>
+        <h1>State Machines</h1>
+        <p>XState-inspired typed state machines. Define states, transitions, guards, and actions — all reactive via signals.</p>
+      </div>
+
+      <h2>Creating a machine</h2>
+      <p>Pass a config object with an <code>initial</code> state and a <code>states</code> map. Each state defines its transitions under <code>on</code>:</p>
+      <pre><code><span class="kw">import</span> { <span class="fn">createMachine</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">auth</span> = <span class="fn">createMachine</span>({
+  <span class="attr">initial</span>: <span class="str">'idle'</span>,
+  <span class="attr">states</span>: {
+    <span class="attr">idle</span>:          { <span class="attr">on</span>: { <span class="attr">LOGIN</span>:   <span class="str">'loading'</span> } },
+    <span class="attr">loading</span>:       { <span class="attr">on</span>: { <span class="attr">SUCCESS</span>: <span class="str">'authenticated'</span>, <span class="attr">FAIL</span>: <span class="str">'error'</span> } },
+    <span class="attr">authenticated</span>: { <span class="attr">on</span>: { <span class="attr">LOGOUT</span>:  <span class="str">'idle'</span> } },
+    <span class="attr">error</span>:         { <span class="attr">on</span>: { <span class="attr">RETRY</span>:   <span class="str">'loading'</span>, <span class="attr">CANCEL</span>: <span class="str">'idle'</span> } },
+  },
+});
+
+<span class="var">auth</span>.<span class="fn">send</span>(<span class="str">'LOGIN'</span>);    <span class="cmt">// → 'loading'</span>
+<span class="var">auth</span>.<span class="fn">send</span>(<span class="str">'SUCCESS'</span>); <span class="cmt">// → 'authenticated'</span>
+<span class="var">auth</span>.<span class="fn">can</span>(<span class="str">'LOGOUT'</span>);   <span class="cmt">// true — check validity before sending</span></code></pre>
+
+      <h2>Guards and actions</h2>
+      <p>Add <code>guard</code> functions to conditionally block transitions, and <code>entry</code>/<code>exit</code> hooks for side effects:</p>
+      <pre><code><span class="kw">const</span> <span class="var">checkout</span> = <span class="fn">createMachine</span>({
+  <span class="attr">initial</span>: <span class="str">'cart'</span>,
+  <span class="attr">states</span>: {
+    <span class="attr">cart</span>: {
+      <span class="attr">on</span>: {
+        <span class="attr">PROCEED</span>: {
+          <span class="attr">target</span>: <span class="str">'payment'</span>,
+          <span class="attr">guard</span>: () <span class="op">=&gt;</span> <span class="var">cartItems</span>().<span class="var">length</span> <span class="op">&gt;</span> <span class="num">0</span>,
+        }
+      },
+      <span class="attr">entry</span>: () <span class="op">=&gt;</span> <span class="fn">trackEvent</span>(<span class="str">'cart_view'</span>),
+    },
+    <span class="attr">payment</span>: {
+      <span class="attr">on</span>: { <span class="attr">BACK</span>: <span class="str">'cart'</span>, <span class="attr">PAY</span>: <span class="str">'complete'</span> },
+      <span class="attr">exit</span>: () <span class="op">=&gt;</span> <span class="fn">savePayment</span>(),
+    },
+    <span class="attr">complete</span>: {},
+  },
+});</code></pre>
+    </section>
+
+    <!-- ── timetravel ─────────────────────────────────────────── -->
+    <section class="docs-section" id="timetravel">
+      <div class="docs-page-header">
+        <div class="tag tag-new">State</div>
+        <h1>Time Travel</h1>
+        <p>Record every signal mutation and replay, undo, or restore any past state with zero configuration.</p>
+      </div>
+
+      <h2>enableTimeTravel</h2>
+      <p>Call <code>enableTimeTravel()</code> before mounting your app. All subsequent signal writes are recorded in a ring buffer:</p>
+      <pre><code><span class="kw">import</span> { <span class="fn">enableTimeTravel</span>, <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">tt</span>    = <span class="fn">enableTimeTravel</span>({ <span class="attr">maxEntries</span>: <span class="num">100</span> });
+<span class="kw">const</span> <span class="var">count</span> = <span class="fn">signal</span>(<span class="num">0</span>);
+
+<span class="var">count</span>.<span class="fn">set</span>(<span class="num">1</span>); <span class="var">count</span>.<span class="fn">set</span>(<span class="num">2</span>); <span class="var">count</span>.<span class="fn">set</span>(<span class="num">3</span>);
+
+<span class="cmt">// Snapshot and restore</span>
+<span class="kw">const</span> <span class="var">snap</span> = <span class="var">tt</span>.<span class="fn">snapshot</span>();
+<span class="var">count</span>.<span class="fn">set</span>(<span class="num">999</span>);
+<span class="var">tt</span>.<span class="fn">restore</span>(<span class="var">snap</span>);  <span class="cmt">// count() → 3</span>
+
+<span class="cmt">// Step through history</span>
+<span class="var">tt</span>.<span class="fn">travel</span>(<span class="op">-</span><span class="num">1</span>); <span class="cmt">// undo — count() → 2</span>
+<span class="var">tt</span>.<span class="fn">travel</span>(<span class="op">+</span><span class="num">1</span>); <span class="cmt">// redo — count() → 3</span></code></pre>
+
+      <h2>Reactive history UI</h2>
+      <pre><code><span class="kw">const</span> <span class="var">Bar</span> = () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'div'</span>, {},
+  <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">tt</span>.<span class="fn">travel</span>(<span class="op">-</span><span class="num">1</span>) }, <span class="str">'Undo'</span>),
+  () <span class="op">=&gt;</span> <span class="str">`Step </span>${<span class="var">tt</span>.<span class="fn">present</span>()}<span class="str"> / </span>${<span class="var">tt</span>.<span class="fn">entries</span>().<span class="var">length</span>}<span class="str">`</span>,
+  <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">tt</span>.<span class="fn">travel</span>(<span class="op">+</span><span class="num">1</span>) }, <span class="str">'Redo'</span>),
+);</code></pre>
+    </section>
+
+    <!-- ── resources ──────────────────────────────────────────── -->
+    <section class="docs-section" id="resources">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Data</div>
+        <h1>Resources</h1>
+        <p>Async data fetching with reactive loading, error, and retry states.</p>
+      </div>
+
+      <h2>createResource</h2>
+      <p><code>createResource</code> takes a fetcher function and returns an object with reactive <code>data</code>, <code>loading</code>, and <code>error</code> signals. The fetcher re-runs when its signal dependencies change:</p>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">createResource</span>, <span class="fn">h</span>, <span class="fn">show</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">userId</span> = <span class="fn">signal</span>(<span class="num">1</span>);
+<span class="kw">const</span> <span class="var">user</span>   = <span class="fn">createResource</span>(
+  () <span class="op">=&gt;</span> <span class="fn">fetch</span>(<span class="str">`/api/users/</span>${<span class="var">userId</span>()}<span class="str">`</span>).<span class="fn">then</span>(<span class="var">r</span> <span class="op">=&gt;</span> <span class="var">r</span>.<span class="fn">json</span>()),
+  { <span class="attr">initialValue</span>: <span class="kw">null</span> }
+);
+
+<span class="kw">const</span> <span class="var">UserCard</span> = () <span class="op">=&gt;</span>
+  <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">user</span>.<span class="fn">loading</span>(),
+    () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'p'</span>, {}, <span class="str">'Loading...'</span>),
+    () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'div'</span>, {}, () <span class="op">=&gt;</span> <span class="var">user</span>.<span class="fn">data</span>()?.name),
+  );</code></pre>
+    </section>
+
+    <!-- ── query ──────────────────────────────────────────────── -->
+    <section class="docs-section" id="query">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Data</div>
+        <h1>Query</h1>
+        <p>React Query-inspired data fetching with automatic caching, deduplication, and background refetching.</p>
+      </div>
+
+      <h2>createQuery</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">createQuery</span>, <span class="fn">invalidateQuery</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">page</span>  = <span class="fn">signal</span>(<span class="num">1</span>);
+<span class="kw">const</span> <span class="var">posts</span> = <span class="fn">createQuery</span>(
+  () <span class="op">=&gt;</span> [<span class="str">'posts'</span>, <span class="var">page</span>()],
+  ([, <span class="var">p</span>]) <span class="op">=&gt;</span> <span class="fn">fetchPosts</span>(<span class="var">p</span>),
+  { <span class="attr">staleTime</span>: <span class="num">30_000</span> }
+);
+
+<span class="cmt">// Invalidate cache and trigger refetch</span>
+<span class="fn">invalidateQuery</span>(<span class="str">'posts'</span>);</code></pre>
+    </section>
+
+    <!-- ── forms ──────────────────────────────────────────────── -->
+    <section class="docs-section" id="forms">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Data</div>
+        <h1>Forms</h1>
+        <p>Schema-driven form state with field-level validation, touched tracking, and submit handling.</p>
+      </div>
+
+      <h2>createForm</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createForm</span>, <span class="fn">h</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">form</span> = <span class="fn">createForm</span>({
+  <span class="attr">email</span>:    { <span class="attr">initial</span>: <span class="str">''</span>, <span class="attr">validate</span>: <span class="var">v</span> <span class="op">=&gt;</span> <span class="var">v</span>.<span class="fn">includes</span>(<span class="str">'@'</span>) || <span class="str">'Invalid email'</span> },
+  <span class="attr">password</span>: { <span class="attr">initial</span>: <span class="str">''</span>, <span class="attr">validate</span>: <span class="var">v</span> <span class="op">=&gt;</span> <span class="var">v</span>.<span class="var">length</span> <span class="op">&gt;=</span> <span class="num">8</span> || <span class="str">'Min 8 chars'</span> },
+}, { <span class="attr">onSubmit</span>: <span class="var">values</span> <span class="op">=&gt;</span> <span class="fn">login</span>(<span class="var">values</span>) });
+
+<span class="kw">const</span> <span class="var">LoginForm</span> = () <span class="op">=&gt;</span>
+  <span class="fn">h</span>(<span class="str">'form'</span>, { <span class="attr">onsubmit</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> { <span class="var">e</span>.<span class="fn">preventDefault</span>(); <span class="var">form</span>.<span class="fn">submit</span>(); } },
+    <span class="fn">h</span>(<span class="str">'input'</span>, { <span class="attr">type</span>: <span class="str">'email'</span>,    <span class="attr">value</span>: <span class="var">form</span>.fields.email.value }),
+    () <span class="op">=&gt;</span> <span class="var">form</span>.fields.email.<span class="fn">error</span>(),
+    <span class="fn">h</span>(<span class="str">'input'</span>, { <span class="attr">type</span>: <span class="str">'password'</span>, <span class="attr">value</span>: <span class="var">form</span>.fields.password.value }),
+    () <span class="op">=&gt;</span> <span class="var">form</span>.fields.password.<span class="fn">error</span>(),
+    <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">type</span>: <span class="str">'submit'</span>, <span class="attr">disabled</span>: () <span class="op">=&gt;</span> <span class="op">!</span><span class="var">form</span>.<span class="fn">valid</span>() }, <span class="str">'Login'</span>),
+  );</code></pre>
+    </section>
+
+    <!-- ── persistence ────────────────────────────────────────── -->
+    <section class="docs-section" id="persistence">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Data</div>
+        <h1>Persistence</h1>
+        <p>Automatically sync any signal to localStorage, sessionStorage, or a custom adapter.</p>
+      </div>
+
+      <h2>persistSignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">persistSignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">theme</span> = <span class="fn">signal</span><span class="op">&lt;</span><span class="str">'light'</span> <span class="op">|</span> <span class="str">'dark'</span><span class="op">&gt;</span>(<span class="str">'dark'</span>);
+
+<span class="fn">persistSignal</span>(<span class="str">'app:theme'</span>, <span class="var">theme</span>, {
+  <span class="attr">storage</span>:     <span class="str">'localStorage'</span>,
+  <span class="attr">serialize</span>:   <span class="type">JSON</span>.<span class="var">stringify</span>,
+  <span class="attr">deserialize</span>: <span class="type">JSON</span>.<span class="var">parse</span>,
+});
+<span class="cmt">// loads from localStorage on startup, syncs writes back automatically</span></code></pre>
+    </section>
+
+    <!-- ── collab ─────────────────────────────────────────────── -->
+    <section class="docs-section" id="collab">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Real-time</div>
+        <h1>Collaboration</h1>
+        <p>CRDT-backed collaborative sessions. Sync any signal across clients — conflict-free and offline-capable.</p>
+      </div>
+
+      <h2>createCollabSession</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createCollabSession</span>, <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">session</span> = <span class="fn">createCollabSession</span>({
+  <span class="attr">room</span>:     <span class="str">'doc-42'</span>,
+  <span class="attr">userId</span>:   <span class="str">'alice'</span>,
+  <span class="attr">wsUrl</span>:    <span class="str">'wss://collab.example.com'</span>,
+  <span class="attr">presence</span>: <span class="kw">true</span>,
+});
+
+<span class="kw">const</span> <span class="var">doc</span> = <span class="fn">signal</span>(<span class="str">''</span>);
+<span class="var">session</span>.<span class="fn">sync</span>(<span class="str">'document'</span>, <span class="var">doc</span>);
+<span class="cmt">// session.peers() → Signal&lt;Peer[]&gt;</span>
+
+<span class="var">session</span>.<span class="fn">disconnect</span>();</code></pre>
+    </section>
+
+    <!-- ── ws-signal ───────────────────────────────────────────── -->
+    <section class="docs-section" id="ws-signal">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Real-time</div>
+        <h1>WebSocket Signal</h1>
+        <p>Connect a signal directly to a WebSocket endpoint. Incoming messages update the signal; signal writes are sent as messages.</p>
+      </div>
+
+      <h2>connectWS</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">connectWS</span>, <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">price</span> = <span class="fn">signal</span>(<span class="num">0</span>);
+
+<span class="kw">const</span> <span class="var">conn</span> = <span class="fn">connectWS</span>(<span class="str">'wss://ticker.example.com'</span>, <span class="var">price</span>, {
+  <span class="attr">parse</span>:     (<span class="var">msg</span>) <span class="op">=&gt;</span> <span class="type">JSON</span>.<span class="fn">parse</span>(<span class="var">msg</span>).price,
+  <span class="attr">serialize</span>: (<span class="var">val</span>) <span class="op">=&gt;</span> <span class="type">JSON</span>.<span class="fn">stringify</span>({ <span class="attr">subscribe</span>: <span class="var">val</span> }),
+  <span class="attr">reconnect</span>: <span class="kw">true</span>,
+});
+<span class="cmt">// conn.status() → 'connecting' | 'open' | 'closed' | 'error'</span></code></pre>
+    </section>
+
+    <!-- ── llm-stream ──────────────────────────────────────────── -->
+    <section class="docs-section" id="llm-stream">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Real-time</div>
+        <h1>LLM Streaming</h1>
+        <p>Stream LLM responses token by token into reactive signals. Full tool call support, thinking state, and abort control.</p>
+      </div>
+
+      <h2>createLLMStream</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createLLMStream</span>, <span class="fn">createThinkingState</span>, <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">response</span> = <span class="fn">signal</span>(<span class="str">''</span>);
+<span class="kw">const</span> <span class="var">thinking</span> = <span class="fn">createThinkingState</span>();
+
+<span class="kw">const</span> <span class="var">stream</span> = <span class="fn">createLLMStream</span>({
+  <span class="attr">endpoint</span>: <span class="str">'/api/chat'</span>,
+  <span class="attr">onChunk</span>:  (<span class="var">chunk</span>) <span class="op">=&gt;</span> <span class="var">response</span>.<span class="fn">set</span>(<span class="var">response</span>() <span class="op">+</span> <span class="var">chunk</span>),
+  <span class="attr">onDone</span>:   () <span class="op">=&gt;</span> console.<span class="fn">log</span>(<span class="str">'done'</span>),
+  <span class="attr">onTool</span>:   (<span class="var">call</span>) <span class="op">=&gt;</span> <span class="fn">handleToolCall</span>(<span class="var">call</span>),
+});
+
+<span class="kw">await</span> <span class="var">stream</span>.<span class="fn">start</span>({
+  <span class="attr">messages</span>: [{ <span class="attr">role</span>: <span class="str">'user'</span>, <span class="attr">content</span>: <span class="str">'Explain fine-grained reactivity'</span> }]
+});
+
+<span class="var">stream</span>.<span class="fn">abort</span>(); <span class="cmt">// cancel in progress</span>
+<span class="cmt">// stream.status() → 'idle' | 'streaming' | 'done' | 'error'</span></code></pre>
+    </section>
+
+    <!-- ── server-signal ──────────────────────────────────────── -->
+    <section class="docs-section" id="server-signal">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Real-time</div>
+        <h1>Server Signals</h1>
+        <p>Server-Sent Events and server-pushed signal updates for real-time data without WebSockets.</p>
+      </div>
+
+      <h2>createSSESignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createSSESignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">deployStatus</span> = <span class="fn">createSSESignal</span>(<span class="str">'/api/deploy/status'</span>, {
+  <span class="attr">initialValue</span>: <span class="str">'idle'</span>,
+  <span class="attr">parse</span>: (<span class="var">data</span>) <span class="op">=&gt;</span> <span class="type">JSON</span>.<span class="fn">parse</span>(<span class="var">data</span>).status,
+});
+<span class="cmt">// deployStatus() updates in real time as the server sends events</span></code></pre>
+    </section>
+
+    <!-- ── audit ──────────────────────────────────────────────── -->
+    <section class="docs-section" id="audit">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Production</div>
+        <h1>Audit Log</h1>
+        <p>Capture every signal write in a ring buffer for compliance, debugging, and session replay.</p>
+      </div>
+
+      <h2>createAuditLog</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createAuditLog</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">audit</span> = <span class="fn">createAuditLog</span>({
+  <span class="attr">maxEntries</span>: <span class="num">1000</span>,
+  <span class="attr">onFlush</span>: (<span class="var">entries</span>) <span class="op">=&gt;</span> <span class="fn">sendToAnalytics</span>(<span class="var">entries</span>),
+});
+<span class="cmt">// audit.entries() → Signal&lt;{ label, prev, next, timestamp }[]&gt;</span></code></pre>
+    </section>
+
+    <!-- ── hipaa ──────────────────────────────────────────────── -->
+    <section class="docs-section" id="hipaa">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Production</div>
+        <h1>HIPAA Mode</h1>
+        <p>Automatic PII scrubbing in audit logs and error reports for SSN, email, phone, and credit card data.</p>
+      </div>
+
+      <h2>enableHIPAA</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">enableHIPAA</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="fn">enableHIPAA</span>({
+  <span class="attr">scrub</span>: [<span class="str">'ssn'</span>, <span class="str">'email'</span>, <span class="str">'phone'</span>, <span class="str">'creditCard'</span>],
+  <span class="attr">replacement</span>: <span class="str">'[REDACTED]'</span>,
+  <span class="attr">auditAll</span>: <span class="kw">true</span>,
+});</code></pre>
+    </section>
+
+    <!-- ── consent ────────────────────────────────────────────── -->
+    <section class="docs-section" id="consent">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Production</div>
+        <h1>GDPR Consent</h1>
+        <p>Manage consent categories reactively. Block analytics/tracking signals until users grant explicit consent.</p>
+      </div>
+
+      <h2>createConsentManager</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createConsentManager</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">consent</span> = <span class="fn">createConsentManager</span>({
+  <span class="attr">categories</span>: [<span class="str">'necessary'</span>, <span class="str">'analytics'</span>, <span class="str">'marketing'</span>],
+  <span class="attr">storage</span>: <span class="str">'localStorage'</span>,
+});
+<span class="cmt">// consent.granted('analytics') → Signal&lt;boolean&gt;</span></code></pre>
+    </section>
+
+    <!-- ── csp ────────────────────────────────────────────────── -->
+    <section class="docs-section" id="csp">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Production</div>
+        <h1>Content Security Policy</h1>
+        <p>Generate and manage CSP nonces for inline scripts and styles. Integrates with SSR for per-request nonces.</p>
+      </div>
+
+      <h2>createCSP</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createCSP</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">csp</span> = <span class="fn">createCSP</span>({
+  <span class="attr">directives</span>: {
+    <span class="str">'default-src'</span>: [<span class="str">"'self'"</span>],
+    <span class="str">'script-src'</span>:  [<span class="str">"'self'"</span>, <span class="str">"'nonce-{nonce}'"</span>],
+  }
+});
+<span class="cmt">// csp.nonce()  → per-request random nonce</span>
+<span class="cmt">// csp.header() → full Content-Security-Policy header string</span></code></pre>
+    </section>
+
+    <!-- ── rum ────────────────────────────────────────────────── -->
+    <section class="docs-section" id="rum">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Production</div>
+        <h1>Real User Monitoring</h1>
+        <p>Collect Core Web Vitals — LCP, FCP, CLS, FID, TTFB — as reactive signals. Send to any analytics backend.</p>
+      </div>
+
+      <h2>createRUM</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createRUM</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">rum</span> = <span class="fn">createRUM</span>({
+  <span class="attr">onVital</span>: (<span class="var">metric</span>) <span class="op">=&gt;</span> <span class="fn">sendToAnalytics</span>(<span class="var">metric</span>),
+});
+<span class="cmt">// rum.vitals() → { lcp, fcp, cls, fid, ttfb } — all Signal&lt;number&gt;</span></code></pre>
+    </section>
+
+    <!-- ── otel ───────────────────────────────────────────────── -->
+    <section class="docs-section" id="otel">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Production</div>
+        <h1>OpenTelemetry</h1>
+        <p>Emit OTel spans for every signal write, effect run, and component render. Works with Jaeger, Zipkin, Grafana Tempo, and any OTel-compatible backend.</p>
+      </div>
+
+      <h2>createOtelTracer</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createOtelTracer</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="fn">createOtelTracer</span>({
+  <span class="attr">endpoint</span>:    <span class="str">'https://otel-collector.example.com/v1/traces'</span>,
+  <span class="attr">serviceName</span>: <span class="str">'my-drishti-app'</span>,
+  <span class="attr">traceSignals</span>: <span class="kw">true</span>,
+  <span class="attr">traceEffects</span>: <span class="kw">true</span>,
+});</code></pre>
+    </section>
+
+    <!-- ── testing-render ─────────────────────────────────────── -->
+    <section class="docs-section" id="testing-render">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Testing</div>
+        <h1>Render &amp; Events</h1>
+        <p>Test DRISHTI components in isolation with <code>render()</code>, <code>fireEvent</code>, and async <code>waitFor()</code>.</p>
+      </div>
+
+      <h2>render() and fireEvent</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">render</span>, <span class="fn">fireEvent</span>, <span class="fn">waitFor</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/testing'</span>;
+<span class="kw">import</span> { <span class="type">Counter</span> } <span class="kw">from</span> <span class="str">'./Counter'</span>;
+<span class="kw">import</span> { <span class="fn">describe</span>, <span class="fn">it</span>, <span class="fn">expect</span> } <span class="kw">from</span> <span class="str">'vitest'</span>;
+
+<span class="fn">describe</span>(<span class="str">'Counter'</span>, () <span class="op">=&gt;</span> {
+  <span class="fn">it</span>(<span class="str">'increments on click'</span>, <span class="kw">async</span> () <span class="op">=&gt;</span> {
+    <span class="kw">const</span> { <span class="var">el</span>, <span class="var">cleanup</span> } = <span class="fn">render</span>(<span class="type">Counter</span>);
+
+    <span class="fn">expect</span>(<span class="var">el</span>.<span class="fn">querySelector</span>(<span class="str">'p'</span>).textContent).<span class="fn">toBe</span>(<span class="str">'0'</span>);
+    <span class="fn">fireEvent</span>.<span class="fn">click</span>(<span class="var">el</span>.<span class="fn">querySelector</span>(<span class="str">'button'</span>));
+
+    <span class="kw">await</span> <span class="fn">waitFor</span>(() <span class="op">=&gt;</span>
+      <span class="fn">expect</span>(<span class="var">el</span>.<span class="fn">querySelector</span>(<span class="str">'p'</span>).textContent).<span class="fn">toBe</span>(<span class="str">'1'</span>)
+    );
+
+    <span class="fn">cleanup</span>();
+  });
+});</code></pre>
+    </section>
+
+    <!-- ── a11y ───────────────────────────────────────────────── -->
+    <section class="docs-section" id="a11y">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Testing</div>
+        <h1>Accessibility</h1>
+        <p>Built-in WCAG 2.2 audit. <code>auditA11y()</code> returns a report; <code>assertA11y()</code> throws if any violations are found.</p>
+      </div>
+
+      <h2>auditA11y and assertA11y</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">render</span>, <span class="fn">auditA11y</span>, <span class="fn">assertA11y</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/testing'</span>;
+<span class="kw">import</span> { <span class="type">LoginForm</span> } <span class="kw">from</span> <span class="str">'./LoginForm'</span>;
+
+<span class="fn">it</span>(<span class="str">'passes WCAG 2.2'</span>, <span class="kw">async</span> () <span class="op">=&gt;</span> {
+  <span class="kw">const</span> { <span class="var">el</span> } = <span class="fn">render</span>(<span class="type">LoginForm</span>);
+
+  <span class="kw">const</span> <span class="var">report</span> = <span class="kw">await</span> <span class="fn">auditA11y</span>(<span class="var">el</span>);
+  <span class="fn">expect</span>(<span class="var">report</span>.violations).<span class="fn">toHaveLength</span>(<span class="num">0</span>);
+
+  <span class="cmt">// Or use the throwing variant:</span>
+  <span class="kw">await</span> <span class="fn">assertA11y</span>(<span class="var">el</span>);
+});</code></pre>
+    </section>
+
+    <!-- ── visual ─────────────────────────────────────────────── -->
+    <section class="docs-section" id="visual">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Testing</div>
+        <h1>Visual Regression</h1>
+        <p>Capture pixel snapshots and diff them between runs to catch unintended visual changes.</p>
+      </div>
+
+      <h2>takeSnapshot and assertVisualMatch</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">render</span>, <span class="fn">assertVisualMatch</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/testing'</span>;
+<span class="kw">import</span> { <span class="type">Button</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/components'</span>;
+
+<span class="fn">it</span>(<span class="str">'button matches baseline'</span>, <span class="kw">async</span> () <span class="op">=&gt;</span> {
+  <span class="kw">const</span> { <span class="var">el</span> } = <span class="fn">render</span>(() <span class="op">=&gt;</span> <span class="type">Button</span>({ <span class="attr">label</span>: <span class="str">'Submit'</span> }));
+  <span class="kw">await</span> <span class="fn">assertVisualMatch</span>(<span class="var">el</span>, <span class="str">'button-default'</span>);
+});</code></pre>
+    </section>
+
+    <!-- ── signal-assertions ──────────────────────────────────── -->
+    <section class="docs-section" id="signal-assertions">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Testing</div>
+        <h1>Signal Assertions</h1>
+        <p>Chainable assertions for signal values, change tracking, and derived state verification.</p>
+      </div>
+
+      <h2>expectSignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">expectSignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/testing'</span>;
+<span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">count</span>  = <span class="fn">signal</span>(<span class="num">0</span>);
+<span class="kw">const</span> <span class="var">double</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">count</span>() <span class="op">*</span> <span class="num">2</span>);
+
+<span class="fn">expectSignal</span>(<span class="var">count</span>).<span class="fn">toBe</span>(<span class="num">0</span>);
+
+<span class="var">count</span>.<span class="fn">set</span>(<span class="num">5</span>);
+<span class="fn">expectSignal</span>(<span class="var">count</span>).<span class="fn">toBe</span>(<span class="num">5</span>);
+<span class="fn">expectSignal</span>(<span class="var">double</span>).<span class="fn">toBe</span>(<span class="num">10</span>);</code></pre>
+    </section>
+
+    <!-- ── vercel ─────────────────────────────────────────────── -->
+    <section class="docs-section" id="vercel">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Deployment</div>
+        <h1>Deploy to Vercel</h1>
+        <p>Generate a complete Vercel configuration with edge functions, ISR, and environment variable mappings.</p>
+      </div>
+
+      <h2>generateVercelConfig</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">generateVercelConfig</span>, <span class="fn">generateVercelJson</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">config</span> = <span class="fn">generateVercelConfig</span>({
+  <span class="attr">ssr</span>:     <span class="kw">true</span>,
+  <span class="attr">edge</span>:    <span class="kw">true</span>,
+  <span class="attr">isr</span>:     { <span class="attr">revalidate</span>: <span class="num">60</span> },
+  <span class="attr">regions</span>: [<span class="str">'iad1'</span>, <span class="str">'sfo1'</span>],
+});
+
+<span class="fn">generateVercelJson</span>(<span class="var">config</span>); <span class="cmt">// writes vercel.json</span></code></pre>
+
+      <div class="callout callout-info">
+        Deploy with <code>vercel --prod</code> after generating the config. DRISHTI SSR runs as a Vercel Edge Function automatically.
+      </div>
+    </section>
+
+    <!-- ── netlify ────────────────────────────────────────────── -->
+    <section class="docs-section" id="netlify">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Deployment</div>
+        <h1>Deploy to Netlify</h1>
+        <p>Generate Netlify configuration with edge functions and serverless rendering.</p>
+      </div>
+
+      <h2>generateNetlifyConfig</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">generateNetlifyConfig</span>, <span class="fn">generateNetlifyToml</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">cfg</span> = <span class="fn">generateNetlifyConfig</span>({ <span class="attr">ssr</span>: <span class="kw">true</span>, <span class="attr">edge</span>: <span class="kw">true</span> });
+<span class="fn">generateNetlifyToml</span>(<span class="var">cfg</span>); <span class="cmt">// writes netlify.toml</span></code></pre>
+    </section>
+
+    <!-- ── cloudflare ──────────────────────────────────────────── -->
+    <section class="docs-section" id="cloudflare">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Deployment</div>
+        <h1>Deploy to Cloudflare Workers</h1>
+        <p>Generate wrangler.toml with D1 and KV signal bindings for Cloudflare Workers.</p>
+      </div>
+
+      <h2>generateCloudflareConfig</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">generateCloudflareConfig</span>, <span class="fn">generateWranglerToml</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">cfg</span> = <span class="fn">generateCloudflareConfig</span>({
+  <span class="attr">kvBindings</span>:  [<span class="str">'SESSION'</span>, <span class="str">'CACHE'</span>],
+  <span class="attr">d1Databases</span>: [<span class="str">'DB'</span>],
+});
+<span class="fn">generateWranglerToml</span>(<span class="var">cfg</span>); <span class="cmt">// writes wrangler.toml</span></code></pre>
+    </section>
+
+    <!-- ── edge ───────────────────────────────────────────────── -->
+    <section class="docs-section" id="edge">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Deployment</div>
+        <h1>Edge Runtime</h1>
+        <p>Detect the runtime platform and create platform-agnostic edge handlers for Vercel, Netlify, Cloudflare, and Deno.</p>
+      </div>
+
+      <h2>createEdgeHandler</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">detectPlatform</span>, <span class="fn">createEdgeHandler</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">platform</span> = <span class="fn">detectPlatform</span>();
+<span class="cmt">// → 'vercel' | 'netlify' | 'cloudflare' | 'deno' | 'node'</span>
+
+<span class="kw">export default</span> <span class="fn">createEdgeHandler</span>(<span class="kw">async</span> (<span class="var">req</span>, <span class="var">ctx</span>) <span class="op">=&gt;</span> {
+  <span class="kw">const</span> <span class="var">html</span> = <span class="kw">await</span> <span class="var">ctx</span>.<span class="fn">renderToString</span>(<span class="type">App</span>);
+  <span class="kw">return</span> <span class="kw">new</span> <span class="type">Response</span>(<span class="var">html</span>, {
+    <span class="attr">headers</span>: { <span class="str">'Content-Type'</span>: <span class="str">'text/html'</span> }
+  });
+});</code></pre>
+    </section>
+
+  </main>
+</div><!-- .docs-layout -->
+
+<script src="src/nav.js"></script>
+<script src="src/docs.js"></script>
+<script src="src/copy.js"></script>
+</body>
+</html>

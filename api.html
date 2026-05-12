@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DRISHTI — API Reference</title>
+  <meta name="description" content="Complete API reference for @nexoraaidrishti/runtime, @nexoraaidrishti/ssr, and @nexoraaidrishti/testing. Signals, renderer, state machines, LLM streaming, and more.">
+  <meta property="og:title" content="DRISHTI API Reference">
+  <meta property="og:description" content="Full API documentation for all DRISHTI packages.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<!-- ── Navigation ───────────────────────────────────────────── -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="nav-logo-icon">DR</span>
+      DRISHTI
+    </a>
+    <div class="nav-links" role="menubar">
+      <a href="docs.html" role="menuitem">Docs</a>
+      <a href="api.html" class="active" role="menuitem">API</a>
+      <a href="examples.html" role="menuitem">Examples</a>
+      <a href="index.html#packages" role="menuitem">Packages</a>
+      <a href="https://github.com/2ool4techai-oss/front" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" role="menuitem">GitHub &rarr;</a>
+    </div>
+    <div class="nav-actions">
+      <span class="nav-version">v0.1.0</span>
+      <button class="nav-mobile-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Docs Layout (reuse sidebar pattern) ───────────────────── -->
+<div class="docs-layout">
+
+  <!-- Sidebar -->
+  <aside class="docs-sidebar" aria-label="API navigation">
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">@nexoraaidrishti/runtime</div>
+      <a class="sidebar-link" data-section="api-signals">Signals</a>
+      <a class="sidebar-link" data-section="api-renderer">Renderer</a>
+      <a class="sidebar-link" data-section="api-state">State Machines</a>
+      <a class="sidebar-link" data-section="api-timetravel">Time Travel</a>
+      <a class="sidebar-link" data-section="api-data">Data Fetching</a>
+      <a class="sidebar-link" data-section="api-routing">Routing</a>
+      <a class="sidebar-link" data-section="api-forms">Forms</a>
+      <a class="sidebar-link" data-section="api-llm">LLM &amp; AI</a>
+      <a class="sidebar-link" data-section="api-collab">Collaboration</a>
+      <a class="sidebar-link" data-section="api-production">Production</a>
+      <a class="sidebar-link" data-section="api-persistence">Persistence</a>
+      <a class="sidebar-link" data-section="api-flags">Feature Flags</a>
+      <a class="sidebar-link" data-section="api-dev">Dev Tools</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">@nexoraaidrishti/ssr</div>
+      <a class="sidebar-link" data-section="api-ssr">SSR</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">@nexoraaidrishti/testing</div>
+      <a class="sidebar-link" data-section="api-testing">Testing</a>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <main class="docs-content" id="docs-main" role="main">
+
+    <!-- Page hero -->
+    <div class="docs-page-header">
+      <div class="tag tag-new">v0.1.0</div>
+      <h1>API Reference</h1>
+      <p>Complete reference for all exported functions, types, and classes in the DRISHTI framework.</p>
+    </div>
+
+    <!-- ── Signals ───────────────────────────────────────────── -->
+    <section class="docs-section active api-group" id="api-signals">
+      <h2 class="api-group-title">Signals — <code>@nexoraaidrishti/runtime</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">initialValue</span>: <span class="type">T</span>): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a reactive signal. Read with <code>sig()</code>, write with <code>sig.set(value)</code>. All <code>computed()</code> and <code>effect()</code> that read this signal re-run when it changes. Writes are synchronous and immediately propagate through the dependency graph.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">computed</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">fn</span>: () <span class="op">=&gt;</span> <span class="type">T</span>): <span class="type">ComputedSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a memoized derived signal. The function is called lazily and only re-runs when its signal dependencies change. The returned value is read-only — call it as a function to get the current value. Never throws inside computed; errors propagate to the reading context.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">effect</span>(<span class="var">fn</span>: () <span class="op">=&gt;</span> <span class="type">void</span> | (() <span class="op">=&gt;</span> <span class="type">void</span>)): () <span class="op">=&gt;</span> <span class="type">void</span></div>
+        <div class="api-desc">Runs the given function immediately and re-runs it whenever its reactive dependencies change. Optionally returns a cleanup function that runs before the next execution. The return value is a dispose function — call it to permanently stop the effect.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">batch</span>(<span class="var">fn</span>: () <span class="op">=&gt;</span> <span class="type">void</span>): <span class="type">void</span></div>
+        <div class="api-desc">Groups multiple signal writes into a single atomic flush. All effects and computeds that depend on any of the written signals re-run exactly once after the batch completes. Batches may be nested.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">untrack</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">fn</span>: () <span class="op">=&gt;</span> <span class="type">T</span>): <span class="type">T</span></div>
+        <div class="api-desc">Executes the function without tracking any signal reads as dependencies. Use inside effects or computed functions when you need to read a signal without subscribing to its changes.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createStore</span><span class="op">&lt;</span><span class="type">T</span> <span class="kw">extends</span> <span class="type">object</span><span class="op">&gt;</span>(<span class="var">init</span>: <span class="type">T</span>): <span class="type">Store</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates an object-shaped reactive store with fine-grained per-property tracking. Direct property access and assignment work naturally. Only effects that read a specific property re-run when that property changes.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">label</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">sig</span>: <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>, <span class="var">name</span>: <span class="type">string</span>): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Attaches a human-readable name to a signal. Named signals appear in <code>_getDevSignals()</code>, audit logs, and OTel traces, making it easy for AI agents and developers to identify specific signals by purpose.</div>
+      </div>
+    </section>
+
+    <!-- ── Renderer ──────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-renderer">
+      <h2 class="api-group-title">Renderer — <code>@nexoraaidrishti/runtime</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">h</span>(<span class="var">tag</span>: <span class="type">string</span>, <span class="var">attrs</span>: <span class="type">Record</span><span class="op">&lt;</span><span class="type">string</span>, <span class="kw">unknown</span><span class="op">&gt;</span>, ...<span class="var">children</span>): <span class="type">HTMLElement</span></div>
+        <div class="api-desc">Creates a live DOM element. Attribute values and children can be signals, reactive functions, or static values. Reactive values are wired directly — when a dependency changes, only that attribute or child text node is updated in place. No virtual DOM intermediary.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">show</span>(<span class="var">condition</span>: () <span class="op">=&gt;</span> <span class="type">boolean</span>, <span class="var">then</span>: () <span class="op">=&gt;</span> <span class="type">HTMLElement</span>, <span class="var">else</span>?: () <span class="op">=&gt;</span> <span class="type">HTMLElement</span>): <span class="type">Node</span></div>
+        <div class="api-desc">Conditionally renders one of two branches. The condition is tracked reactively. When it changes, the old branch is removed from the DOM and the new branch is created and inserted. The else branch is optional — if omitted, a comment node placeholder is used.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">each</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">list</span>: () <span class="op">=&gt;</span> <span class="type">T</span>[], <span class="var">key</span>: (<span class="var">item</span>: <span class="type">T</span>) <span class="op">=&gt;</span> <span class="type">string</span> | <span class="type">number</span>, <span class="var">render</span>: (<span class="var">item</span>: <span class="type">T</span>, <span class="var">index</span>: <span class="type">number</span>) <span class="op">=&gt;</span> <span class="type">HTMLElement</span>): <span class="type">Node</span></div>
+        <div class="api-desc">Keyed list rendering. When the list changes, only the items that were added, removed, or reordered are touched. Items that remain at the same key are not re-created. The key function must return a stable unique identifier per item.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">mount</span>(<span class="var">component</span>: () <span class="op">=&gt;</span> <span class="type">HTMLElement</span>, <span class="var">container</span>: <span class="type">HTMLElement</span>): () <span class="op">=&gt;</span> <span class="type">void</span></div>
+        <div class="api-desc">Mounts a component function into the given container. Returns a dispose function. Unlike <code>mountApp</code>, this does not set up a top-level error boundary and is intended for embedding sub-trees.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">mountApp</span>(<span class="var">component</span>: () <span class="op">=&gt;</span> <span class="type">HTMLElement</span>, <span class="var">container</span>: <span class="type">HTMLElement</span>): () <span class="op">=&gt;</span> <span class="type">void</span></div>
+        <div class="api-desc">Top-level application mount with a global error boundary, devtools integration, and automatic cleanup on dispose. Returns a function that unmounts the app, stops all effects, and removes all DOM nodes created by the app.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">portal</span>(<span class="var">component</span>: () <span class="op">=&gt;</span> <span class="type">HTMLElement</span>, <span class="var">target</span>?: <span class="type">HTMLElement</span>): <span class="type">HTMLElement</span></div>
+        <div class="api-desc">Renders content into a DOM node outside the component tree. Useful for modals, tooltips, and notification toasts that must escape overflow:hidden or z-index stacking contexts. Defaults to <code>document.body</code> if no target is provided.</div>
+      </div>
+    </section>
+
+    <!-- ── State Machines ────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-state">
+      <h2 class="api-group-title">State Machines — <code>@nexoraaidrishti/runtime</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createMachine</span><span class="op">&lt;</span><span class="type">TState</span>, <span class="type">TEvent</span><span class="op">&gt;</span>(<span class="var">config</span>: <span class="type">MachineConfig</span>): <span class="type">MachineHandle</span></div>
+        <div class="api-desc">Creates an XState-inspired typed state machine. The config defines states and their transitions. Guards block transitions conditionally; entry/exit hooks run as side effects. The returned handle exposes a reactive <code>state()</code> signal and imperative <code>send()</code>/<code>can()</code> methods.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="type">MachineHandle</span>: { <span class="fn">state</span>(): <span class="type">TState</span>; <span class="fn">send</span>(<span class="var">event</span>: <span class="type">TEvent</span>): <span class="type">void</span>; <span class="fn">can</span>(<span class="var">event</span>: <span class="type">TEvent</span>): <span class="type">boolean</span>; <span class="fn">history</span>(): <span class="type">entry[]</span>; <span class="fn">done</span>(): <span class="type">boolean</span> }</div>
+        <div class="api-desc">Handle returned by <code>createMachine()</code>. <code>state()</code> is a reactive signal — reading it in effects or computed values creates a dependency. <code>can(event)</code> checks whether the transition is valid from the current state without sending. <code>history()</code> returns all past transitions with timestamps.</div>
+      </div>
+    </section>
+
+    <!-- ── Time Travel ───────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-timetravel">
+      <h2 class="api-group-title">Time Travel — <code>@nexoraaidrishti/runtime</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">enableTimeTravel</span>(<span class="var">opts</span>?: <span class="type">TimeTravelOptions</span>): <span class="type">TimeTravelHandle</span></div>
+        <div class="api-desc">Activates time-travel debugging. All subsequent signal writes are recorded in a ring buffer (default: 500 entries). Must be called before mounting your app. Returns a handle for snapshot, restore, and replay operations.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="type">TimeTravelHandle</span>: { <span class="fn">snapshot</span>(): <span class="type">Snapshot</span>; <span class="fn">restore</span>(<span class="var">s</span>: <span class="type">Snapshot</span>): <span class="type">void</span>; <span class="fn">travel</span>(<span class="var">n</span>: <span class="type">number</span>): <span class="type">void</span>; <span class="fn">entries</span>(): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">entry[]</span><span class="op">&gt;</span>; <span class="fn">present</span>(): <span class="type">ComputedSignal</span><span class="op">&lt;</span><span class="type">number</span><span class="op">&gt;</span> }</div>
+        <div class="api-desc"><code>snapshot()</code> captures a full copy of all current signal values. <code>restore(s)</code> resets all signals to a prior snapshot. <code>travel(n)</code> steps forward (positive) or backward (negative) through the write history, applying or reverting each write. <code>present()</code> is the current cursor index as a reactive signal.</div>
+      </div>
+    </section>
+
+    <!-- ── Data Fetching ─────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-data">
+      <h2 class="api-group-title">Data Fetching — <code>@nexoraaidrishti/runtime</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createResource</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">fetcher</span>, <span class="var">opts</span>?): <span class="type">Resource</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Wraps an async operation in a reactive resource. The fetcher re-runs automatically when any signals it reads change. Returns an object with reactive <code>data()</code>, <code>loading()</code>, <code>error()</code>, and <code>refetch()</code> signals.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createMutation</span><span class="op">&lt;</span><span class="type">T</span>, <span class="type">V</span><span class="op">&gt;</span>(<span class="var">mutator</span>, <span class="var">opts</span>?): <span class="type">Mutation</span><span class="op">&lt;</span><span class="type">T</span>, <span class="type">V</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a mutation handle for write operations with loading, error, and success state. Integrates with <code>createCache</code> for automatic cache invalidation on success. Supports optimistic updates via <code>opts.optimistic</code>.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createCache</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">opts</span>): <span class="type">Cache</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a reactive key-value cache with TTL, LRU eviction, and manual invalidation. Cache hits prevent redundant network requests. Integrates with <code>createResource</code> and <code>createQuery</code>.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createQuery</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">key</span>, <span class="var">fetcher</span>, <span class="var">opts</span>?): <span class="type">QueryResult</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">React Query-inspired data fetching. Automatically deduplicates concurrent requests with the same key, caches results, and supports stale-while-revalidate. The key is reactive — if it changes, the query re-runs. Supports background refetch, retry, and pagination.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">invalidateQuery</span>(<span class="var">key</span>: <span class="type">string</span> | <span class="type">unknown[]</span>): <span class="type">void</span></div>
+        <div class="api-desc">Marks a query as stale and triggers a background refetch for all active query subscribers with a matching key. Partial key matching is supported for cache groups.</div>
+      </div>
+    </section>
+
+    <!-- ── Routing ───────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-routing">
+      <h2 class="api-group-title">Routing — <code>@nexoraaidrishti/runtime</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createRouter</span>(<span class="var">routes</span>: <span class="type">RouteConfig[]</span>, <span class="var">opts</span>?): <span class="type">Router</span></div>
+        <div class="api-desc">Creates a client-side router from a flat or nested route config. Supports dynamic segments (<code>:id</code>), catch-all routes (<code>*</code>), and route guards. The active route is exposed as a reactive signal on the returned handle.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">useRouter</span>(): <span class="type">Router</span></div>
+        <div class="api-desc">Returns the active router instance. Throws if called outside a mounted app tree with no router configured. Use this to access <code>router.location()</code>, <code>router.push()</code>, and <code>router.params()</code> from any component.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="type">Router</span>: { <span class="fn">location</span>(): <span class="type">RouteLocation</span>; <span class="fn">push</span>(<span class="var">path</span>: <span class="type">string</span>): <span class="type">void</span>; <span class="fn">replace</span>(<span class="var">path</span>: <span class="type">string</span>): <span class="type">void</span>; <span class="fn">back</span>(): <span class="type">void</span>; <span class="fn">forward</span>(): <span class="type">void</span> }</div>
+        <div class="api-desc"><code>location()</code> is a reactive signal with <code>pathname</code>, <code>params</code>, <code>query</code>, and <code>hash</code>. Reading <code>location()</code> inside an effect or computed re-runs it on navigation. <code>push()</code> adds to the history stack; <code>replace()</code> replaces the current entry.</div>
+      </div>
+    </section>
+
+    <!-- ── Forms ─────────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-forms">
+      <h2 class="api-group-title">Forms — <code>@nexoraaidrishti/runtime</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createForm</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">schema</span>, <span class="var">opts</span>?): <span class="type">Form</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a reactive form with schema-driven field-level validation. Each field in the schema defines an initial value, synchronous or async validator, and optional transform. Returns a <code>Form</code> object with per-field state signals and overall validity.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="type">Form</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>: { <span class="attr">fields</span>: <span class="type">Record</span><span class="op">&lt;</span><span class="kw">keyof</span> <span class="type">T</span>, <span class="type">FieldState</span><span class="op">&gt;</span>; <span class="fn">valid</span>(): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">boolean</span><span class="op">&gt;</span>; <span class="fn">submit</span>(): <span class="type">void</span>; <span class="fn">reset</span>(): <span class="type">void</span> }</div>
+        <div class="api-desc">Each <code>FieldState</code> has reactive <code>value()</code>, <code>error()</code>, <code>touched()</code>, and <code>dirty()</code> signals. <code>valid()</code> is true when all fields pass validation. <code>submit()</code> touches all fields, validates, and calls <code>opts.onSubmit</code> with typed values if valid. <code>reset()</code> restores all fields to their initial values.</div>
+      </div>
+    </section>
+
+    <!-- ── LLM & AI ───────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-llm">
+      <h2 class="api-group-title">LLM &amp; AI — <code>@nexoraaidrishti/runtime</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createLLMStream</span>(<span class="var">opts</span>: <span class="type">LLMStreamOptions</span>): <span class="type">LLMStreamHandle</span></div>
+        <div class="api-desc">Creates a streaming LLM connection. Calls <code>opts.onChunk</code> for each token, <code>opts.onTool</code> for tool calls, and <code>opts.onDone</code> on completion. The handle exposes <code>start()</code>, <code>abort()</code>, and a reactive <code>status()</code> signal (<code>'idle' | 'streaming' | 'done' | 'error'</code>).</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createThinkingState</span>(): <span class="type">ThinkingState</span></div>
+        <div class="api-desc">Creates a reactive thinking/reasoning state object for UIs that display LLM extended thinking. Exposes <code>thinking()</code> (boolean signal) and <code>thoughts()</code> (accumulated thinking text signal).</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createToolCallState</span>(): <span class="type">ToolCallState</span></div>
+        <div class="api-desc">Manages reactive state for in-flight tool calls during LLM streaming. Tracks each tool call's name, arguments, and result status as reactive signals for display in tool-use UIs.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createIntentEngine</span>(<span class="var">opts</span>): <span class="type">IntentEngine</span></div>
+        <div class="api-desc">Creates an intent detection engine that observes signal writes and user interactions to infer what the user is trying to accomplish. Calls <code>opts.onIntent</code> with a structured intent object including action, params, and confidence score. Used by AI agents to proactively suggest next actions.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">_setSignalWriteHook</span>(<span class="var">hook</span>: ((<span class="var">label</span>: <span class="type">string</span>, <span class="var">prev</span>: <span class="kw">unknown</span>, <span class="var">next</span>: <span class="kw">unknown</span>) <span class="op">=&gt;</span> <span class="type">void</span>) | <span class="kw">null</span>): <span class="type">void</span></div>
+        <div class="api-desc">Registers a global hook that runs synchronously after every signal write. Receives the signal label, previous value, and next value. Pass <code>null</code> to remove the hook. Used by AI agents, OTel tracers, and audit logs to observe all state changes.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">_getDevSignals</span>(): <span class="type">Record</span><span class="op">&lt;</span><span class="type">string</span>, <span class="type">Signal</span><span class="op">&lt;</span><span class="kw">unknown</span><span class="op">&gt;&gt;</span></div>
+        <div class="api-desc">Returns a snapshot of all labeled signals in the current app, keyed by their label strings. AI agents use this to discover the full app state model and gain read/write access to every reactive value without DOM traversal.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">_enableDevMode</span>(): <span class="type">void</span></div>
+        <div class="api-desc">Enables development mode, which activates enhanced error messages, signal labeling warnings, effect cycle detection, and the browser devtools panel. Should not be called in production builds.</div>
+      </div>
+    </section>
+
+    <!-- ── Collaboration ─────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-collab">
+      <h2 class="api-group-title">Collaboration — <code>@nexoraaidrishti/runtime</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createCollabSession</span>(<span class="var">opts</span>: <span class="type">CollabOptions</span>): <span class="type">CollabHandle</span></div>
+        <div class="api-desc">Creates a CRDT-backed collaborative session using vector clocks for conflict-free concurrent edits. Connects over WebSocket and supports automatic reconnection and offline queuing. Returns a handle for syncing signals and observing peer presence.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="type">CollabHandle</span>: { <span class="fn">sync</span>(<span class="var">key</span>: <span class="type">string</span>, <span class="var">sig</span>: <span class="type">Signal</span>): <span class="type">void</span>; <span class="fn">peers</span>(): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">Peer[]</span><span class="op">&gt;</span>; <span class="fn">send</span>(<span class="var">op</span>): <span class="type">void</span>; <span class="fn">disconnect</span>(): <span class="type">void</span> }</div>
+        <div class="api-desc"><code>sync(key, signal)</code> binds a local signal to a shared CRDT document field — writes propagate to all peers, and incoming ops are merged conflict-free. <code>peers()</code> is a reactive signal listing all connected peers with their presence data. <code>disconnect()</code> cleanly closes the session.</div>
+      </div>
+    </section>
+
+    <!-- ── Production ────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-production">
+      <h2 class="api-group-title">Production — <code>@nexoraaidrishti/runtime</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createAuditLog</span>(<span class="var">opts</span>?): <span class="type">AuditHandle</span></div>
+        <div class="api-desc">Creates a ring buffer that records every signal write for compliance and debugging. The buffer size is configurable. When full, oldest entries are evicted. Exposes a reactive <code>entries()</code> signal and an <code>onFlush</code> callback for batching writes to a backend.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">enableHIPAA</span>(<span class="var">opts</span>?): <span class="type">HIPAAHandle</span></div>
+        <div class="api-desc">Activates automatic PII scrubbing for SSN, email, phone numbers, and credit card data in all audit logs and error reports. Regex-based scrubbing runs in the signal write hook pipeline. Fields matching configured patterns are replaced before being recorded.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createConsentManager</span>(<span class="var">opts</span>): <span class="type">ConsentHandle</span></div>
+        <div class="api-desc">GDPR-compliant consent management. Exposes per-category <code>granted(category)</code> reactive signals. Signals that depend on consent automatically pause when consent is revoked and resume when it's granted. Persists choices to localStorage by default.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createCSP</span>(<span class="var">opts</span>?): <span class="type">CSPHandle</span></div>
+        <div class="api-desc">Generates Content-Security-Policy headers and per-request nonces for inline scripts and styles. In SSR mode, a new nonce is generated for each request. <code>csp.nonce()</code> returns the current nonce as a string; <code>csp.header()</code> returns the full CSP header value.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createRUM</span>(<span class="var">opts</span>?): <span class="type">RUMHandle</span></div>
+        <div class="api-desc">Real User Monitoring via the PerformanceObserver API. Collects Largest Contentful Paint, First Contentful Paint, Cumulative Layout Shift, First Input Delay, and Time to First Byte. All vitals are exposed as reactive signals and reported via <code>opts.onVital</code>.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createOtelTracer</span>(<span class="var">opts</span>): <span class="type">OtelHandle</span></div>
+        <div class="api-desc">Emits OpenTelemetry spans for signal writes, effect runs, and component renders. Compatible with any OTLP-capable backend (Jaeger, Zipkin, Grafana Tempo, Honeycomb). Configurable sampling rate and attribute filtering.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createErrorTracker</span>(<span class="var">opts</span>): <span class="type">ErrorTrackingHandle</span></div>
+        <div class="api-desc">Captures uncaught errors and unhandled promise rejections with signal state snapshots attached. Sends structured error reports to a configurable endpoint. Integrates with <code>createAuditLog</code> to include the last N signal writes as breadcrumbs.</div>
+      </div>
+    </section>
+
+    <!-- ── Persistence ───────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-persistence">
+      <h2 class="api-group-title">Persistence — <code>@nexoraaidrishti/runtime</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">persistSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">key</span>: <span class="type">string</span>, <span class="var">signal</span>: <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>, <span class="var">opts</span>?): () <span class="op">=&gt;</span> <span class="type">void</span></div>
+        <div class="api-desc">Syncs a signal to a storage backend. On startup, the signal is initialized from the stored value if present. On every write, the new value is serialized and saved. Supports localStorage, sessionStorage, IndexedDB, and custom adapters via <code>opts.storage</code>. Returns an unsubscribe function.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createPersistedStore</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">key</span>: <span class="type">string</span>, <span class="var">init</span>: <span class="type">T</span>, <span class="var">opts</span>?): <span class="type">Store</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a store where the entire object is persisted to storage and restored on startup. Individual property changes are debounced before writing to avoid excessive I/O. Useful for user preferences and session state that spans page reloads.</div>
+      </div>
+    </section>
+
+    <!-- ── Feature Flags ─────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-flags">
+      <h2 class="api-group-title">Feature Flags — <code>@nexoraaidrishti/runtime</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createFlag</span>(<span class="var">key</span>: <span class="type">string</span>, <span class="var">config</span>: <span class="type">FlagConfig</span>): <span class="type">FlagHandle</span></div>
+        <div class="api-desc">Creates a reactive feature flag. Supports boolean flags, multi-variant flags, and user-targeting rules. The flag value is a reactive signal — changing the flag configuration updates all dependent UI instantly without a page reload.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createBandit</span>(<span class="var">opts</span>): <span class="type">BanditHandle</span></div>
+        <div class="api-desc">Multi-armed bandit for A/B testing with automatic traffic allocation. Supports epsilon-greedy, UCB1, and Thompson sampling algorithms. Tracks conversion events per arm and adjusts allocation toward the winning variant over time.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createAutoRollout</span>(<span class="var">opts</span>): <span class="type">AutoRolloutHandle</span></div>
+        <div class="api-desc">Gradually rolls out a feature flag from 0% to 100% based on configurable success metrics. Monitors error rates, conversion events, and custom signals. Automatically pauses or rolls back if metrics degrade beyond configured thresholds.</div>
+      </div>
+    </section>
+
+    <!-- ── Dev Tools ─────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-dev">
+      <h2 class="api-group-title">Dev Tools — <code>@nexoraaidrishti/runtime</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">_enableDevMode</span>(): <span class="type">void</span></div>
+        <div class="api-desc">Enables all development-time checks: enhanced error messages with signal stack traces, cycle detection in effect graphs, label collision warnings, and the browser devtools panel integration.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">_getDevSignals</span>(): <span class="type">Record</span><span class="op">&lt;</span><span class="type">string</span>, <span class="type">Signal</span><span class="op">&lt;</span><span class="kw">unknown</span><span class="op">&gt;&gt;</span></div>
+        <div class="api-desc">Returns all signals that have been labeled via <code>label()</code>, keyed by their label strings. Use this in devtools, AI agents, or testing utilities to inspect and mutate the full application state map.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">_setSignalWriteHook</span>(<span class="var">hook</span>): <span class="type">void</span></div>
+        <div class="api-desc">Sets a global write interceptor called synchronously on every signal write. The hook receives <code>(label: string, prev: unknown, next: unknown)</code>. Only one hook can be active at a time. Pass <code>null</code> to remove. Used internally by <code>createAuditLog</code> and <code>createOtelTracer</code>.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">_totalEffectRuns</span>(): <span class="type">number</span></div>
+        <div class="api-desc">Returns the total count of effect executions since the page loaded. Useful for profiling and verifying that batching strategies are working correctly. Only meaningful in development builds.</div>
+      </div>
+    </section>
+
+    <!-- ── SSR ───────────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-ssr">
+      <h2 class="api-group-title">SSR — <code>@nexoraaidrishti/ssr</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">renderToString</span>(<span class="var">component</span>, <span class="var">context</span>?): <span class="type">Promise</span><span class="op">&lt;</span><span class="type">string</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Renders a DRISHTI component to an HTML string on the server. Executes all synchronous signal reads, resolves all resources without suspending, and serializes the resulting DOM tree. The client automatically hydrates from the serialized signal state embedded in the HTML.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">renderToStream</span>(<span class="var">component</span>, <span class="var">context</span>?): <span class="type">ReadableStream</span></div>
+        <div class="api-desc">Streaming SSR — flushes the shell HTML immediately and streams suspended content as it resolves. Works on any runtime that supports the Web Streams API, including Node.js 18+, Deno, Cloudflare Workers, and Vercel Edge Runtime.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createSuspense</span>(<span class="var">fallback</span>, <span class="var">contentFn</span>): <span class="type">SuspenseBoundary</span></div>
+        <div class="api-desc">Creates a suspense boundary for async data in SSR mode. During server rendering, shows the fallback until all async resources inside resolve. In streaming mode, the fallback is flushed immediately and the resolved content is streamed when ready.</div>
+      </div>
+    </section>
+
+    <!-- ── Testing ───────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-testing">
+      <h2 class="api-group-title">Testing — <code>@nexoraaidrishti/testing</code></h2>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">render</span>(<span class="var">component</span>, <span class="var">opts</span>?): <span class="type">RenderResult</span></div>
+        <div class="api-desc">Renders a component into a detached DOM node for testing. Returns <code>{ el, cleanup, getBy*, queryBy*, findBy* }</code>. Effects run synchronously in the test environment. Call <code>cleanup()</code> to dispose the component and remove the DOM.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="type">fireEvent</span>: { <span class="fn">click</span>, <span class="fn">input</span>, <span class="fn">keydown</span>, <span class="fn">keyup</span>, <span class="fn">submit</span>, <span class="fn">change</span>, <span class="fn">focus</span>, <span class="fn">blur</span>, ... }</div>
+        <div class="api-desc">Dispatches DOM events and flushes all reactive effects synchronously. Each method accepts an element and an optional event init object. Effects triggered by the event are guaranteed to complete before the function returns.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">waitFor</span>(<span class="var">condition</span>, <span class="var">opts</span>?): <span class="type">Promise</span><span class="op">&lt;</span><span class="type">void</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Polls the condition function until it passes without throwing, or until the timeout is reached. Use for async operations where effects don't fire synchronously (e.g. after a fetch resolves). Default timeout is 1000ms with 50ms polling interval.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">auditA11y</span>(<span class="var">element</span>, <span class="var">opts</span>?): <span class="type">Promise</span><span class="op">&lt;</span><span class="type">A11yReport</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Runs WCAG 2.2 accessibility checks against the given element using axe-core under the hood. Returns a report with <code>violations</code>, <code>passes</code>, and <code>incomplete</code> arrays. Each violation includes the WCAG criterion, affected nodes, and suggested fixes.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">assertA11y</span>(<span class="var">element</span>, <span class="var">opts</span>?): <span class="type">Promise</span><span class="op">&lt;</span><span class="type">void</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Runs the same WCAG 2.2 audit as <code>auditA11y()</code> but throws a descriptive error if any violations are found. Use in test assertions to enforce accessibility standards automatically on every component test.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">takeSnapshot</span>(<span class="var">el</span>: <span class="type">HTMLElement</span>, <span class="var">name</span>: <span class="type">string</span>): <span class="type">VisualSnapshot</span></div>
+        <div class="api-desc">Captures a pixel snapshot of the element for visual regression testing. On the first run, the snapshot is saved as the baseline. On subsequent runs, the current render is compared against the baseline.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">diffVisualSnapshots</span>(<span class="var">before</span>, <span class="var">after</span>, <span class="var">opts</span>?): <span class="type">VisualDiff</span></div>
+        <div class="api-desc">Computes a pixel-level diff between two snapshots. Returns a <code>VisualDiff</code> with the diff percentage, a diff image, and the coordinates of changed regions. Useful for debugging visual regression failures.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">assertVisualMatch</span>(<span class="var">el</span>: <span class="type">HTMLElement</span>, <span class="var">baseline</span>: <span class="type">string</span>, <span class="var">opts</span>?): <span class="type">void</span></div>
+        <div class="api-desc">Captures a snapshot and asserts it matches the named baseline within a configurable pixel diff threshold (default: 0.1%). Throws a descriptive error on failure with the diff image path and changed pixel count.</div>
+      </div>
+
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">expectSignal</span>(<span class="var">sig</span>: <span class="type">Signal</span><span class="op">&lt;</span><span class="kw">unknown</span><span class="op">&gt;</span>): <span class="type">SignalAssertion</span></div>
+        <div class="api-desc">Returns a chainable assertion object for a signal. Supports <code>.toBe(value)</code>, <code>.toEqual(value)</code>, <code>.toHaveBeenCalledWith(...values)</code>, and <code>.toHaveLength(n)</code>. The assertion reads the signal value at call time without creating a reactive dependency.</div>
+      </div>
+    </section>
+
+  </main>
+</div><!-- .docs-layout -->
+
+<script src="src/nav.js"></script>
+<script src="src/docs.js"></script>
+<script src="src/copy.js"></script>
+</body>
+</html>
