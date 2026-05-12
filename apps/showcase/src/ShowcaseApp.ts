@@ -1657,7 +1657,7 @@ function FooterSection(): HTMLElement {
   return h('footer', { class: 'showcase-footer' },
     h('p', {}, h('strong', {}, 'DRISHTI'), ' — The AI-Native Frontend Framework'),
     h('p', { style: 'margin-top: 8px' },
-      '950 tests · 81 test files · 44 novel features · ',
+      '950 tests · 81 test files · 44 novel features · MIT License · ',
       h('a', { href: 'https://github.com/2ool4techai-oss/front' }, 'GitHub'),
     ),
   );
