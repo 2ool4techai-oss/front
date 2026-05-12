@@ -97,6 +97,75 @@
   </div>
 </div>
 
+<!-- ── What We Do Best ───────────────────────────────────────── -->
+<section class="best-section" aria-labelledby="best-heading">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Why DRISHTI</div>
+      <h2 id="best-heading" class="section-title">What We Do Best</h2>
+      <p class="section-desc">Built from the ground up for a world where AI writes, reads, and controls your UI.</p>
+    </div>
+
+    <div class="best-grid">
+
+      <div class="best-card">
+        <div class="best-icon">⚡</div>
+        <h3>Surgical DOM Updates</h3>
+        <p>Every signal knows exactly which DOM node depends on it. When a value changes, only that node updates — nothing else. No tree diffing, no re-renders, no wasted work.</p>
+        <div class="best-proof">
+          <code>const name = signal('Ada')<br>h('h1', {}, () => name()) <span class="proof-comment">// only this &lt;h1&gt; updates</span></code>
+        </div>
+      </div>
+
+      <div class="best-card">
+        <div class="best-icon">🤖</div>
+        <h3>AI Can Control Your App</h3>
+        <p>Every signal is labelled and observable. An LLM can read your entire app state in one call and write any value directly — no adapters, no wrappers, no special glue code.</p>
+        <div class="best-proof">
+          <code>agent.readState()  <span class="proof-comment">// full app snapshot</span><br>agent.set('cart.total', 99) <span class="proof-comment">// direct write</span></code>
+        </div>
+      </div>
+
+      <div class="best-card">
+        <div class="best-icon">🌊</div>
+        <h3>LLM Streaming is a First-Class Primitive</h3>
+        <p>Token-by-token streaming, thinking state, tool call results — all exposed as reactive signals. Wire an AI response directly into your UI with one line.</p>
+        <div class="best-proof">
+          <code>const stream = createLLMStream(prompt)<br>h('p', {}, () => stream.text()) <span class="proof-comment">// live tokens</span></code>
+        </div>
+      </div>
+
+      <div class="best-card">
+        <div class="best-icon">⏪</div>
+        <h3>Time Travel Built-In</h3>
+        <p>Every signal write is captured automatically. Replay any past state, undo any action, or snapshot your app at any moment — without writing a single line of history code.</p>
+        <div class="best-proof">
+          <code>enableTimeTravel()<br>tt.restore(index) <span class="proof-comment">// jump to any moment</span></code>
+        </div>
+      </div>
+
+      <div class="best-card">
+        <div class="best-icon">🧩</div>
+        <h3>Zero Dependencies, Forever</h3>
+        <p>The entire runtime is self-contained. No ecosystem churn, no peer dependency conflicts, no supply chain risk. Ship it and it stays working.</p>
+        <div class="best-proof">
+          <code>npm install @nexoraaidrishti/runtime<br><span class="proof-comment">// 0 dependencies. ~8kb. done.</span></code>
+        </div>
+      </div>
+
+      <div class="best-card">
+        <div class="best-icon">🔬</div>
+        <h3>State Machines Without the Boilerplate</h3>
+        <p>Define typed state machines in plain objects. Transitions, guards, history — all reactive. Your UI reacts to state changes automatically, no subscription code needed.</p>
+        <div class="best-proof">
+          <code>const light = createMachine({<br>&nbsp;&nbsp;initial: 'red',<br>&nbsp;&nbsp;states: { red: { on: { NEXT: 'green' } } }<br>})</code>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ── Quick Start Code Examples ────────────────────────────── -->
 <section class="code-section" aria-labelledby="quickstart-heading">
   <div class="container">
