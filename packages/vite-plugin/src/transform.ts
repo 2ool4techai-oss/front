@@ -13,7 +13,7 @@ export function transformDrFile(source: string, id: string): string {
   if (blocks.script) {
     // Remove any import of @nexoraaidrishti/runtime from user script (we provide it)
     const script = blocks.script.replace(
-      /import\s+\{[^}]+\}\s+from\s+['"]@drishti\/runtime['"]\s*;?\n?/g,
+      /import\s+\{[^}]+\}\s+from\s+['"]@nexoraaidrishti\/runtime['"]\s*;?\n?/g,
       ''
     );
     parts.push(script);
