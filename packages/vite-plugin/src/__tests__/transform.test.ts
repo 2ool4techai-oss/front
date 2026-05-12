@@ -34,7 +34,7 @@ describe('transformDrFile', () => {
   it('removes duplicate runtime import from user script', () => {
     const result = transformDrFile(FULL_COMPONENT, 'Counter.dr');
     // Should not have duplicate import
-    const importCount = (result.match(/from '@drishti\/runtime'/g) || []).length;
+    const importCount = (result.match(/from '@nexoraaidrishti\/runtime'/g) || []).length;
     expect(importCount).toBe(1);
   });
 
