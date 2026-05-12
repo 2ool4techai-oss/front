@@ -29,7 +29,7 @@
       <a href="https://github.com/2ool4techai-oss/front" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" role="menuitem">GitHub &rarr;</a>
     </div>
     <div class="nav-actions">
-      <span class="nav-version">v0.1.0</span>
+      <span class="nav-version">v0.2.0</span>
       <button class="nav-mobile-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
@@ -115,6 +115,47 @@
       <a class="sidebar-link" data-section="netlify">Netlify</a>
       <a class="sidebar-link" data-section="cloudflare">Cloudflare</a>
       <a class="sidebar-link" data-section="edge">Edge Runtime</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">AI-Native</div>
+      <a class="sidebar-link" data-section="ai-generate">AI Generate</a>
+      <a class="sidebar-link" data-section="voice-signal">Voice Signals</a>
+      <a class="sidebar-link" data-section="permissions">Permissions</a>
+      <a class="sidebar-link" data-section="nlquery">NL Queries</a>
+      <a class="sidebar-link" data-section="semantic">Semantic Signals</a>
+      <a class="sidebar-link" data-section="ai-trace">AI Audit Trail</a>
+      <a class="sidebar-link" data-section="screen-schema">Screen Schema</a>
+      <a class="sidebar-link" data-section="predictive">Predictive Router</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">Adaptive</div>
+      <a class="sidebar-link" data-section="offline-signal">Offline Signals</a>
+      <a class="sidebar-link" data-section="crosssession">Cross-Session</a>
+      <a class="sidebar-link" data-section="decay">Decay Signals</a>
+      <a class="sidebar-link" data-section="context-profile">Context Profiles</a>
+      <a class="sidebar-link" data-section="attention">Attention Tracker</a>
+      <a class="sidebar-link" data-section="preference">Preference Merge</a>
+      <a class="sidebar-link" data-section="multimodal">Multi-Modal Input</a>
+      <a class="sidebar-link" data-section="lazysplit">Code Splitting</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">Security</div>
+      <a class="sidebar-link" data-section="signal-integrity">Signal Integrity</a>
+      <a class="sidebar-link" data-section="private-signal">Private Signals</a>
+      <a class="sidebar-link" data-section="rate-limit">Rate Limiting</a>
+      <a class="sidebar-link" data-section="xss-guard">XSS Guard</a>
+      <a class="sidebar-link" data-section="anomaly">Anomaly Detection</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title">Auto-Fix</div>
+      <a class="sidebar-link" data-section="type-coerce">Type Coercion</a>
+      <a class="sidebar-link" data-section="dead-signal">Dead Signals</a>
+      <a class="sidebar-link" data-section="circular-guard">Circular Guard</a>
+      <a class="sidebar-link" data-section="bounded-signal">Bounded Arrays</a>
     </div>
 
   </aside>
@@ -1102,6 +1143,502 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
     <span class="attr">headers</span>: { <span class="str">'Content-Type'</span>: <span class="str">'text/html'</span> }
   });
 });</code></pre>
+    </section>
+
+    <!-- ── AI-Native ─────────────────────────────────────────── -->
+    <section class="docs-section" id="ai-generate">
+      <div class="docs-page-header">
+        <div class="tag tag-new">AI-Native · v0.2.0</div>
+        <h1>AI Component Generation</h1>
+        <p>Generate a live reactive DRISHTI component from a natural-language description. Works offline with pattern-matched templates; falls back to any LLM API when a key is provided.</p>
+      </div>
+      <h2>generateSync — instant, no API key</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">generateSync</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">result</span> = <span class="fn">generateSync</span>(<span class="str">'a counter with increment and decrement'</span>);
+<span class="cmt">// result.component() → live HTMLElement</span>
+<span class="cmt">// result.signals    → ['count']</span>
+<span class="cmt">// result.code       → generated source string</span>
+document.body.<span class="fn">appendChild</span>(<span class="var">result</span>.<span class="fn">component</span>());</code></pre>
+      <h2>generate — async with LLM fallback</h2>
+      <pre><code><span class="kw">const</span> <span class="var">result</span> = <span class="kw">await</span> <span class="fn">generate</span>(<span class="str">'a todo list with priorities'</span>, {
+  <span class="attr">apiKey</span>: process.env.<span class="var">ANTHROPIC_KEY</span>,
+  <span class="attr">model</span>: <span class="str">'claude-3-haiku-20240307'</span>,
+});</code></pre>
+      <p>Supported patterns without an API key: <code>counter</code>, <code>todo list</code>, <code>form</code>, <code>toggle</code>, <code>input</code>, <code>slider</code>, <code>accordion</code>.</p>
+    </section>
+
+    <section class="docs-section" id="voice-signal">
+      <div class="docs-page-header">
+        <div class="tag tag-new">AI-Native · v0.2.0</div>
+        <h1>Voice Signals</h1>
+        <p>The Web Speech API exposed as a first-class reactive signal. Transcript updates the UI automatically — no callbacks, no wiring.</p>
+      </div>
+      <h2>createVoiceSignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createVoiceSignal</span>, <span class="fn">effect</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">voice</span> = <span class="fn">createVoiceSignal</span>({ <span class="attr">lang</span>: <span class="str">'en-US'</span>, <span class="attr">continuous</span>: <span class="kw">true</span> });
+
+<span class="fn">effect</span>(() <span class="op">=&gt;</span> {
+  console.<span class="fn">log</span>(<span class="str">'Heard:'</span>, <span class="var">voice</span>.<span class="fn">transcript</span>());
+  console.<span class="fn">log</span>(<span class="str">'Listening:'</span>, <span class="var">voice</span>.<span class="fn">listening</span>());
+});
+
+<span class="var">voice</span>.<span class="fn">start</span>();   <span class="cmt">// begin recognition</span>
+<span class="var">voice</span>.<span class="fn">stop</span>();    <span class="cmt">// stop recognition</span>
+<span class="var">voice</span>.supported; <span class="cmt">// false if browser lacks SpeechRecognition (use polyfill)</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="permissions">
+      <div class="docs-page-header">
+        <div class="tag tag-new">AI-Native · v0.2.0</div>
+        <h1>Signal Permissions</h1>
+        <p>Fine-grained access control on any signal. Restrict AI agents from reading sensitive state or writing critical values — with a full audit trail.</p>
+      </div>
+      <h2>withPermissions</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">withPermissions</span>, <span class="fn">setAIAgent</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">salary</span> = <span class="fn">withPermissions</span>(<span class="fn">signal</span>(<span class="num">95000</span>), {
+  <span class="attr">aiAccess</span>: <span class="str">'none'</span>,      <span class="cmt">// AI cannot read or write</span>
+  <span class="attr">audit</span>: <span class="kw">true</span>,           <span class="cmt">// log every access attempt</span>
+});
+
+<span class="kw">const</span> <span class="var">theme</span> = <span class="fn">withPermissions</span>(<span class="fn">signal</span>(<span class="str">'dark'</span>), {
+  <span class="attr">aiAccess</span>: <span class="str">'read-only'</span>, <span class="cmt">// AI can read but not write</span>
+});
+
+<span class="fn">setAIAgent</span>(<span class="str">'agent-1'</span>);    <span class="cmt">// marks subsequent reads/writes as AI</span>
+<span class="var">salary</span>();                 <span class="cmt">// throws PermissionError</span>
+<span class="fn">setAIAgent</span>(<span class="kw">null</span>);         <span class="cmt">// back to human context</span></code></pre>
+      <p>Access levels: <code>'read-write'</code> · <code>'read-only'</code> · <code>'write-only'</code> · <code>'none'</code></p>
+    </section>
+
+    <section class="docs-section" id="nlquery">
+      <div class="docs-page-header">
+        <div class="tag tag-new">AI-Native · v0.2.0</div>
+        <h1>Natural Language Queries</h1>
+        <p>Query reactive state in plain English. No SQL, no filter functions — just describe what you want.</p>
+      </div>
+      <h2>drQuery</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">registerQueryable</span>, <span class="fn">drQuery</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">users</span> = <span class="fn">signal</span>([
+  { <span class="attr">name</span>: <span class="str">'Alice'</span>, <span class="attr">age</span>: <span class="num">32</span>, <span class="attr">active</span>: <span class="kw">true</span> },
+  { <span class="attr">name</span>: <span class="str">'Bob'</span>,   <span class="attr">age</span>: <span class="num">24</span>, <span class="attr">active</span>: <span class="kw">false</span> },
+]);
+<span class="fn">registerQueryable</span>(<span class="str">'users'</span>, <span class="var">users</span>);
+
+<span class="kw">const</span> <span class="var">result</span> = <span class="fn">drQuery</span>(<span class="str">'active users older than 30'</span>);
+<span class="cmt">// result.data()    → [{ name: 'Alice', age: 32, active: true }]</span>
+<span class="cmt">// result.loading() → false</span>
+<span class="cmt">// result.refresh() → re-run the query</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="semantic">
+      <div class="docs-page-header">
+        <div class="tag tag-new">AI-Native · v0.2.0</div>
+        <h1>Semantic Signals</h1>
+        <p>Signals with meaning — description, unit, tags, and intent so LLMs can understand what each piece of state represents.</p>
+      </div>
+      <h2>semanticSignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">semanticSignal</span>, <span class="fn">describeAppState</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">revenue</span> = <span class="fn">semanticSignal</span>(<span class="num">0</span>, {
+  <span class="attr">description</span>: <span class="str">'Monthly recurring revenue'</span>,
+  <span class="attr">unit</span>: <span class="str">'USD'</span>,
+  <span class="attr">intent</span>: <span class="str">'business-metric'</span>,
+  <span class="attr">range</span>: { <span class="attr">min</span>: <span class="num">0</span> },
+});
+
+<span class="cmt">// Give an LLM full context of your app state in one call:</span>
+<span class="kw">const</span> <span class="var">stateJSON</span> = <span class="fn">describeAppState</span>();</code></pre>
+    </section>
+
+    <section class="docs-section" id="ai-trace">
+      <div class="docs-page-header">
+        <div class="tag tag-new">AI-Native · v0.2.0</div>
+        <h1>AI Audit Trail</h1>
+        <p>Complete log of every AI read, write, generate, heal, and query — with actor, timestamp, before/after values, and confidence scores.</p>
+      </div>
+      <h2>globalTrace / createAITrace</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">globalTrace</span>, <span class="fn">createAITrace</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="var">globalTrace</span>.<span class="fn">record</span>({ <span class="attr">actor</span>: <span class="str">'ai'</span>, <span class="attr">action</span>: <span class="str">'write'</span>, <span class="attr">target</span>: <span class="str">'cart'</span>, <span class="attr">after</span>: [<span class="str">'item-1'</span>] });
+
+<span class="kw">const</span> <span class="var">aiWrites</span> = <span class="var">globalTrace</span>.<span class="fn">filter</span>(<span class="var">e</span> <span class="op">=&gt;</span> <span class="var">e</span>.actor === <span class="str">'ai'</span>);
+<span class="kw">const</span> <span class="var">json</span> = <span class="var">globalTrace</span>.<span class="fn">export</span>();  <span class="cmt">// JSON string for logging</span>
+
+<span class="cmt">// Persist trace across page loads:</span>
+<span class="kw">const</span> <span class="var">trace</span> = <span class="fn">createAITrace</span>({ <span class="attr">maxEntries</span>: <span class="num">1000</span>, <span class="attr">persist</span>: <span class="kw">true</span> });</code></pre>
+    </section>
+
+    <section class="docs-section" id="screen-schema">
+      <div class="docs-page-header">
+        <div class="tag tag-new">AI-Native · v0.2.0</div>
+        <h1>Screen Schema</h1>
+        <p>Capture the entire UI state as a compact JSON object optimised for LLM consumption. Restore it or convert to a plain-English prompt.</p>
+      </div>
+      <h2>captureScreenSchema</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">registerSchemaSignal</span>, <span class="fn">captureScreenSchema</span>, <span class="fn">schemaToPrompt</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">count</span> = <span class="fn">signal</span>(<span class="num">5</span>);
+<span class="fn">registerSchemaSignal</span>(<span class="var">count</span>, <span class="str">'counter'</span>, <span class="str">'Current count');
+
+<span class="kw">const</span> <span class="var">schema</span> = <span class="fn">captureScreenSchema</span>();
+<span class="cmt">// { version, timestamp, signals: [{ id: 'counter', value: 5, ... }] }</span>
+
+<span class="kw">const</span> <span class="var">prompt</span> = <span class="fn">schemaToPrompt</span>(<span class="var">schema</span>);
+<span class="cmt">// "The current UI state: counter = 5 ..."</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="predictive">
+      <div class="docs-page-header">
+        <div class="tag tag-new">AI-Native · v0.2.0</div>
+        <h1>Predictive Router</h1>
+        <p>Learn from navigation patterns and prefetch the most likely next route before the user clicks.</p>
+      </div>
+      <h2>createPredictiveRouter</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createPredictiveRouter</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">router</span> = <span class="fn">createPredictiveRouter</span>({
+  <span class="attr">onNavigate</span>: (<span class="var">route</span>) <span class="op">=&gt;</span> console.<span class="fn">log</span>(<span class="str">'Navigated:'</span>, <span class="var">route</span>),
+});
+
+<span class="var">router</span>.<span class="fn">navigate</span>(<span class="str">'/products'</span>);
+<span class="var">router</span>.<span class="fn">predictions</span>(); <span class="cmt">// → ['/cart', '/wishlist'] — predicted next routes</span>
+<span class="var">router</span>.<span class="fn">prefetch</span>(<span class="str">'/cart'</span>);  <span class="cmt">// manually prefetch</span></code></pre>
+    </section>
+
+    <!-- ── Adaptive ────────────────────────────────────────────── -->
+    <section class="docs-section" id="offline-signal">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Adaptive · v0.2.0</div>
+        <h1>Offline-First Signals</h1>
+        <p>Signals that persist locally, sync when online, and resolve conflicts automatically.</p>
+      </div>
+      <h2>offlineSignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">offlineSignal</span>, <span class="fn">isOnline</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">cart</span> = <span class="fn">offlineSignal</span>([], {
+  <span class="attr">key</span>: <span class="str">'shopping-cart'</span>,
+  <span class="attr">sync</span>: <span class="str">'when-online'</span>,
+  <span class="attr">conflict</span>: <span class="str">'last-write'</span>,
+  <span class="attr">remote</span>: {
+    <span class="attr">get</span>: () <span class="op">=&gt;</span> fetch(<span class="str">'/api/cart'</span>).<span class="fn">then</span>(<span class="var">r</span> <span class="op">=&gt;</span> <span class="var">r</span>.<span class="fn">json</span>()),
+    <span class="attr">set</span>: (<span class="var">v</span>) <span class="op">=&gt;</span> fetch(<span class="str">'/api/cart'</span>, { <span class="attr">method</span>: <span class="str">'PUT'</span>, <span class="attr">body</span>: <span class="fn">JSON.stringify</span>(<span class="var">v</span>) }),
+  },
+});
+<span class="var">isOnline</span>(); <span class="cmt">// reactive boolean — true/false as network changes</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="crosssession">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Adaptive · v0.2.0</div>
+        <h1>Cross-Session Learning</h1>
+        <p>Signals that learn from usage across browser sessions. The most frequently chosen value becomes the default.</p>
+      </div>
+      <h2>adaptiveSignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">adaptiveSignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">layout</span> = <span class="fn">adaptiveSignal</span>(<span class="str">'grid'</span>, { <span class="attr">key</span>: <span class="str">'preferred-layout'</span> });
+<span class="var">layout</span>.<span class="fn">set</span>(<span class="str">'list'</span>); <span class="var">layout</span>.<span class="fn">set</span>(<span class="str">'list'</span>); <span class="var">layout</span>.<span class="fn">set</span>(<span class="str">'list'</span>);
+
+<span class="var">layout</span>.<span class="fn">preferred</span>();    <span class="cmt">// → 'list'  (most frequent)</span>
+<span class="var">layout</span>.<span class="fn">frequencies</span>(); <span class="cmt">// → [{ value: 'list', frequency: 3 }, ...]</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="decay">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Adaptive · v0.2.0</div>
+        <h1>Decay Signals</h1>
+        <p>Preferences that forget. Confidence in a learned value halves every <code>halfLife</code> milliseconds — stale choices never lock the UI.</p>
+      </div>
+      <h2>createDecaySignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createDecaySignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">fav</span> = <span class="fn">createDecaySignal</span>({
+  <span class="attr">initial</span>: <span class="str">'Electronics'</span>,
+  <span class="attr">halfLife</span>: <span class="num">7</span> * <span class="num">24</span> * <span class="num">60</span> * <span class="num">60</span> * <span class="num">1000</span>, <span class="cmt">// 7 days</span>
+  <span class="attr">minConfidence</span>: <span class="num">0.05</span>,
+});
+
+<span class="var">fav</span>.<span class="fn">reinforce</span>(<span class="str">'Books'</span>);       <span class="cmt">// +0.2 confidence</span>
+<span class="var">fav</span>.<span class="fn">confidence</span>(<span class="str">'Books'</span>);       <span class="cmt">// → 0.2 (decays over time)</span>
+<span class="var">fav</span>();                         <span class="cmt">// → highest-confidence value above minConfidence</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="context-profile">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Adaptive · v0.2.0</div>
+        <h1>Context Profiles</h1>
+        <p>Automatically detect the user's context (device, time of day, network speed) and serve a different learned profile per context.</p>
+      </div>
+      <h2>createContextProfile</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createContextProfile</span>, <span class="fn">useContextAdaptiveSignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">ctx</span> = <span class="fn">createContextProfile</span>();
+<span class="var">ctx</span>.<span class="fn">currentContext</span>(); <span class="cmt">// → { timeSlot: 'morning', device: 'mobile', network: 'fast' }</span>
+<span class="var">ctx</span>.<span class="fn">contextKey</span>();    <span class="cmt">// → 'morning:mobile:fast'</span>
+
+<span class="kw">const</span> <span class="var">density</span> = <span class="fn">useContextAdaptiveSignal</span>({
+  <span class="str">'morning:mobile'</span>: <span class="str">'compact'</span>,
+  <span class="str">'evening:desktop'</span>: <span class="str">'expanded'</span>,
+}, <span class="str">'default'</span>, <span class="var">ctx</span>);
+<span class="var">density</span>(); <span class="cmt">// → 'compact'  (on mobile in the morning)</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="attention">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Adaptive · v0.2.0</div>
+        <h1>Attention Tracker</h1>
+        <p>Track hover dwell time and scroll visibility per element — richer behavioral signal than click counts alone.</p>
+      </div>
+      <h2>createAttentionTracker</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createAttentionTracker</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">tracker</span> = <span class="fn">createAttentionTracker</span>({ <span class="attr">dwellThreshold</span>: <span class="num">800</span> });
+
+<span class="kw">const</span> <span class="var">cleanup</span> = <span class="var">tracker</span>.<span class="fn">track</span>(document.<span class="fn">getElementById</span>(<span class="str">'hero'</span>), <span class="str">'hero'</span>);
+<span class="var">tracker</span>.<span class="fn">attention</span>(<span class="str">'hero'</span>); <span class="cmt">// → { totalDwell: 4200, visits: 3, scrollVisibility: 0.8 }</span>
+<span class="var">tracker</span>.<span class="fn">topElements</span>(<span class="num">5</span>);   <span class="cmt">// → top 5 by attention score</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="preference">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Adaptive · v0.2.0</div>
+        <h1>Preference Merge</h1>
+        <p>Combine explicit user choices with inferred behavioral preferences. An explicit "I prefer X" always outweighs observations.</p>
+      </div>
+      <h2>preferenceSignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">preferenceSignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">view</span> = <span class="fn">preferenceSignal</span>({
+  <span class="attr">key</span>: <span class="str">'view-mode'</span>, <span class="attr">fallback</span>: <span class="str">'grid'</span>,
+  <span class="attr">explicit</span>: <span class="num">1.0</span>, <span class="attr">behavioral</span>: <span class="num">0.4</span>,
+});
+
+<span class="var">view</span>.<span class="fn">observe</span>(<span class="str">'list'</span>);  <span class="cmt">// records behavioral evidence</span>
+<span class="var">view</span>.<span class="fn">set</span>(<span class="str">'grid'</span>);     <span class="cmt">// explicit — overrides behavioral</span>
+<span class="var">view</span>.<span class="fn">confidence</span>();    <span class="cmt">// → 1.0</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="multimodal">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Adaptive · v0.2.0</div>
+        <h1>Multi-Modal Input</h1>
+        <p>Detect the active input modality (touch, mouse, keyboard, voice, pen) and adapt UI reactively.</p>
+      </div>
+      <h2>createMultiModalInput</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createMultiModalInput</span>, <span class="fn">adaptToModality</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">m</span> = <span class="fn">createMultiModalInput</span>({ <span class="attr">autoDetect</span>: <span class="kw">true</span> });
+<span class="var">m</span>.<span class="fn">modality</span>();   <span class="cmt">// → 'touch' | 'mouse' | 'keyboard' | 'voice' | 'pen'</span>
+<span class="var">m</span>.<span class="fn">isTouch</span>();    <span class="cmt">// → boolean (reactive)</span>
+
+<span class="kw">const</span> <span class="var">btnSize</span> = <span class="fn">adaptToModality</span>(<span class="var">m</span>, {
+  <span class="attr">touch</span>: <span class="str">'48px'</span>, <span class="attr">mouse</span>: <span class="str">'32px'</span>, <span class="attr">keyboard</span>: <span class="str">'36px'</span>,
+}, <span class="str">'32px'</span>);</code></pre>
+    </section>
+
+    <section class="docs-section" id="lazysplit">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Adaptive · v0.2.0</div>
+        <h1>Signal-Based Code Splitting</h1>
+        <p>Load modules only when a signal condition is met — idle, visible, or on interaction.</p>
+      </div>
+      <h2>lazySignal / splitOn</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">lazySignal</span>, <span class="fn">splitOn</span>, <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">chart</span> = <span class="fn">lazySignal</span>(() <span class="op">=&gt;</span> <span class="kw">import</span>(<span class="str">'./Chart.js'</span>), { <span class="attr">trigger</span>: <span class="str">'visible'</span> });
+<span class="var">chart</span>.<span class="fn">status</span>(); <span class="cmt">// → 'idle' | 'loading' | 'loaded' | 'error'</span>
+<span class="kw">await</span> <span class="var">chart</span>.<span class="fn">load</span>();
+
+<span class="cmt">// Load when a signal becomes true:</span>
+<span class="kw">const</span> <span class="var">showAdmin</span> = <span class="fn">signal</span>(<span class="kw">false</span>);
+<span class="fn">splitOn</span>(<span class="var">showAdmin</span>, () <span class="op">=&gt;</span> <span class="kw">import</span>(<span class="str">'./AdminPanel.js'</span>));</code></pre>
+    </section>
+
+    <!-- ── Security ───────────────────────────────────────────── -->
+    <section class="docs-section" id="signal-integrity">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Security · v0.2.0</div>
+        <h1>Signal Integrity</h1>
+        <p>HMAC-sign signal values to detect tampering during SSR hydration or XSS injection attempts.</p>
+      </div>
+      <h2>createIntegritySignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createIntegritySignal</span>, <span class="type">IntegrityError</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">price</span> = <span class="fn">createIntegritySignal</span>(<span class="num">99.99</span>, <span class="str">'checkout-price'</span>, {
+  <span class="attr">secret</span>: process.env.<span class="var">APP_SECRET</span>,
+  <span class="attr">onTamper</span>: (<span class="var">label</span>, <span class="var">recv</span>, <span class="var">exp</span>) <span class="op">=&gt;</span> alert(<span class="str">'Tamper detected!'</span>),
+});
+
+<span class="var">price</span>();            <span class="cmt">// verified read — throws IntegrityError if tampered</span>
+<span class="var">price</span>.<span class="fn">verify</span>();     <span class="cmt">// → true | false without throwing</span>
+<span class="var">price</span>.<span class="fn">peek</span>();       <span class="cmt">// unverified read</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="private-signal">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Security · v0.2.0</div>
+        <h1>Private Signals</h1>
+        <p>PII-aware signals. Auto-redact sensitive values when they flow into LLM prompts, audit trails, or serialisation.</p>
+      </div>
+      <h2>privateSignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">privateSignal</span>, <span class="fn">isPrivateSignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">email</span> = <span class="fn">privateSignal</span>(<span class="str">'alice@company.com'</span>, {
+  <span class="attr">category</span>: <span class="str">'email'</span>,                   <span class="cmt">// 'name'|'email'|'phone'|'ssn'|'dob'|'financial'|'health'</span>
+  <span class="attr">allowedContexts</span>: [<span class="str">'billing'</span>],
+  <span class="attr">audit</span>: <span class="kw">true</span>,
+});
+
+<span class="var">email</span>();                       <span class="cmt">// → 'alice@company.com'  (trusted UI code)</span>
+<span class="var">email</span>.<span class="fn">redacted</span>();              <span class="cmt">// → '***REDACTED***'     (for LLM prompts)</span>
+<span class="var">email</span>.<span class="fn">inContext</span>(<span class="str">'billing'</span>);   <span class="cmt">// → 'alice@company.com'  (allowed)</span>
+<span class="var">email</span>.<span class="fn">inContext</span>(<span class="str">'analytics'</span>); <span class="cmt">// → '***REDACTED***'     (blocked)</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="rate-limit">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Security · v0.2.0</div>
+        <h1>Rate-Limited Signals</h1>
+        <p>Prevent signals from being written more than N times per time window. Useful for bot detection and abuse prevention at the reactive layer.</p>
+      </div>
+      <h2>rateLimitSignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">rateLimitSignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">votes</span> = <span class="fn">rateLimitSignal</span>(<span class="num">0</span>, {
+  <span class="attr">maxWrites</span>: <span class="num">5</span>,
+  <span class="attr">windowMs</span>: <span class="num">1000</span>,            <span class="cmt">// 5 writes per second</span>
+  <span class="attr">mode</span>: <span class="str">'drop'</span>,              <span class="cmt">// 'throw' | 'drop' | 'queue'</span>
+  <span class="attr">onViolation</span>: (<span class="var">count</span>) <span class="op">=&gt;</span> console.<span class="fn">warn</span>(<span class="str">'Rate limited'</span>, <span class="var">count</span>),
+});
+
+<span class="var">votes</span>.<span class="fn">isLimited</span>();    <span class="cmt">// → boolean</span>
+<span class="var">votes</span>.<span class="fn">writeCount</span>();  <span class="cmt">// → writes in current window</span>
+<span class="var">votes</span>.<span class="fn">force</span>(<span class="num">99</span>);    <span class="cmt">// bypass rate limit</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="xss-guard">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Security · v0.2.0</div>
+        <h1>XSS Guard Signal</h1>
+        <p>String signals where every read returns sanitized HTML. Raw value is available only to trusted server-side code.</p>
+      </div>
+      <h2>xssGuardSignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">xssGuardSignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">comment</span> = <span class="fn">xssGuardSignal</span>(<span class="str">''</span>, {
+  <span class="attr">allowedTags</span>: [<span class="str">'b'</span>, <span class="str">'i'</span>, <span class="str">'em'</span>],
+  <span class="attr">onAttempt</span>: (<span class="var">raw</span>, <span class="var">clean</span>) <span class="op">=&gt;</span> console.<span class="fn">warn</span>(<span class="str">'XSS stripped'</span>),
+});
+
+<span class="var">comment</span>.<span class="fn">set</span>(<span class="str">'&lt;img src=x onerror="alert(1)"&gt; hello'</span>);
+<span class="var">comment</span>();              <span class="cmt">// → 'hello'  (sanitized)</span>
+<span class="var">comment</span>.<span class="fn">raw</span>();          <span class="cmt">// → original (trusted code only)</span>
+<span class="var">comment</span>.<span class="fn">wasSanitized</span>(); <span class="cmt">// → true</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="anomaly">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Security · v0.2.0</div>
+        <h1>Anomaly Detection</h1>
+        <p>Statistical anomaly detection at the signal layer. Flags sudden jumps, off-hours writes, and impossible values.</p>
+      </div>
+      <h2>anomalySignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">anomalySignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">score</span> = <span class="fn">anomalySignal</span>(<span class="num">50</span>, {
+  <span class="attr">builtInRules</span>: {
+    <span class="attr">suddenJump</span>: <span class="kw">true</span>,                     <span class="cmt">// flag if value jumps &gt;3 std devs</span>
+    <span class="attr">offHours</span>: { <span class="attr">startHour</span>: <span class="num">9</span>, <span class="attr">endHour</span>: <span class="num">18</span> }, <span class="cmt">// flag writes outside business hours</span>
+    <span class="attr">impossibleValue</span>: { <span class="attr">min</span>: <span class="num">0</span>, <span class="attr">max</span>: <span class="num">100</span> },  <span class="cmt">// flag out-of-range</span>
+  },
+  <span class="attr">onAnomaly</span>: (<span class="var">event</span>) <span class="op">=&gt;</span> console.<span class="fn">warn</span>(<span class="str">'Anomaly:'</span>, <span class="var">event</span>),
+});
+
+<span class="var">score</span>.<span class="fn">isAnomaly</span>();      <span class="cmt">// → true if last write was anomalous</span>
+<span class="var">score</span>.<span class="fn">anomalies</span>();     <span class="cmt">// → AnomalyEvent[]</span></code></pre>
+    </section>
+
+    <!-- ── Auto-Fix ───────────────────────────────────────────── -->
+    <section class="docs-section" id="type-coerce">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Auto-Fix · v0.2.0</div>
+        <h1>Type-Coercing Signals</h1>
+        <p>Signals that auto-coerce incoming values to the correct type instead of crashing. Logs a warning when coercion happens.</p>
+      </div>
+      <h2>coercedSignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">coercedSignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">age</span> = <span class="fn">coercedSignal</span>(<span class="num">0</span>, {
+  <span class="attr">target</span>: <span class="str">'number'</span>,
+  <span class="attr">onCoerce</span>: (<span class="var">from</span>, <span class="var">to</span>) <span class="op">=&gt;</span> console.<span class="fn">warn</span>(<span class="str">`Coerced ${from} → ${to}`</span>),
+});
+
+<span class="var">age</span>.<span class="fn">set</span>(<span class="str">'42'</span>);       <span class="cmt">// auto-coerces → 42</span>
+<span class="var">age</span>();               <span class="cmt">// → 42</span>
+<span class="var">age</span>.<span class="fn">coercionCount</span>(); <span class="cmt">// → 1</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="dead-signal">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Auto-Fix · v0.2.0</div>
+        <h1>Dead Signal Detector</h1>
+        <p>Dev-time hygiene: find signals that are created but never read or written. Catches memory leaks and dead code at runtime.</p>
+      </div>
+      <h2>createDeadSignalDetector</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">createDeadSignalDetector</span>, <span class="fn">watchedSignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">detector</span> = <span class="fn">createDeadSignalDetector</span>({
+  <span class="attr">devOnly</span>: <span class="kw">true</span>,             <span class="cmt">// no-op in production</span>
+  <span class="attr">gracePeriodMs</span>: <span class="num">5000</span>,
+  <span class="attr">onDead</span>: (<span class="var">label</span>, <span class="var">age</span>) <span class="op">=&gt;</span> console.<span class="fn">warn</span>(<span class="str">`Dead signal: ${label} (${age}ms old)`</span>),
+});
+
+<span class="kw">const</span> <span class="var">count</span> = <span class="fn">watchedSignal</span>(<span class="num">0</span>, <span class="str">'counter'</span>, <span class="var">detector</span>);
+<span class="var">detector</span>.<span class="fn">scan</span>(); <span class="cmt">// → DeadSignalReport[]</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="circular-guard">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Auto-Fix · v0.2.0</div>
+        <h1>Circular Dependency Guard</h1>
+        <p>Detect circular computed dependencies at creation time — before they become silent infinite loops in production.</p>
+      </div>
+      <h2>guardedComputed / detectCycles</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">guardedComputed</span>, <span class="fn">detectCycles</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">a</span> = <span class="fn">signal</span>(<span class="num">1</span>);
+<span class="kw">const</span> <span class="var">doubled</span> = <span class="fn">guardedComputed</span>(<span class="str">'doubled'</span>, () <span class="op">=&gt;</span> <span class="var">a</span>() * <span class="num">2</span>, [{ <span class="attr">label</span>: <span class="str">'a'</span>, <span class="attr">signal</span>: <span class="var">a</span> }]);
+<span class="cmt">// Throws CircularDependencyError if a cycle is found</span>
+
+<span class="cmt">// Pure utility — detect cycles in any directed graph:</span>
+<span class="kw">const</span> <span class="var">cycles</span> = <span class="fn">detectCycles</span>(<span class="kw">new</span> <span class="type">Map</span>([
+  [<span class="str">'A'</span>, [<span class="str">'B'</span>]], [<span class="str">'B'</span>, [<span class="str">'C'</span>]], [<span class="str">'C'</span>, [<span class="str">'A'</span>]],
+]));
+<span class="cmt">// → [['A', 'B', 'C', 'A']]</span></code></pre>
+    </section>
+
+    <section class="docs-section" id="bounded-signal">
+      <div class="docs-page-header">
+        <div class="tag tag-new">Auto-Fix · v0.2.0</div>
+        <h1>Bounded Array Signals</h1>
+        <p>Prevent unbounded array growth. Automatically trims or blocks when the array exceeds <code>maxSize</code> — no more memory leaks from accumulating state.</p>
+      </div>
+      <h2>boundedSignal</h2>
+      <pre><code><span class="kw">import</span> { <span class="fn">boundedSignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">log</span> = <span class="fn">boundedSignal</span>([], {
+  <span class="attr">maxSize</span>: <span class="num">100</span>,
+  <span class="attr">strategy</span>: <span class="str">'drop-oldest'</span>,    <span class="cmt">// 'drop-oldest' | 'drop-newest' | 'throw'</span>
+  <span class="attr">onBound</span>: (<span class="var">dropped</span>) <span class="op">=&gt;</span> console.<span class="fn">warn</span>(<span class="str">`Dropped ${dropped.length} entries`</span>),
+});
+
+<span class="var">log</span>.<span class="fn">push</span>(<span class="str">'event-1'</span>);  <span class="cmt">// respects bound</span>
+<span class="var">log</span>.<span class="fn">isFull</span>();         <span class="cmt">// → boolean</span>
+<span class="var">log</span>.<span class="fn">size</span>();           <span class="cmt">// → current length</span></code></pre>
     </section>
 
   </main>
