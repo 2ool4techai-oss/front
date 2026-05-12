@@ -296,7 +296,7 @@ function NavBar(): HTMLElement {
       h('a', { href: '#collab' }, 'Collab'),
       h('a', { href: '#adaptive' }, 'Adaptive'),
     ),
-    h('span', { class: 'nav-badge' }, 'v0.1.0'),
+    h('span', { class: 'nav-badge' }, 'v0.3.0'),
   );
 }
 
@@ -1657,7 +1657,7 @@ function FooterSection(): HTMLElement {
   return h('footer', { class: 'showcase-footer' },
     h('p', {}, h('strong', {}, 'DRISHTI'), ' — The AI-Native Frontend Framework'),
     h('p', { style: 'margin-top: 8px' },
-      '810 tests · 67 test files · 29 novel features · MIT License · ',
+      '950 tests · 81 test files · 44 novel features · ',
       h('a', { href: 'https://github.com/2ool4techai-oss/front' }, 'GitHub'),
     ),
   );
