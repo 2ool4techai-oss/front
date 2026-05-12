@@ -1553,3 +1553,77 @@ hr {
   background: rgba(99,102,241,0.3);
   color: var(--text);
 }
+
+/* ── What We Do Best ────────────────────────────────────────── */
+.best-section {
+  padding: 100px 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(99,102,241,0.03) 50%, transparent 100%);
+}
+
+.best-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .best-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .best-grid { grid-template-columns: 1fr; }
+}
+
+.best-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.best-card:hover {
+  border-color: rgba(99,102,241,0.4);
+  box-shadow: 0 0 40px rgba(99,102,241,0.08);
+}
+
+.best-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.best-card h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+
+.best-card p {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.best-proof {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 4px;
+}
+
+.best-proof code {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.proof-comment {
+  color: var(--muted);
+}
