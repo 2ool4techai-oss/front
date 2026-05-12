@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/devtools",
+  "name": "@nexoraaidrishti/devtools",
   "version": "0.1.0",
   "description": "DRISHTI developer tools — signal inspector, emotion monitor, resource tracker",
   "type": "module",
@@ -17,7 +17,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@drishti/runtime": "workspace:*"
+    "@nexoraaidrishti/runtime": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.4.5"

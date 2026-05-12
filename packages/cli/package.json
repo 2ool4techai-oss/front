@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/cli",
+  "name": "@nexoraaidrishti/cli",
   "version": "0.1.0",
   "type": "module",
   "bin": { "dr": "./dist/bin.js" },

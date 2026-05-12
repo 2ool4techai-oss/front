@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/compiler",
+  "name": "@nexoraaidrishti/compiler",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",

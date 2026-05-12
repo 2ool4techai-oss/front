@@ -4,9 +4,9 @@ import { resolve } from 'path';
 export default defineConfig({
   resolve: {
     alias: {
-      '@drishti/runtime':    resolve(__dirname, '../../packages/runtime/src/index.ts'),
-      '@drishti/components': resolve(__dirname, '../../packages/components/src/index.ts'),
-      '@drishti/compiler':   resolve(__dirname, '../../packages/compiler/src/index.ts'),
+      '@nexoraaidrishti/runtime':    resolve(__dirname, '../../packages/runtime/src/index.ts'),
+      '@nexoraaidrishti/components': resolve(__dirname, '../../packages/components/src/index.ts'),
+      '@nexoraaidrishti/compiler':   resolve(__dirname, '../../packages/compiler/src/index.ts'),
     },
   },
   server: {
@@ -24,7 +24,7 @@ export default defineConfig({
   optimizeDeps: {
     // Pre-bundle workspace source so Vite doesn't re-process on every save
     include: [],
-    exclude: ['@drishti/runtime', '@drishti/components', '@drishti/compiler'],
+    exclude: ['@nexoraaidrishti/runtime', '@nexoraaidrishti/components', '@nexoraaidrishti/compiler'],
   },
   build: {
     target: 'es2022',

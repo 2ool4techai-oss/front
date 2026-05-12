@@ -1,4 +1,4 @@
-import { signal, computed, h } from '@drishti/runtime';
+import { signal, computed, h } from '@nexoraaidrishti/runtime';
 
 interface DocSection {
   id:      string;
@@ -57,7 +57,7 @@ cd my-app
 pnpm install
 pnpm dev`),
         heading('Install manually'),
-        codeBlock(`pnpm add @drishti/runtime @drishti/components`),
+        codeBlock(`pnpm add @nexoraaidrishti/runtime @nexoraaidrishti/components`),
       ),
     },
     {
@@ -65,7 +65,7 @@ pnpm dev`),
       title: 'Signals',
       content: () => docSection('Signals',
         para('Signals are the core reactive primitive. They are fine-grained — only effects that read a signal re-run when it changes.'),
-        codeBlock(`import { signal, computed, effect } from '@drishti/runtime';
+        codeBlock(`import { signal, computed, effect } from '@nexoraaidrishti/runtime';
 
 const count = signal(0);
 const doubled = computed(() => count() * 2);
@@ -88,7 +88,7 @@ sig.subscribe(fn) // subscribe to changes`),
       title: 'Rendering',
       content: () => docSection('Rendering',
         para('DRISHTI renders directly to the DOM — no virtual DOM diff. Reactive updates are surgical: only changed attributes/text nodes update.'),
-        codeBlock(`import { h, signal, mountApp } from '@drishti/runtime';
+        codeBlock(`import { h, signal, mountApp } from '@nexoraaidrishti/runtime';
 
 function App(container) {
   const name = signal('World');
@@ -113,7 +113,7 @@ mountApp(App, document.getElementById('app'));`),
       title: 'State Machines',
       content: () => docSection('State Machines',
         para('createMachine() provides XState-inspired state machines backed by signals. Entry/exit hooks, context mutations, history tracking.'),
-        codeBlock(`import { createMachine } from '@drishti/runtime';
+        codeBlock(`import { createMachine } from '@nexoraaidrishti/runtime';
 
 const machine = createMachine({
   initial: 'idle',
@@ -140,7 +140,7 @@ console.log(machine.state()); // 'loading'`),
       title: 'Time Travel',
       content: () => docSection('Time Travel Debugging',
         para('DRISHTI is the only frontend framework with built-in time-travel debugging. Every signal write is recorded — you can undo/redo the entire application state.'),
-        codeBlock(`import { signal, enableTimeTravel } from '@drishti/runtime';
+        codeBlock(`import { signal, enableTimeTravel } from '@nexoraaidrishti/runtime';
 
 const tt = enableTimeTravel({ maxHistory: 100 });
 
@@ -159,8 +159,8 @@ tt.goto(0);    // back to initial state`),
       id: 'components',
       title: 'Components',
       content: () => docSection('UI Components',
-        para('@drishti/components provides 30+ accessible, signal-native UI components. No React. No Vue. Pure DOM.'),
-        codeBlock(`import { createModal, createToast, createSelect } from '@drishti/components';
+        para('@nexoraaidrishti/components provides 30+ accessible, signal-native UI components. No React. No Vue. Pure DOM.'),
+        codeBlock(`import { createModal, createToast, createSelect } from '@nexoraaidrishti/components';
 
 // Modal
 const modal = createModal({
@@ -187,8 +187,8 @@ const select = createSelect({
       id: 'a11y',
       title: 'Accessibility',
       content: () => docSection('Accessibility (WCAG 2.2)',
-        para('@drishti/testing includes a built-in WCAG 2.2 audit engine with 18+ rules across A, AA, and AAA levels.'),
-        codeBlock(`import { auditA11y, assertA11y } from '@drishti/testing';
+        para('@nexoraaidrishti/testing includes a built-in WCAG 2.2 audit engine with 18+ rules across A, AA, and AAA levels.'),
+        codeBlock(`import { auditA11y, assertA11y } from '@nexoraaidrishti/testing';
 
 // Audit any element
 const report = auditA11y(document.getElementById('app'));

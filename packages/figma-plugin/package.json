@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/figma-plugin",
+  "name": "@nexoraaidrishti/figma-plugin",
   "version": "0.1.0",
   "description": "Figma plugin — export design components as .dr files",
   "type": "module",

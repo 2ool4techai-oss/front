@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/tailwind-plugin",
+  "name": "@nexoraaidrishti/tailwind-plugin",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",

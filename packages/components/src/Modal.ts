@@ -1,8 +1,8 @@
 // ── Modal / Dialog component ───────────────────────────────────────────
 // Accessible, focus-trapped, stacking modals.
 
-import { signal } from '@drishti/runtime';
-import type { Signal } from '@drishti/runtime';
+import { signal } from '@nexoraaidrishti/runtime';
+import type { Signal } from '@nexoraaidrishti/runtime';
 
 export interface ModalOptions {
   title?:           string;

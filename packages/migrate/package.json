@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/migrate",
+  "name": "@nexoraaidrishti/migrate",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",

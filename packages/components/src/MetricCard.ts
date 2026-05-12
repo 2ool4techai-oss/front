@@ -1,5 +1,5 @@
-import { signal, effect, h, text } from '@drishti/runtime';
-import type { EmotionState } from '@drishti/runtime';
+import { signal, effect, h, text } from '@nexoraaidrishti/runtime';
+import type { EmotionState } from '@nexoraaidrishti/runtime';
 
 export interface MetricCardProps {
   label: string;

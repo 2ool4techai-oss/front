@@ -133,10 +133,10 @@ export function runCLI(args: string[]): void {
     case 'migrate': {
       const from = flags['from'];
       if (from === 'react') {
-        console.log('Analyzing project... Run @drishti/migrate to transform your code');
+        console.log('Analyzing project... Run @nexoraaidrishti/migrate to transform your code');
       } else if (from) {
         console.log(`Analyzing project for migration from ${String(from)}...`);
-        console.log('Run @drishti/migrate to transform your code');
+        console.log('Run @nexoraaidrishti/migrate to transform your code');
       } else {
         console.log('Usage: dr migrate --from <framework>');
         console.log('Supported frameworks: react, vue, svelte, angular');

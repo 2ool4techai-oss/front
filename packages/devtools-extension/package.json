@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/devtools-extension",
+  "name": "@nexoraaidrishti/devtools-extension",
   "version": "0.1.0",
   "description": "Browser DevTools extension for DRISHTI signal debugging",
   "type": "module",

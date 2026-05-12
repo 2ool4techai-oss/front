@@ -1,5 +1,5 @@
-import type { Signal } from '@drishti/runtime';
-import { signal } from '@drishti/runtime';
+import type { Signal } from '@nexoraaidrishti/runtime';
+import { signal } from '@nexoraaidrishti/runtime';
 
 // ── Types ──────────────────────────────────────────────────────────────
 

@@ -4,7 +4,7 @@ export { noUntrackedEffectRule, preferComputedRule, noSignalInConditionRule, noM
 export type { LintRule, LintViolation } from './rules.js';
 
 export const plugin = {
-  name: '@drishti/eslint-plugin',
+  name: '@nexoraaidrishti/eslint-plugin',
   rules: {
     'no-untracked-effect':    noUntrackedEffectRule,
     'prefer-computed':        preferComputedRule,
@@ -14,10 +14,10 @@ export const plugin = {
   configs: {
     recommended: {
       rules: {
-        '@drishti/no-untracked-effect':    'warn',
-        '@drishti/prefer-computed':        'warn',
-        '@drishti/no-signal-in-condition': 'error',
-        '@drishti/no-mutate-in-render':    'error',
+        '@nexoraaidrishti/no-untracked-effect':    'warn',
+        '@nexoraaidrishti/prefer-computed':        'warn',
+        '@nexoraaidrishti/no-signal-in-condition': 'error',
+        '@nexoraaidrishti/no-mutate-in-render':    'error',
       },
     },
   },

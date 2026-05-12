@@ -40,7 +40,7 @@ All notable changes to DRISHTI will be documented in this file.
 ### Added — Developer Experience
 
 - TypeScript-first, strict mode throughout
-- ESLint plugin with 4 custom rules (`@drishti/eslint-plugin`)
+- ESLint plugin with 4 custom rules (`@nexoraaidrishti/eslint-plugin`)
 - Component testing library with `render()`, `fireEvent`, `waitFor()`, `waitForSignal()`
 - WCAG 2.2 accessibility audit (`auditA11y`, `assertA11y`, 18+ rules)
 - Visual regression testing (`takeSnapshot`, `diffSnapshots`, `assertVisualMatch`)

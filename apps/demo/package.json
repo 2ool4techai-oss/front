@@ -10,11 +10,11 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@drishti/runtime": "workspace:*",
-    "@drishti/components": "workspace:*"
+    "@nexoraaidrishti/runtime": "workspace:*",
+    "@nexoraaidrishti/components": "workspace:*"
   },
   "devDependencies": {
-    "@drishti/compiler": "workspace:*",
+    "@nexoraaidrishti/compiler": "workspace:*",
     "vite": "^5.4.0",
     "typescript": "^5.4.5"
   }

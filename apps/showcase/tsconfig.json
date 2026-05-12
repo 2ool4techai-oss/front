@@ -5,8 +5,8 @@
     "rootDir": "./src",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "paths": {
-      "@drishti/runtime": ["../../packages/runtime/dist/index.d.ts"],
-      "@drishti/components": ["../../packages/components/dist/index.d.ts"]
+      "@nexoraaidrishti/runtime": ["../../packages/runtime/dist/index.d.ts"],
+      "@nexoraaidrishti/components": ["../../packages/components/dist/index.d.ts"]
     }
   },
   "include": ["src/**/*", "vite.config.ts"]

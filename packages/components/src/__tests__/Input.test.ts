@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { signal } from '@drishti/runtime';
+import { signal } from '@nexoraaidrishti/runtime';
 import { Input } from '../Input.js';
 
 describe('Input', () => {

@@ -1,5 +1,5 @@
-import { signal } from '@drishti/runtime';
-import type { Signal, SignalSubscriber, Unsubscribe } from '@drishti/runtime';
+import { signal } from '@nexoraaidrishti/runtime';
+import type { Signal, SignalSubscriber, Unsubscribe } from '@nexoraaidrishti/runtime';
 
 export interface CursorUser {
   id:    string;
@@ -77,7 +77,7 @@ function injectStyles(smoothing: number): void {
 }
 
 export function createCollabCursors(
-  _session: import('@drishti/runtime').CollabHandle,
+  _session: import('@nexoraaidrishti/runtime').CollabHandle,
   opts: CollabCursorOptions,
 ): CollabCursorHandle {
   const {

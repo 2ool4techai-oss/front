@@ -1,5 +1,5 @@
-import { signal, effect, batch } from '@drishti/runtime';
-import type { Signal, Unsubscribe } from '@drishti/runtime';
+import { signal, effect, batch } from '@nexoraaidrishti/runtime';
+import type { Signal, Unsubscribe } from '@nexoraaidrishti/runtime';
 
 // ── testSignal ─────────────────────────────────────────────────────────
 // Wraps a signal for easy assertion in tests.
@@ -326,7 +326,7 @@ export function diffSnapshots(before: string, after: string): SnapshotDiff {
 
 /**
  * Vitest custom matcher. Add to your vitest setup file:
- *   import { setupVisualMatchers } from '@drishti/testing';
+ *   import { setupVisualMatchers } from '@nexoraaidrishti/testing';
  *   setupVisualMatchers();
  */
 export function setupVisualMatchers(): void {

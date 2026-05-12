@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { signal } from '@drishti/runtime';
+import { signal } from '@nexoraaidrishti/runtime';
 import { render, fireEvent, waitFor, waitForSignal } from '../render.js';
 
 beforeEach(() => {

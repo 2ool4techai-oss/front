@@ -106,7 +106,7 @@ describe('renderIslandPage', () => {
     ];
     const html = renderIslandPage('<div></div>', islands);
     expect(html).toContain('<script type="module">');
-    expect(html).toContain(`import { hydrateIslands } from '@drishti/runtime';`);
+    expect(html).toContain(`import { hydrateIslands } from '@nexoraaidrishti/runtime';`);
     expect(html).toContain('// island: counter');
     expect(html).toContain('// island: search');
     expect(html).toContain('hydrateIslands();');

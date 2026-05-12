@@ -19,7 +19,7 @@ describe('transformVue', () => {
   it('transforms Vue named imports to Drishti imports', () => {
     const code = `import { ref, computed, watch, onMounted } from 'vue';`;
     const result = transformVue(code);
-    expect(result.code).toContain("from '@drishti/runtime'");
+    expect(result.code).toContain("from '@nexoraaidrishti/runtime'");
     expect(result.code).not.toContain("from 'vue'");
   });
 

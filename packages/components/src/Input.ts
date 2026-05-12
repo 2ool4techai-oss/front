@@ -1,5 +1,5 @@
-import { signal, effect } from '@drishti/runtime';
-import type { Signal } from '@drishti/runtime';
+import { signal, effect } from '@nexoraaidrishti/runtime';
+import type { Signal } from '@nexoraaidrishti/runtime';
 
 export type InputType = 'text' | 'email' | 'password' | 'number' | 'search' | 'url' | 'tel';
 

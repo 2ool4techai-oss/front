@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/components",
+  "name": "@nexoraaidrishti/components",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -18,7 +18,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@drishti/runtime": "workspace:*"
+    "@nexoraaidrishti/runtime": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.4.5",

@@ -1,5 +1,5 @@
-import { _getDevSignals, _totalEffectRuns } from '@drishti/runtime';
-import type { EmotionProcessor, Cache, Router, TimeTravelHandle } from '@drishti/runtime';
+import { _getDevSignals, _totalEffectRuns } from '@nexoraaidrishti/runtime';
+import type { EmotionProcessor, Cache, Router, TimeTravelHandle } from '@nexoraaidrishti/runtime';
 
 export interface DevToolsOptions {
   emotion?:    EmotionProcessor;

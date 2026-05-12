@@ -1,6 +1,6 @@
-import { signal, effect, h } from '@drishti/runtime';
-import { HealingMonitor } from '@drishti/runtime';
-import type { HealConfig } from '@drishti/runtime';
+import { signal, effect, h } from '@nexoraaidrishti/runtime';
+import { HealingMonitor } from '@nexoraaidrishti/runtime';
+import type { HealConfig } from '@nexoraaidrishti/runtime';
 
 export interface HealingCardProps {
   title: string;

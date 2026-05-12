@@ -1,4 +1,4 @@
-import { _setSSRMode } from '@drishti/runtime';
+import { _setSSRMode } from '@nexoraaidrishti/runtime';
 import { createSSRContext, VNode, VDocument } from './vdom.js';
 import type { SSRContext } from './vdom.js';
 
@@ -14,7 +14,7 @@ const STATE_KEY  = '__DRISHTI_STATE__';
 // returns the serialized HTML plus serialized initial state.
 //
 // Usage (Node.js / edge worker):
-//   import { renderToString } from '@drishti/ssr';
+//   import { renderToString } from '@nexoraaidrishti/ssr';
 //   const { html, stateScript } = renderToString(() => MyApp());
 //   const page = `<div id="app">${html}</div>${stateScript}`;
 
@@ -84,7 +84,7 @@ export function registerSSRState(key: string, value: unknown): void {
 // DRISHTI's renderer uses fine-grained DOM patches.
 //
 // Usage (browser entry point):
-//   import { hydrate } from '@drishti/ssr';
+//   import { hydrate } from '@nexoraaidrishti/ssr';
 //   hydrate(document.getElementById('app'), () => MyApp());
 
 export function hydrate(

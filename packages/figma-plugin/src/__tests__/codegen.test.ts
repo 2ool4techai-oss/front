@@ -70,8 +70,8 @@ describe('generateDrFile', () => {
     expect(result).toContain('signal(');
   });
 
-  it('includes @drishti/runtime import', () => {
+  it('includes @nexoraaidrishti/runtime import', () => {
     const result = generateDrFile(makeNode());
-    expect(result).toContain('@drishti/runtime');
+    expect(result).toContain('@nexoraaidrishti/runtime');
   });
 });

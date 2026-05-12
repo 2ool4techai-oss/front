@@ -1,5 +1,5 @@
-import { loadGenome, signal, effect } from '@drishti/runtime';
-import type { GenomeConfig, EmotionState } from '@drishti/runtime';
+import { loadGenome, signal, effect } from '@nexoraaidrishti/runtime';
+import type { GenomeConfig, EmotionState } from '@nexoraaidrishti/runtime';
 
 loadGenome({
   primaryColor: '#3b82f6', secondaryColor: '#07070f', accentColor: '#8b5cf6',
@@ -769,7 +769,7 @@ function tabCompiler(): HTMLElement {
   let compileFn: ((s: string) => { code: string; errors: string[] }) | null = null;
   timing.textContent = 'loading compiler…';
 
-  import('@drishti/compiler').then(m => {
+  import('@nexoraaidrishti/compiler').then(m => {
     compileFn = m.compile;
     run(textarea.value);
   });

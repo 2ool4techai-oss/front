@@ -58,7 +58,7 @@ function viteConfig(): string {
 
 export default defineConfig({
   resolve: {
-    alias: { '@drishti/runtime': '/node_modules/@drishti/runtime/dist/index.js' }
+    alias: { '@nexoraaidrishti/runtime': '/node_modules/@nexoraaidrishti/runtime/dist/index.js' }
   }
 });
 `;
@@ -76,8 +76,8 @@ function packageJson(name: string): string {
         preview: 'vite preview',
       },
       dependencies: {
-        '@drishti/runtime':    '^0.1.0',
-        '@drishti/components': '^0.1.0',
+        '@nexoraaidrishti/runtime':    '^0.1.0',
+        '@nexoraaidrishti/components': '^0.1.0',
       },
       devDependencies: {
         typescript: '^5.4.5',
@@ -109,7 +109,7 @@ function tsConfig(): string {
 }
 
 function mainTs(): string {
-  return `import { mountApp } from '@drishti/runtime';
+  return `import { mountApp } from '@nexoraaidrishti/runtime';
 import { App } from './App.js';
 
 mountApp(App, document.getElementById('app')!);
@@ -117,7 +117,7 @@ mountApp(App, document.getElementById('app')!);
 }
 
 function minimalAppTs(): string {
-  return `import { signal, h } from '@drishti/runtime';
+  return `import { signal, h } from '@nexoraaidrishti/runtime';
 export function App(container: HTMLElement): () => void {
   const count = signal(0);
   const el = h('div', { class: 'app' },
@@ -132,7 +132,7 @@ export function App(container: HTMLElement): () => void {
 }
 
 function todoAppTs(): string {
-  return `import { signal, computed, h, each, show } from '@drishti/runtime';
+  return `import { signal, computed, h, each, show } from '@nexoraaidrishti/runtime';
 
 interface Todo {
   id:        number;

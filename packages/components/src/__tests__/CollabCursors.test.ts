@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { signal } from '@drishti/runtime';
-import type { CollabHandle, PresenceState } from '@drishti/runtime';
+import { signal } from '@nexoraaidrishti/runtime';
+import type { CollabHandle, PresenceState } from '@nexoraaidrishti/runtime';
 import { createCollabCursors } from '../CollabCursors.js';
 
 // ── Mock CollabHandle ──────────────────────────────────────────────────
@@ -12,7 +12,7 @@ function makeMockSession(): CollabHandle {
     peers: signal<PresenceState[]>([]),
     signal<T>(_key: string, initial: T) {
       const s = signal(initial);
-      return Object.assign(s, { key: _key, clientId: 'test-client', lastOp: signal(null) }) as import('@drishti/runtime').CollaborativeSignal<T>;
+      return Object.assign(s, { key: _key, clientId: 'test-client', lastOp: signal(null) }) as import('@nexoraaidrishti/runtime').CollaborativeSignal<T>;
     },
     updatePresence: vi.fn(),
     destroy: vi.fn(),

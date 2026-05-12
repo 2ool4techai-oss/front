@@ -135,7 +135,7 @@ function buildRecommendations(
       recs.push(`Replace ${breakdown.contextUsages} useContext() call(s) with Drishti store/provide`);
     }
     if (breakdown.routerUsages > 0) {
-      recs.push(`Migrate ${breakdown.routerUsages} router usage(s) to @drishti/router`);
+      recs.push(`Migrate ${breakdown.routerUsages} router usage(s) to @nexoraaidrishti/router`);
     }
     recs.push('Remove React import — Drishti does not require a runtime import');
     recs.push('Convert JSX components to Drishti Islands manually');
@@ -150,7 +150,7 @@ function buildRecommendations(
       recs.push(`Replace ${breakdown.contextUsages} provide/inject usage(s) with Drishti store`);
     }
     if (breakdown.routerUsages > 0) {
-      recs.push(`Migrate ${breakdown.routerUsages} vue-router usage(s) to @drishti/router`);
+      recs.push(`Migrate ${breakdown.routerUsages} vue-router usage(s) to @nexoraaidrishti/router`);
     }
     recs.push('Replace .value accesses with signal() calls');
     recs.push('Convert Vue SFCs to Drishti component format');
@@ -162,7 +162,7 @@ function buildRecommendations(
     recs.push('Convert Angular services to Drishti stores');
     recs.push('Migrate Angular components to Drishti Islands');
     if (breakdown.routerUsages > 0) {
-      recs.push(`Migrate ${breakdown.routerUsages} Angular router usage(s) to @drishti/router`);
+      recs.push(`Migrate ${breakdown.routerUsages} Angular router usage(s) to @nexoraaidrishti/router`);
     }
   } else {
     recs.push('Framework not detected — manual analysis required');

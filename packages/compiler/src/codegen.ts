@@ -140,7 +140,7 @@ export function generateDirectDOM(ast: DOMASTNode, opts?: CodegenOptions): Codeg
 // The JS output skips the TypeScript compile step entirely — like Svelte.
 
 export function generateSurface(node: SurfaceNode, opts: CodegenOptions = {}): string {
-  const runtime  = opts.runtime ?? '@drishti/runtime';
+  const runtime  = opts.runtime ?? '@nexoraaidrishti/runtime';
   const target   = opts.target  ?? 'js';
   const isTS     = target === 'ts';
   const lines: string[] = [];

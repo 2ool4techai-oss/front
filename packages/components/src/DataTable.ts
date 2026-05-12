@@ -1,5 +1,5 @@
-import { signal, computed, effect, batch } from '@drishti/runtime';
-import type { Signal, ComputedSignal } from '@drishti/runtime';
+import { signal, computed, effect, batch } from '@nexoraaidrishti/runtime';
+import type { Signal, ComputedSignal } from '@nexoraaidrishti/runtime';
 
 // ── Types ──────────────────────────────────────────────────────────────
 

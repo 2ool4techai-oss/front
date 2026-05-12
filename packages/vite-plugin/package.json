@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/vite-plugin",
+  "name": "@nexoraaidrishti/vite-plugin",
   "version": "0.1.0",
   "description": "Vite plugin for .dr single-file components",
   "type": "module",

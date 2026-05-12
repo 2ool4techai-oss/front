@@ -1,4 +1,4 @@
-import { signal, computed, h, each, show } from '@drishti/runtime';
+import { signal, computed, h, each, show } from '@nexoraaidrishti/runtime';
 
 interface Todo {
   id:        number;

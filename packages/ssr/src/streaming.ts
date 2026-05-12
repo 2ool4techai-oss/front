@@ -1,4 +1,4 @@
-import { _setSSRMode } from '@drishti/runtime';
+import { _setSSRMode } from '@nexoraaidrishti/runtime';
 import { VNode, createSSRContext } from './vdom.js';
 import type { SSRContext } from './vdom.js';
 

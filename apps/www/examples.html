@@ -57,7 +57,7 @@
       <pre><code><span class="kw">import</span> {
   <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">effect</span>,
   <span class="fn">enableTimeTravel</span>, <span class="fn">h</span>, <span class="fn">mountApp</span>, <span class="fn">show</span>,
-} <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+} <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="cmt">// Enable time travel before creating signals</span>
 <span class="kw">const</span> <span class="var">tt</span> = <span class="fn">enableTimeTravel</span>({ <span class="attr">maxEntries</span>: <span class="num">50</span> });
@@ -133,7 +133,7 @@
       <p class="example-desc">Full TodoMVC implementation with filters, add/complete/clear, and reactive computed counts. Shows <code>each()</code>, <code>show()</code>, and <code>batch()</code>.</p>
     </div>
     <div class="example-body">
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">each</span>, <span class="fn">show</span>, <span class="fn">batch</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">each</span>, <span class="fn">show</span>, <span class="fn">batch</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">interface</span> <span class="type">Todo</span> { <span class="attr">id</span>: <span class="type">number</span>; <span class="attr">text</span>: <span class="type">string</span>; <span class="attr">done</span>: <span class="type">boolean</span>; }
 <span class="kw">type</span> <span class="type">Filter</span> = <span class="str">'all'</span> | <span class="str">'active'</span> | <span class="str">'completed'</span>;
@@ -233,7 +233,7 @@
       <p class="example-desc"><code>createResource</code> with reactive loading, error, and retry states. Skeleton UI while fetching, error recovery, and dependent queries.</p>
     </div>
     <div class="example-body">
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">createResource</span>, <span class="fn">createQuery</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">each</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">createResource</span>, <span class="fn">createQuery</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">each</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">interface</span> <span class="type">Post</span> { <span class="attr">id</span>: <span class="type">number</span>; <span class="attr">title</span>: <span class="type">string</span>; <span class="attr">body</span>: <span class="type">string</span>; <span class="attr">userId</span>: <span class="type">number</span>; }
 <span class="kw">interface</span> <span class="type">User</span> { <span class="attr">id</span>: <span class="type">number</span>; <span class="attr">name</span>: <span class="type">string</span>; <span class="attr">email</span>: <span class="type">string</span>; }
@@ -310,7 +310,7 @@
       <p class="example-desc"><code>createForm</code> with schema-driven validation, field-level errors, touched tracking, and async submission handling.</p>
     </div>
     <div class="example-body">
-      <pre><code><span class="kw">import</span> { <span class="fn">createForm</span>, <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createForm</span>, <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">submitStatus</span> = <span class="fn">signal</span><span class="op">&lt;</span><span class="str">'idle'</span> | <span class="str">'submitting'</span> | <span class="str">'success'</span> | <span class="str">'error'</span><span class="op">&gt;</span>(<span class="str">'idle'</span>);
 
@@ -381,7 +381,7 @@
       <p class="example-desc"><code>createMachine</code> with guarded transitions for a multi-step form. Guards prevent advancing without valid data. Entry hooks log analytics.</p>
     </div>
     <div class="example-body">
-      <pre><code><span class="kw">import</span> { <span class="fn">createMachine</span>, <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createMachine</span>, <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="cmt">// Step data</span>
 <span class="kw">const</span> <span class="var">name</span>    = <span class="fn">signal</span>(<span class="str">''</span>);
@@ -478,7 +478,7 @@
   <span class="fn">signal</span>, <span class="fn">computed</span>,
   <span class="fn">createLLMStream</span>, <span class="fn">createThinkingState</span>, <span class="fn">createToolCallState</span>,
   <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">each</span>, <span class="fn">mountApp</span>,
-} <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+} <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">interface</span> <span class="type">Message</span> { <span class="attr">role</span>: <span class="str">'user'</span> | <span class="str">'assistant'</span>; <span class="attr">content</span>: <span class="type">string</span>; }
 
@@ -566,7 +566,7 @@
       <p class="example-desc"><code>createFlag</code> for boolean and variant flags, <code>createBandit</code> for epsilon-greedy traffic allocation, and reactive UI that updates when flag values change.</p>
     </div>
     <div class="example-body">
-      <pre><code><span class="kw">import</span> { <span class="fn">createFlag</span>, <span class="fn">createBandit</span>, <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createFlag</span>, <span class="fn">createBandit</span>, <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="cmt">// Simple boolean flag</span>
 <span class="kw">const</span> <span class="var">newUiFlag</span> = <span class="fn">createFlag</span>(<span class="str">'new-ui'</span>, {
@@ -653,7 +653,7 @@
       <pre><code><span class="kw">import</span> {
   <span class="fn">createCollabSession</span>, <span class="fn">signal</span>, <span class="fn">computed</span>,
   <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">each</span>, <span class="fn">mountApp</span>,
-} <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+} <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">COLORS</span> = [<span class="str">'#6366f1'</span>, <span class="str">'#10b981'</span>, <span class="str">'#f59e0b'</span>, <span class="str">'#ef4444'</span>, <span class="str">'#3b82f6'</span>];
 

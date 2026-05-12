@@ -115,9 +115,9 @@ function packageJson(name: string): string {
       typecheck: 'tsc --noEmit',
     },
     dependencies: {
-      '@drishti/runtime':    '^0.1.0',
-      '@drishti/components': '^0.1.0',
-      '@drishti/compiler':   '^0.1.0',
+      '@nexoraaidrishti/runtime':    '^0.1.0',
+      '@nexoraaidrishti/components': '^0.1.0',
+      '@nexoraaidrishti/compiler':   '^0.1.0',
     },
     devDependencies: {
       vite:        '^5.0.0',
@@ -128,7 +128,7 @@ function packageJson(name: string): string {
 
 function viteConfig(): string {
   return `import { defineConfig } from 'vite';
-import { drishtiPlugin } from '@drishti/compiler/vite-plugin';
+import { drishtiPlugin } from '@nexoraaidrishti/compiler/vite-plugin';
 
 export default defineConfig({
   plugins: [drishtiPlugin()],
@@ -146,7 +146,7 @@ function tsConfig(): string {
       strict: true,
       skipLibCheck: true,
       lib: ['ES2022', 'DOM', 'DOM.Iterable'],
-      paths: { '@drishti/runtime': ['./node_modules/@drishti/runtime/dist/index.d.ts'] },
+      paths: { '@nexoraaidrishti/runtime': ['./node_modules/@nexoraaidrishti/runtime/dist/index.d.ts'] },
     },
     include: ['src'],
   }, null, 2) + '\n';
@@ -173,7 +173,7 @@ function indexHtml(name: string): string {
 }
 
 function mainTs(): string {
-  return `import { loadGenome, loadGenomePreset } from '@drishti/runtime';
+  return `import { loadGenome, loadGenomePreset } from '@nexoraaidrishti/runtime';
 import { App } from './App.js';
 
 // Load brand design tokens (pick a preset or pass your own config)
@@ -185,8 +185,8 @@ app.appendChild(App());
 }
 
 function appTs(): string {
-  return `import { signal, effect, h } from '@drishti/runtime';
-import { Button, toast } from '@drishti/components';
+  return `import { signal, effect, h } from '@nexoraaidrishti/runtime';
+import { Button, toast } from '@nexoraaidrishti/components';
 
 export function App(): HTMLElement {
   const count = signal(0);
@@ -253,8 +253,8 @@ pnpm dev
 
 ## Docs
 
-- Runtime API: \`import { signal, computed, effect, spring } from '@drishti/runtime'\`
-- Components:  \`import { Button, Input, Modal, toast } from '@drishti/components'\`
-- Router:      \`import { createRouter } from '@drishti/runtime'\`
+- Runtime API: \`import { signal, computed, effect, spring } from '@nexoraaidrishti/runtime'\`
+- Components:  \`import { Button, Input, Modal, toast } from '@nexoraaidrishti/components'\`
+- Router:      \`import { createRouter } from '@nexoraaidrishti/runtime'\`
 `;
 }

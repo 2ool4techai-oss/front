@@ -110,10 +110,10 @@ describe('plugin', () => {
 
   it('recommended config has all 4 rules', () => {
     const ruleKeys = Object.keys(plugin.configs.recommended.rules);
-    expect(ruleKeys).toContain('@drishti/no-untracked-effect');
-    expect(ruleKeys).toContain('@drishti/prefer-computed');
-    expect(ruleKeys).toContain('@drishti/no-signal-in-condition');
-    expect(ruleKeys).toContain('@drishti/no-mutate-in-render');
+    expect(ruleKeys).toContain('@nexoraaidrishti/no-untracked-effect');
+    expect(ruleKeys).toContain('@nexoraaidrishti/prefer-computed');
+    expect(ruleKeys).toContain('@nexoraaidrishti/no-signal-in-condition');
+    expect(ruleKeys).toContain('@nexoraaidrishti/no-mutate-in-render');
   });
 
   it('each rule has meta.docs.description', () => {

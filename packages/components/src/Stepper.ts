@@ -1,7 +1,7 @@
 // ── Stepper / Wizard component ─────────────────────────────────────────
 
-import { signal, computed } from '@drishti/runtime';
-import type { Signal, ComputedSignal } from '@drishti/runtime';
+import { signal, computed } from '@nexoraaidrishti/runtime';
+import type { Signal, ComputedSignal } from '@nexoraaidrishti/runtime';
 
 export interface StepConfig {
   label:        string;

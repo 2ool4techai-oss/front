@@ -8,7 +8,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@drishti/runtime': resolve(__dirname, '../runtime/src/index.ts'),
+      '@nexoraaidrishti/runtime': resolve(__dirname, '../runtime/src/index.ts'),
     },
   },
 });

@@ -5,7 +5,7 @@
     "rootDir": "./src",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "paths": {
-      "@drishti/runtime": ["../runtime/dist/index.d.ts"]
+      "@nexoraaidrishti/runtime": ["../runtime/dist/index.d.ts"]
     }
   },
   "include": ["src/**/*"]

@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/bench",
+  "name": "@nexoraaidrishti/bench",
   "version": "0.1.0",
   "description": "Performance benchmarks for DRISHTI signals",
   "type": "module",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "tinybench": "^2.6.0",
-    "@drishti/runtime": "workspace:*"
+    "@nexoraaidrishti/runtime": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.4.5",

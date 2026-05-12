@@ -1,5 +1,5 @@
-import { signal, effect, computed } from '@drishti/runtime';
-import { sanitizeInput } from '@drishti/runtime';
+import { signal, effect, computed } from '@nexoraaidrishti/runtime';
+import { sanitizeInput } from '@nexoraaidrishti/runtime';
 
 export interface TableColumn<T> {
   key: keyof T;

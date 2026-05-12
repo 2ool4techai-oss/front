@@ -2,6 +2,6 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   resolve: {
-    alias: { '@drishti/runtime': '/node_modules/@drishti/runtime/dist/index.js' }
+    alias: { '@nexoraaidrishti/runtime': '/node_modules/@nexoraaidrishti/runtime/dist/index.js' }
   }
 });

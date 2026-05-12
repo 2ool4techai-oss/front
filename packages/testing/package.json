@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/testing",
+  "name": "@nexoraaidrishti/testing",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -18,7 +18,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@drishti/runtime": "workspace:*"
+    "@nexoraaidrishti/runtime": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.4.5",

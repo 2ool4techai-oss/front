@@ -43,7 +43,7 @@ describe('transformReact', () => {
   it('transforms named React imports', () => {
     const code = `import { useState, useEffect, useCallback } from 'react';`;
     const result = transformReact(code);
-    expect(result.code).toContain("from '@drishti/runtime'");
+    expect(result.code).toContain("from '@nexoraaidrishti/runtime'");
     expect(result.code).not.toContain("from 'react'");
   });
 

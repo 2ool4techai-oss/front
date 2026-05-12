@@ -18,7 +18,7 @@ export function transformVue(code: string, _filename?: string): CodemodResult {
     const match = pattern.exec(result);
     if (match && match.index !== undefined) {
       const from = match[0];
-      const to = "import { signal, computed, effect } from '@drishti/runtime'";
+      const to = "import { signal, computed, effect } from '@nexoraaidrishti/runtime'";
       const lineNum = getLineNumber(result, match.index);
       result = result.replace(pattern, to);
       changes.push({ line: lineNum, from, to });
@@ -159,7 +159,7 @@ export function transformVue(code: string, _filename?: string): CodemodResult {
       changes.push({ line: lineNum, from: rep.from, to: rep.to });
     }
     if (replacements.length > 0) {
-      warnings.push('reactive() converted to createStore() — ensure @drishti/runtime exports createStore');
+      warnings.push('reactive() converted to createStore() — ensure @nexoraaidrishti/runtime exports createStore');
     }
   }
 

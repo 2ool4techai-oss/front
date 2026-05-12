@@ -108,7 +108,7 @@ export function getIslandRegistry(): ReadonlyMap<string, IslandDefinition<Record
 /** Generate a minimal JS bootstrap snippet that only imports islands used in the page */
 export function generateIslandBootstrap(usedIslands: string[]): string {
   const lines = [
-    `import { hydrateIslands } from '@drishti/runtime';`,
+    `import { hydrateIslands } from '@nexoraaidrishti/runtime';`,
     ...usedIslands.map(name => `import './${name}.island.js';`),
     `hydrateIslands();`,
   ];

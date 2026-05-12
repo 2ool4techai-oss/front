@@ -15,7 +15,7 @@ import {
   sanitizeInput,
   mesh,
   h, show, each, mount,
-} from '@drishti/runtime';
+} from '@nexoraaidrishti/runtime';
 
 // ─── 1. Brand DNA — loaded once, inherited by every component ─────────────
 loadGenome({

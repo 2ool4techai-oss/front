@@ -3,7 +3,7 @@ import {
   h,
   label, _enableDevMode, enableTimeTravel,
   createMachine,
-} from '@drishti/runtime';
+} from '@nexoraaidrishti/runtime';
 
 _enableDevMode();
 

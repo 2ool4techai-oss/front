@@ -5,8 +5,8 @@ export default defineConfig({
   base: '/front/showcase/',
   resolve: {
     alias: {
-      '@drishti/runtime':    resolve(__dirname, '../../packages/runtime/src/index.ts'),
-      '@drishti/components': resolve(__dirname, '../../packages/components/src/index.ts'),
+      '@nexoraaidrishti/runtime':    resolve(__dirname, '../../packages/runtime/src/index.ts'),
+      '@nexoraaidrishti/components': resolve(__dirname, '../../packages/components/src/index.ts'),
     },
   },
   server: {
@@ -22,7 +22,7 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: [],
-    exclude: ['@drishti/runtime', '@drishti/components'],
+    exclude: ['@nexoraaidrishti/runtime', '@nexoraaidrishti/components'],
   },
   build: {
     target: 'es2022',

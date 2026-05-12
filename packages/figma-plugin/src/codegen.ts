@@ -14,7 +14,7 @@ export function generateDrFile(root: DrNode, opts?: CodegenOptions): string {
   if (addSignals) collectTextNodes(root, textNodes);
 
   const scriptLines: string[] = [
-    `import { signal, computed } from '@drishti/runtime';`,
+    `import { signal, computed } from '@nexoraaidrishti/runtime';`,
   ];
 
   if (addSignals && textNodes.length > 0) {

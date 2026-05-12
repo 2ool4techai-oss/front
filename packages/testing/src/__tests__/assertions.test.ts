@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { signal, computed } from '@drishti/runtime';
+import { signal, computed } from '@nexoraaidrishti/runtime';
 import { expectSignal, setupSignalMatchers } from '../assertions.js';
 
 describe('expectSignal', () => {

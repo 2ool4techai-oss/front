@@ -1,17 +1,17 @@
-# @drishti/runtime
+# @nexoraaidrishti/runtime
 
 Fine-grained reactive signals runtime for the DRISHTI framework — the reactive core powering signals, computed values, effects, and state machines.
 
 ## Install
 
 ```bash
-pnpm add @drishti/runtime
+pnpm add @nexoraaidrishti/runtime
 ```
 
 ## Basic Usage
 
 ```typescript
-import { signal, computed, effect, batch } from '@drishti/runtime';
+import { signal, computed, effect, batch } from '@nexoraaidrishti/runtime';
 
 // Create a reactive signal
 const count = signal(0);

@@ -172,7 +172,7 @@ describe('getIslandRegistry', () => {
 describe('generateIslandBootstrap', () => {
   it('produces correct import lines', () => {
     const result = generateIslandBootstrap(['counter', 'search']);
-    expect(result).toContain(`import { hydrateIslands } from '@drishti/runtime';`);
+    expect(result).toContain(`import { hydrateIslands } from '@nexoraaidrishti/runtime';`);
     expect(result).toContain(`import './counter.island.js';`);
     expect(result).toContain(`import './search.island.js';`);
     expect(result).toContain(`hydrateIslands();`);
@@ -180,7 +180,7 @@ describe('generateIslandBootstrap', () => {
 
   it('handles empty island list', () => {
     const result = generateIslandBootstrap([]);
-    expect(result).toContain(`import { hydrateIslands } from '@drishti/runtime';`);
+    expect(result).toContain(`import { hydrateIslands } from '@nexoraaidrishti/runtime';`);
     expect(result).toContain(`hydrateIslands();`);
     expect(result).not.toContain('.island.js');
   });

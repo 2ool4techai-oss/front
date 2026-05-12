@@ -1,5 +1,5 @@
-import { signal, computed, effect } from '@drishti/runtime';
-import type { Signal } from '@drishti/runtime';
+import { signal, computed, effect } from '@nexoraaidrishti/runtime';
+import type { Signal } from '@nexoraaidrishti/runtime';
 
 export interface PaginationProps {
   total:      number | Signal<number>;  // total items

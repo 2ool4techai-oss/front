@@ -1,7 +1,7 @@
-import { _enableDevMode } from '@drishti/runtime';
+import { _enableDevMode } from '@nexoraaidrishti/runtime';
 import { createPanel } from './panel.js';
 import type { DevToolsOptions, DevToolsHandle } from './panel.js';
-import type { TimeTravelHandle } from '@drishti/runtime';
+import type { TimeTravelHandle } from '@nexoraaidrishti/runtime';
 
 export type { DevToolsOptions, DevToolsHandle, TimeTravelHandle };
 export { createPanel };
@@ -10,7 +10,7 @@ export { createPanel };
 // Call this as the very first thing in your app entry point.
 //
 // Usage:
-//   import { installDevtools } from '@drishti/devtools';
+//   import { installDevtools } from '@nexoraaidrishti/devtools';
 //   const dt = installDevtools({ emotion: myEmotionProcessor });
 //   // Ctrl+Shift+D toggles the panel
 

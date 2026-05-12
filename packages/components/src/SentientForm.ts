@@ -1,6 +1,6 @@
-import { signal, effect, h } from '@drishti/runtime';
-import { sanitizeInput } from '@drishti/runtime';
-import type { EmotionState } from '@drishti/runtime';
+import { signal, effect, h } from '@nexoraaidrishti/runtime';
+import { sanitizeInput } from '@nexoraaidrishti/runtime';
+import type { EmotionState } from '@nexoraaidrishti/runtime';
 
 export interface FormField {
   name: string;

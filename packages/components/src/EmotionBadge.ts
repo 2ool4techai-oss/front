@@ -1,5 +1,5 @@
-import { effect } from '@drishti/runtime';
-import type { EmotionState } from '@drishti/runtime';
+import { effect } from '@nexoraaidrishti/runtime';
+import type { EmotionState } from '@nexoraaidrishti/runtime';
 
 const EMOTION_CONFIG: Record<EmotionState, { label: string; color: string; bg: string; emoji: string }> = {
   calm:        { label: 'Calm',        color: '#065f46', bg: '#ecfdf5',         emoji: '😌' },

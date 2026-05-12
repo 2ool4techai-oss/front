@@ -47,11 +47,11 @@ describe('runDoctor', () => {
       // Create tsconfig.json
       writeFileSync(join(tmpDir, 'tsconfig.json'), JSON.stringify({ compilerOptions: {} }));
 
-      // Create package.json with type: module, @drishti/runtime dep, test script
+      // Create package.json with type: module, @nexoraaidrishti/runtime dep, test script
       writeFileSync(join(tmpDir, 'package.json'), JSON.stringify({
         name: 'test-project',
         type: 'module',
-        dependencies: { '@drishti/runtime': '^0.1.0' },
+        dependencies: { '@nexoraaidrishti/runtime': '^0.1.0' },
         scripts: { test: 'vitest run' },
       }));
 

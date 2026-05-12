@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/eslint-plugin",
+  "name": "@nexoraaidrishti/eslint-plugin",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",

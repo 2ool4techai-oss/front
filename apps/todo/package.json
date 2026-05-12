@@ -8,8 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@drishti/runtime": "workspace:*",
-    "@drishti/components": "workspace:*"
+    "@nexoraaidrishti/runtime": "workspace:*",
+    "@nexoraaidrishti/components": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.4.5",

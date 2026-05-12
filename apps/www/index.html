@@ -117,7 +117,7 @@
 
       <!-- Counter -->
       <div class="code-panel active" id="tab-counter" role="tabpanel">
-        <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+        <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">count</span> = <span class="fn">signal</span>(<span class="num">0</span>);
 <span class="kw">const</span> <span class="var">doubled</span> = <span class="fn">computed</span>(<span class="op">()</span> <span class="op">=&gt;</span> <span class="var">count</span>() <span class="op">*</span> <span class="num">2</span>);
@@ -135,7 +135,7 @@
 
       <!-- Todo -->
       <div class="code-panel" id="tab-todo" role="tabpanel">
-        <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">each</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+        <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">each</span>, <span class="fn">show</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">interface</span> <span class="type">Todo</span> { <span class="attr">id</span>: <span class="type">number</span>; <span class="attr">text</span>: <span class="type">string</span>; <span class="attr">done</span>: <span class="type">boolean</span>; }
 
@@ -165,7 +165,7 @@
 
       <!-- LLM Stream -->
       <div class="code-panel" id="tab-llm" role="tabpanel">
-        <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">mountApp</span>, <span class="fn">createLLMStream</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+        <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">mountApp</span>, <span class="fn">createLLMStream</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">response</span> = <span class="fn">signal</span>(<span class="str">''</span>);
 <span class="kw">const</span> <span class="var">thinking</span> = <span class="fn">signal</span>(<span class="kw">false</span>);
@@ -189,7 +189,7 @@
 
       <!-- State Machine -->
       <div class="code-panel" id="tab-machine" role="tabpanel">
-        <pre><code><span class="kw">import</span> { <span class="fn">createMachine</span>, <span class="fn">h</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+        <pre><code><span class="kw">import</span> { <span class="fn">createMachine</span>, <span class="fn">h</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">traffic</span> = <span class="fn">createMachine</span>({
   <span class="attr">initial</span>: <span class="str">'red'</span>,
@@ -213,7 +213,7 @@
 
       <!-- Collab -->
       <div class="code-panel" id="tab-collab" role="tabpanel">
-        <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">createCollabSession</span>, <span class="fn">h</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+        <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">createCollabSession</span>, <span class="fn">h</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">session</span> = <span class="fn">createCollabSession</span>({
   <span class="attr">userId</span>: <span class="str">'user-'</span> <span class="op">+</span> <span class="type">Math</span>.<span class="fn">random</span>().<span class="fn">toString</span>(<span class="num">36</span>).<span class="fn">slice</span>(<span class="num">2</span>),
@@ -311,59 +311,59 @@
 
     <div class="packages-grid">
       <div class="pkg-card">
-        <div class="pkg-name">@drishti/runtime</div>
+        <div class="pkg-name">@nexoraaidrishti/runtime</div>
         <div class="pkg-desc">Core signals, renderer, state machines, LLM streaming, 40+ production APIs. Zero dependencies.</div>
-        <div class="pkg-install">npm i @drishti/runtime</div>
+        <div class="pkg-install">npm i @nexoraaidrishti/runtime</div>
       </div>
       <div class="pkg-card">
-        <div class="pkg-name">@drishti/components</div>
+        <div class="pkg-name">@nexoraaidrishti/components</div>
         <div class="pkg-desc">20+ accessible components: Button, Modal, Chart, Kanban, CollabCursors, VirtualList.</div>
-        <div class="pkg-install">npm i @drishti/components</div>
+        <div class="pkg-install">npm i @nexoraaidrishti/components</div>
       </div>
       <div class="pkg-card">
-        <div class="pkg-name">@drishti/vite-plugin</div>
+        <div class="pkg-name">@nexoraaidrishti/vite-plugin</div>
         <div class="pkg-desc">.dr single-file components for Vite. Script + template + style with HMR support.</div>
-        <div class="pkg-install">npm i -D @drishti/vite-plugin</div>
+        <div class="pkg-install">npm i -D @nexoraaidrishti/vite-plugin</div>
       </div>
       <div class="pkg-card">
-        <div class="pkg-name">@drishti/testing</div>
+        <div class="pkg-name">@nexoraaidrishti/testing</div>
         <div class="pkg-desc">render(), fireEvent, WCAG 2.2 audit, visual regression, and signal assertions for vitest/jest.</div>
-        <div class="pkg-install">npm i -D @drishti/testing</div>
+        <div class="pkg-install">npm i -D @nexoraaidrishti/testing</div>
       </div>
       <div class="pkg-card">
-        <div class="pkg-name">@drishti/ssr</div>
+        <div class="pkg-name">@nexoraaidrishti/ssr</div>
         <div class="pkg-desc">Streaming SSR with suspend boundaries. Works on Node, Edge, and Cloudflare Workers.</div>
-        <div class="pkg-install">npm i @drishti/ssr</div>
+        <div class="pkg-install">npm i @nexoraaidrishti/ssr</div>
       </div>
       <div class="pkg-card">
-        <div class="pkg-name">@drishti/cli</div>
+        <div class="pkg-name">@nexoraaidrishti/cli</div>
         <div class="pkg-desc">11 commands: create, add, build, dev, analyze, doctor, migrate. Full project management.</div>
-        <div class="pkg-install">npm i -g @drishti/cli</div>
+        <div class="pkg-install">npm i -g @nexoraaidrishti/cli</div>
       </div>
       <div class="pkg-card">
-        <div class="pkg-name">@drishti/figma-plugin</div>
+        <div class="pkg-name">@nexoraaidrishti/figma-plugin</div>
         <div class="pkg-desc">Export Figma frames as .dr files. Layout, colors, and typography preserved precisely.</div>
         <div class="pkg-install">Install via Figma</div>
       </div>
       <div class="pkg-card">
-        <div class="pkg-name">@drishti/electron</div>
+        <div class="pkg-name">@nexoraaidrishti/electron</div>
         <div class="pkg-desc">IPC signal bridge between Electron main and renderer processes — share reactive state across contexts.</div>
-        <div class="pkg-install">npm i @drishti/electron</div>
+        <div class="pkg-install">npm i @nexoraaidrishti/electron</div>
       </div>
       <div class="pkg-card">
-        <div class="pkg-name">@drishti/capacitor</div>
+        <div class="pkg-name">@nexoraaidrishti/capacitor</div>
         <div class="pkg-desc">iOS/Android signals: device storage, network status, haptics, and native camera APIs.</div>
-        <div class="pkg-install">npm i @drishti/capacitor</div>
+        <div class="pkg-install">npm i @nexoraaidrishti/capacitor</div>
       </div>
       <div class="pkg-card">
-        <div class="pkg-name">@drishti/eslint-plugin</div>
+        <div class="pkg-name">@nexoraaidrishti/eslint-plugin</div>
         <div class="pkg-desc">4 rules: no-untracked-effect, prefer-computed, no-signal-in-condition. Catches bugs at write time.</div>
-        <div class="pkg-install">npm i -D @drishti/eslint-plugin</div>
+        <div class="pkg-install">npm i -D @nexoraaidrishti/eslint-plugin</div>
       </div>
       <div class="pkg-card">
-        <div class="pkg-name">@drishti/migrate</div>
+        <div class="pkg-name">@nexoraaidrishti/migrate</div>
         <div class="pkg-desc">Automated codemods from React and Vue. Complexity analysis and migration report included.</div>
-        <div class="pkg-install">npx @drishti/migrate</div>
+        <div class="pkg-install">npx @nexoraaidrishti/migrate</div>
       </div>
       <div class="pkg-card">
         <div class="pkg-name">create-drishti-app</div>
@@ -392,7 +392,7 @@
     </div>
     <div class="ai-code">
       <pre><code><span class="cmt">// Give an AI agent full read/write access to your app state</span>
-<span class="kw">import</span> { <span class="fn">_setSignalWriteHook</span>, <span class="fn">_getDevSignals</span>, <span class="fn">createIntentEngine</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+<span class="kw">import</span> { <span class="fn">_setSignalWriteHook</span>, <span class="fn">_getDevSignals</span>, <span class="fn">createIntentEngine</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="cmt">// Read the full app state at any time</span>
 <span class="kw">const</span> <span class="var">state</span> = <span class="fn">_getDevSignals</span>();

@@ -38,7 +38,7 @@ export function renderIslandPage(
 ): string {
   const islandNames = islands.map(i => i.name);
   const bootstrap   = islandNames.length
-    ? `<script type="module">\nimport { hydrateIslands } from '@drishti/runtime';\n${islandNames.map(n => `// island: ${n}`).join('\n')}\nhydrateIslands();\n</script>`
+    ? `<script type="module">\nimport { hydrateIslands } from '@nexoraaidrishti/runtime';\n${islandNames.map(n => `// island: ${n}`).join('\n')}\nhydrateIslands();\n</script>`
     : '';
 
   return `<!DOCTYPE html>

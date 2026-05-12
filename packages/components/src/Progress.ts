@@ -1,5 +1,5 @@
-import { effect } from '@drishti/runtime';
-import type { Signal } from '@drishti/runtime';
+import { effect } from '@nexoraaidrishti/runtime';
+import type { Signal } from '@nexoraaidrishti/runtime';
 
 export type ProgressVariant = 'default' | 'success' | 'warning' | 'danger';
 export type ProgressSize    = 'xs' | 'sm' | 'md' | 'lg';

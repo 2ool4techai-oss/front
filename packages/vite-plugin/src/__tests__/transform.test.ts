@@ -3,7 +3,7 @@ import { transformDrFile } from '../transform.js';
 
 const FULL_COMPONENT = `
 <script>
-import { signal } from '@drishti/runtime';
+import { signal } from '@nexoraaidrishti/runtime';
 const count = signal(0);
 </script>
 
@@ -26,9 +26,9 @@ describe('transformDrFile', () => {
     expect(result.length).toBeGreaterThan(0);
   });
 
-  it('imports from @drishti/runtime', () => {
+  it('imports from @nexoraaidrishti/runtime', () => {
     const result = transformDrFile(FULL_COMPONENT, 'Counter.dr');
-    expect(result).toContain('@drishti/runtime');
+    expect(result).toContain('@nexoraaidrishti/runtime');
   });
 
   it('removes duplicate runtime import from user script', () => {

@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/capacitor",
+  "name": "@nexoraaidrishti/capacitor",
   "version": "0.1.0",
   "description": "Capacitor mobile adapter for DRISHTI signals",
   "type": "module",

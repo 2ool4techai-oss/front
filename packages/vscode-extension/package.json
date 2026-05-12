@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/vscode-extension",
+  "name": "@nexoraaidrishti/vscode-extension",
   "version": "0.1.0",
   "description": "VS Code extension for DRISHTI — signal hover info, snippets, diagnostics",
   "type": "commonjs",

@@ -1,5 +1,5 @@
-import { effect } from '@drishti/runtime';
-import type { Signal } from '@drishti/runtime';
+import { effect } from '@nexoraaidrishti/runtime';
+import type { Signal } from '@nexoraaidrishti/runtime';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'success';
 export type ButtonSize    = 'xs' | 'sm' | 'md' | 'lg';

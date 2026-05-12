@@ -45,7 +45,7 @@ export function transformReact(code: string, _filename?: string): CodemodResult 
     const match = pattern.exec(result);
     if (match && match.index !== undefined) {
       const from = match[0];
-      const to = "import { signal, effect, computed } from '@drishti/runtime'";
+      const to = "import { signal, effect, computed } from '@nexoraaidrishti/runtime'";
       const lineNum = getLineNumber(result, match.index);
       result = result.replace(pattern, to);
       changes.push({ line: lineNum, from, to });

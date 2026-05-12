@@ -1,4 +1,4 @@
-import { mountApp } from '@drishti/runtime';
+import { mountApp } from '@nexoraaidrishti/runtime';
 import { ShowcaseApp } from './ShowcaseApp.js';
 
 mountApp((container) => {

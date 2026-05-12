@@ -110,7 +110,7 @@ Compiles to TypeScript automatically. See Section 6 of the demo for the live com
 ## Using the Runtime Directly (TypeScript API)
 
 ```ts
-import { signal, computed, effect, connect, h, EmotionProcessor } from '@drishti/runtime';
+import { signal, computed, effect, connect, h, EmotionProcessor } from '@nexoraaidrishti/runtime';
 
 // State
 const count = signal(0);

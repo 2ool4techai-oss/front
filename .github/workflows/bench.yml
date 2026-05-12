@@ -26,7 +26,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run benchmarks
-        run: pnpm --filter @drishti/bench bench 2>/dev/null || echo "Benchmarks not yet runnable in CI"
+        run: pnpm --filter @nexoraaidrishti/bench bench 2>/dev/null || echo "Benchmarks not yet runnable in CI"
 
       - name: Add to job summary
         run: |

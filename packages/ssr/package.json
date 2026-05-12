@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/ssr",
+  "name": "@nexoraaidrishti/ssr",
   "version": "0.1.0",
   "description": "DRISHTI server-side rendering — renderToString + client hydration",
   "type": "module",
@@ -18,7 +18,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@drishti/runtime": "workspace:*"
+    "@nexoraaidrishti/runtime": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.4.5",

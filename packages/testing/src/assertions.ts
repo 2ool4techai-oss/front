@@ -1,4 +1,4 @@
-import type { Signal } from '@drishti/runtime';
+import type { Signal } from '@nexoraaidrishti/runtime';
 
 // ── expectSignal ───────────────────────────────────────────────────────
 

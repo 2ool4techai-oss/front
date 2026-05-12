@@ -7,11 +7,11 @@ export function transformDrFile(source: string, id: string): string {
   const parts: string[] = [];
 
   // Runtime import
-  parts.push(`import { h, effect, signal, computed, batch, show, each } from '@drishti/runtime';`);
+  parts.push(`import { h, effect, signal, computed, batch, show, each } from '@nexoraaidrishti/runtime';`);
 
   // User script
   if (blocks.script) {
-    // Remove any import of @drishti/runtime from user script (we provide it)
+    // Remove any import of @nexoraaidrishti/runtime from user script (we provide it)
     const script = blocks.script.replace(
       /import\s+\{[^}]+\}\s+from\s+['"]@drishti\/runtime['"]\s*;?\n?/g,
       ''

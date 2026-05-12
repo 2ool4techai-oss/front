@@ -29,7 +29,7 @@ export async function measureOps(fn: () => void, durationMs = 100): Promise<numb
 
 export async function runSignalCreationBench(): Promise<BenchResult[]> {
   // Import dynamically to avoid issues in test environment
-  const { signal } = await import('@drishti/runtime');
+  const { signal } = await import('@nexoraaidrishti/runtime');
 
   const createHz = await measureOps(() => { signal(0); });
   const createWithLabelHz = await measureOps(() => {
@@ -45,7 +45,7 @@ export async function runSignalCreationBench(): Promise<BenchResult[]> {
 }
 
 export async function runSignalUpdateBench(): Promise<BenchResult[]> {
-  const { signal, computed, effect } = await import('@drishti/runtime');
+  const { signal, computed, effect } = await import('@nexoraaidrishti/runtime');
 
   const s = signal(0);
   const updateHz = await measureOps(() => { s.set(s() + 1); });
@@ -65,7 +65,7 @@ export async function runSignalUpdateBench(): Promise<BenchResult[]> {
 }
 
 export async function runBatchBench(): Promise<BenchResult[]> {
-  const { signal, batch, effect } = await import('@drishti/runtime');
+  const { signal, batch, effect } = await import('@nexoraaidrishti/runtime');
 
   const signals = Array.from({ length: 10 }, (_, i) => signal(i));
   let effectRuns = 0;

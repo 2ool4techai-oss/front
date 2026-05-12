@@ -82,14 +82,14 @@ export function runDoctor(projectDir: string): DoctorResult {
     checks.push({ name: 'No any types', status: 'warn', message: '`any` types found in package.json scripts' });
   }
 
-  // Check 5: @drishti/runtime is a dependency
+  // Check 5: @nexoraaidrishti/runtime is a dependency
   let hasDrishtiRuntime = false;
   if (existsSync(pkgPath)) {
     try {
       const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8')) as Record<string, unknown>;
       const deps = pkg['dependencies'] as Record<string, unknown> | undefined;
       const devDeps = pkg['devDependencies'] as Record<string, unknown> | undefined;
-      if ((deps && '@drishti/runtime' in deps) || (devDeps && '@drishti/runtime' in devDeps)) {
+      if ((deps && '@nexoraaidrishti/runtime' in deps) || (devDeps && '@nexoraaidrishti/runtime' in devDeps)) {
         hasDrishtiRuntime = true;
       }
     } catch {
@@ -97,9 +97,9 @@ export function runDoctor(projectDir: string): DoctorResult {
     }
   }
   if (hasDrishtiRuntime) {
-    checks.push({ name: '@drishti/runtime dependency', status: 'pass', message: '@drishti/runtime found in dependencies' });
+    checks.push({ name: '@nexoraaidrishti/runtime dependency', status: 'pass', message: '@nexoraaidrishti/runtime found in dependencies' });
   } else {
-    checks.push({ name: '@drishti/runtime dependency', status: 'warn', message: '@drishti/runtime not found in dependencies' });
+    checks.push({ name: '@nexoraaidrishti/runtime dependency', status: 'warn', message: '@nexoraaidrishti/runtime not found in dependencies' });
   }
 
   // Check 6: Build output directory exists (dist/)

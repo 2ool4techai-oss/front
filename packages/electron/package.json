@@ -1,5 +1,5 @@
 {
-  "name": "@drishti/electron",
+  "name": "@nexoraaidrishti/electron",
   "version": "0.1.0",
   "description": "Electron main/renderer signal bridge for DRISHTI",
   "type": "module",

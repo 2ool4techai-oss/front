@@ -37,12 +37,12 @@ jobs:
 
       - name: Publish to npm
         run: |
-          pnpm --filter @drishti/runtime publish --no-git-checks --access public
-          pnpm --filter @drishti/components publish --no-git-checks --access public
-          pnpm --filter @drishti/testing publish --no-git-checks --access public
-          pnpm --filter @drishti/ssr publish --no-git-checks --access public
-          pnpm --filter @drishti/cli publish --no-git-checks --access public
-          pnpm --filter @drishti/vite-plugin publish --no-git-checks --access public
+          pnpm --filter @nexoraaidrishti/runtime publish --no-git-checks --access public
+          pnpm --filter @nexoraaidrishti/components publish --no-git-checks --access public
+          pnpm --filter @nexoraaidrishti/testing publish --no-git-checks --access public
+          pnpm --filter @nexoraaidrishti/ssr publish --no-git-checks --access public
+          pnpm --filter @nexoraaidrishti/cli publish --no-git-checks --access public
+          pnpm --filter @nexoraaidrishti/vite-plugin publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

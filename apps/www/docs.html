@@ -139,17 +139,17 @@ npm run dev</code></pre>
 
       <h2>Add to existing project</h2>
       <p>Install only what you need. The runtime is the only required package — everything else is optional:</p>
-      <pre><code>npm install @drishti/runtime
+      <pre><code>npm install @nexoraaidrishti/runtime
 <span class="cmt"># Optional packages:</span>
-npm install @drishti/components       <span class="cmt"># UI components</span>
-npm install -D @drishti/vite-plugin   <span class="cmt"># .dr file support</span>
-npm install -D @drishti/testing       <span class="cmt"># testing utilities</span></code></pre>
+npm install @nexoraaidrishti/components       <span class="cmt"># UI components</span>
+npm install -D @nexoraaidrishti/vite-plugin   <span class="cmt"># .dr file support</span>
+npm install -D @nexoraaidrishti/testing       <span class="cmt"># testing utilities</span></code></pre>
 
       <h2>Manual Vite setup</h2>
       <p>If you're adding to an existing Vite project, configure the plugin to enable <code>.dr</code> single-file components and HMR signal preservation:</p>
       <pre><code><span class="cmt">// vite.config.ts</span>
 <span class="kw">import</span> { <span class="fn">defineConfig</span> } <span class="kw">from</span> <span class="str">'vite'</span>;
-<span class="kw">import</span> { <span class="fn">drishti</span> } <span class="kw">from</span> <span class="str">'@drishti/vite-plugin'</span>;
+<span class="kw">import</span> { <span class="fn">drishti</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/vite-plugin'</span>;
 
 <span class="kw">export default</span> <span class="fn">defineConfig</span>({
   <span class="attr">plugins</span>: [<span class="fn">drishti</span>()],
@@ -167,7 +167,7 @@ npm install -D @drishti/testing       <span class="cmt"># testing utilities</spa
 }</code></pre>
 
       <div class="callout callout-tip">
-        <strong>Tip:</strong> Run <code>npx @drishti/cli doctor</code> to verify your setup and diagnose any configuration issues.
+        <strong>Tip:</strong> Run <code>npx @nexoraaidrishti/cli doctor</code> to verify your setup and diagnose any configuration issues.
       </div>
     </section>
 
@@ -181,7 +181,7 @@ npm install -D @drishti/testing       <span class="cmt"># testing utilities</spa
 
       <h2>Your first signal</h2>
       <p>Signals are the foundation of DRISHTI. A signal holds a value and notifies all subscribers when it changes. Read by calling it as a function, write with <code>.set()</code>:</p>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">effect</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">effect</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">name</span> = <span class="fn">signal</span>(<span class="str">'world'</span>);
 
@@ -195,7 +195,7 @@ npm install -D @drishti/testing       <span class="cmt"># testing utilities</spa
 
       <h2>Your first component</h2>
       <p>Components are plain functions that return DOM nodes via <code>h()</code>. Reactive expressions in children re-run automatically when signals change:</p>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">count</span> = <span class="fn">signal</span>(<span class="num">0</span>);
 <span class="kw">const</span> <span class="var">noun</span>  = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">count</span>() <span class="op">===</span> <span class="num">1</span> ? <span class="str">'click'</span> : <span class="str">'clicks'</span>);
@@ -219,9 +219,9 @@ npm install -D @drishti/testing       <span class="cmt"># testing utilities</spa
       </div>
 
       <h2>Plugin options</h2>
-      <p>The <code>@drishti/vite-plugin</code> extends Vite with <code>.dr</code> file support, HMR-safe signal preservation, automatic island detection, and optimized production builds:</p>
+      <p>The <code>@nexoraaidrishti/vite-plugin</code> extends Vite with <code>.dr</code> file support, HMR-safe signal preservation, automatic island detection, and optimized production builds:</p>
       <pre><code><span class="kw">import</span> { <span class="fn">defineConfig</span> } <span class="kw">from</span> <span class="str">'vite'</span>;
-<span class="kw">import</span> { <span class="fn">drishti</span> } <span class="kw">from</span> <span class="str">'@drishti/vite-plugin'</span>;
+<span class="kw">import</span> { <span class="fn">drishti</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/vite-plugin'</span>;
 
 <span class="kw">export default</span> <span class="fn">defineConfig</span>({
   <span class="attr">plugins</span>: [
@@ -247,7 +247,7 @@ npm install -D @drishti/testing       <span class="cmt"># testing utilities</spa
       <p>A <code>.dr</code> file has three optional blocks: <code>&lt;script&gt;</code>, <code>&lt;template&gt;</code>, and <code>&lt;style&gt;</code>. The template is compiled to <code>h()</code> calls at build time:</p>
       <pre><code><span class="cmt">&lt;!-- Counter.dr --&gt;</span>
 <span class="kw">&lt;script&gt;</span>
-<span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+<span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 <span class="kw">const</span> <span class="var">count</span>   = <span class="fn">signal</span>(<span class="num">0</span>);
 <span class="kw">const</span> <span class="var">doubled</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">count</span>() <span class="op">*</span> <span class="num">2</span>);
 <span class="kw">&lt;/script&gt;</span>
@@ -275,7 +275,7 @@ npm install -D @drishti/testing       <span class="cmt"># testing utilities</spa
 
       <h2>Creating signals</h2>
       <p>Call <code>signal(initialValue)</code> to create a reactive container. TypeScript infers the type from the initial value:</p>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">count</span>   = <span class="fn">signal</span>(<span class="num">0</span>);
 <span class="kw">const</span> <span class="var">name</span>    = <span class="fn">signal</span>(<span class="str">'Alice'</span>);
@@ -304,7 +304,7 @@ console.<span class="fn">log</span>(<span class="var">count</span>());     <span
 
       <h2>Untracked reads</h2>
       <p>Read a signal inside an effect without creating a dependency using <code>untrack()</code>:</p>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">effect</span>, <span class="fn">untrack</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">effect</span>, <span class="fn">untrack</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="fn">effect</span>(() <span class="op">=&gt;</span> {
   <span class="cmt">// re-runs when `a` changes, NOT when `b` changes</span>
@@ -324,7 +324,7 @@ console.<span class="fn">log</span>(<span class="var">count</span>());     <span
 
       <h2>Basic derived value</h2>
       <p>Pass a function to <code>computed()</code>. Any signal reads inside become dependencies. The result is lazily evaluated and cached:</p>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">firstName</span> = <span class="fn">signal</span>(<span class="str">'Jane'</span>);
 <span class="kw">const</span> <span class="var">lastName</span>  = <span class="fn">signal</span>(<span class="str">'Doe'</span>);
@@ -357,7 +357,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
 
       <h2>Basic effect</h2>
       <p>An effect runs immediately on creation, then re-runs whenever a signal it reads changes. Dependencies are tracked automatically:</p>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">effect</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">effect</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">theme</span> = <span class="fn">signal</span>(<span class="str">'dark'</span>);
 
@@ -394,7 +394,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
 
       <h2>Batching multiple writes</h2>
       <p>Without batching, each <code>.set()</code> triggers an immediate flush. Wrapping in <code>batch()</code> defers all notifications until the block returns:</p>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">effect</span>, <span class="fn">batch</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">effect</span>, <span class="fn">batch</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">x</span>   = <span class="fn">signal</span>(<span class="num">1</span>);
 <span class="kw">const</span> <span class="var">y</span>   = <span class="fn">signal</span>(<span class="num">2</span>);
@@ -420,7 +420,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>createStore</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">createStore</span>, <span class="fn">effect</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createStore</span>, <span class="fn">effect</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">user</span> = <span class="fn">createStore</span>({
   <span class="attr">name</span>: <span class="str">'Alice'</span>,
@@ -443,7 +443,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>Labeling signals</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">label</span>, <span class="fn">_getDevSignals</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">label</span>, <span class="fn">_getDevSignals</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">count</span>  = <span class="fn">label</span>(<span class="fn">signal</span>(<span class="num">0</span>),    <span class="str">'counter/count'</span>);
 <span class="kw">const</span> <span class="var">filter</span> = <span class="fn">label</span>(<span class="fn">signal</span>(<span class="str">'all'</span>), <span class="str">'todos/filter'</span>);
@@ -463,7 +463,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
 
       <h2>The h() function</h2>
       <p><code>h(tag, attrs, ...children)</code> creates a DOM node. Attribute values and children can be signals or reactive functions — they patch the DOM directly when dependencies change:</p>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">active</span>    = <span class="fn">signal</span>(<span class="kw">false</span>);
 <span class="kw">const</span> <span class="var">labelText</span> = <span class="fn">signal</span>(<span class="str">'Click me'</span>);
@@ -485,7 +485,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>show() — conditional rendering</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">show</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">show</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">isLoggedIn</span> = <span class="fn">signal</span>(<span class="kw">false</span>);
 
@@ -497,7 +497,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
 
       <h2>each() — keyed list rendering</h2>
       <p>Efficiently re-renders only the items that changed. Provide a key function to identify stable items:</p>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">each</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">each</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">items</span> = <span class="fn">signal</span>([
   { <span class="attr">id</span>: <span class="num">1</span>, <span class="attr">name</span>: <span class="str">'Alpha'</span> },
@@ -520,7 +520,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>Using portal()</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">portal</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">portal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">open</span> = <span class="fn">signal</span>(<span class="kw">false</span>);
 
@@ -542,7 +542,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>Mounting and unmounting</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">mountApp</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 <span class="kw">import</span> { <span class="type">App</span> } <span class="kw">from</span> <span class="str">'./App'</span>;
 
 <span class="kw">const</span> <span class="var">dispose</span> = <span class="fn">mountApp</span>(<span class="type">App</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);
@@ -561,7 +561,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
 
       <h2>Creating a machine</h2>
       <p>Pass a config object with an <code>initial</code> state and a <code>states</code> map. Each state defines its transitions under <code>on</code>:</p>
-      <pre><code><span class="kw">import</span> { <span class="fn">createMachine</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createMachine</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">auth</span> = <span class="fn">createMachine</span>({
   <span class="attr">initial</span>: <span class="str">'idle'</span>,
@@ -610,7 +610,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
 
       <h2>enableTimeTravel</h2>
       <p>Call <code>enableTimeTravel()</code> before mounting your app. All subsequent signal writes are recorded in a ring buffer:</p>
-      <pre><code><span class="kw">import</span> { <span class="fn">enableTimeTravel</span>, <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">enableTimeTravel</span>, <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">tt</span>    = <span class="fn">enableTimeTravel</span>({ <span class="attr">maxEntries</span>: <span class="num">100</span> });
 <span class="kw">const</span> <span class="var">count</span> = <span class="fn">signal</span>(<span class="num">0</span>);
@@ -644,7 +644,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
 
       <h2>createResource</h2>
       <p><code>createResource</code> takes a fetcher function and returns an object with reactive <code>data</code>, <code>loading</code>, and <code>error</code> signals. The fetcher re-runs when its signal dependencies change:</p>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">createResource</span>, <span class="fn">h</span>, <span class="fn">show</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">createResource</span>, <span class="fn">h</span>, <span class="fn">show</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">userId</span> = <span class="fn">signal</span>(<span class="num">1</span>);
 <span class="kw">const</span> <span class="var">user</span>   = <span class="fn">createResource</span>(
@@ -668,7 +668,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>createQuery</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">createQuery</span>, <span class="fn">invalidateQuery</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">createQuery</span>, <span class="fn">invalidateQuery</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">page</span>  = <span class="fn">signal</span>(<span class="num">1</span>);
 <span class="kw">const</span> <span class="var">posts</span> = <span class="fn">createQuery</span>(
@@ -690,7 +690,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>createForm</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">createForm</span>, <span class="fn">h</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createForm</span>, <span class="fn">h</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">form</span> = <span class="fn">createForm</span>({
   <span class="attr">email</span>:    { <span class="attr">initial</span>: <span class="str">''</span>, <span class="attr">validate</span>: <span class="var">v</span> <span class="op">=&gt;</span> <span class="var">v</span>.<span class="fn">includes</span>(<span class="str">'@'</span>) || <span class="str">'Invalid email'</span> },
@@ -716,7 +716,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>persistSignal</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">persistSignal</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">persistSignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">theme</span> = <span class="fn">signal</span><span class="op">&lt;</span><span class="str">'light'</span> <span class="op">|</span> <span class="str">'dark'</span><span class="op">&gt;</span>(<span class="str">'dark'</span>);
 
@@ -737,7 +737,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>createCollabSession</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">createCollabSession</span>, <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createCollabSession</span>, <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">session</span> = <span class="fn">createCollabSession</span>({
   <span class="attr">room</span>:     <span class="str">'doc-42'</span>,
@@ -762,7 +762,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>connectWS</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">connectWS</span>, <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">connectWS</span>, <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">price</span> = <span class="fn">signal</span>(<span class="num">0</span>);
 
@@ -783,7 +783,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>createLLMStream</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">createLLMStream</span>, <span class="fn">createThinkingState</span>, <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createLLMStream</span>, <span class="fn">createThinkingState</span>, <span class="fn">signal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">response</span> = <span class="fn">signal</span>(<span class="str">''</span>);
 <span class="kw">const</span> <span class="var">thinking</span> = <span class="fn">createThinkingState</span>();
@@ -812,7 +812,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>createSSESignal</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">createSSESignal</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createSSESignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">deployStatus</span> = <span class="fn">createSSESignal</span>(<span class="str">'/api/deploy/status'</span>, {
   <span class="attr">initialValue</span>: <span class="str">'idle'</span>,
@@ -830,7 +830,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>createAuditLog</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">createAuditLog</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createAuditLog</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">audit</span> = <span class="fn">createAuditLog</span>({
   <span class="attr">maxEntries</span>: <span class="num">1000</span>,
@@ -848,7 +848,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>enableHIPAA</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">enableHIPAA</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">enableHIPAA</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="fn">enableHIPAA</span>({
   <span class="attr">scrub</span>: [<span class="str">'ssn'</span>, <span class="str">'email'</span>, <span class="str">'phone'</span>, <span class="str">'creditCard'</span>],
@@ -866,7 +866,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>createConsentManager</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">createConsentManager</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createConsentManager</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">consent</span> = <span class="fn">createConsentManager</span>({
   <span class="attr">categories</span>: [<span class="str">'necessary'</span>, <span class="str">'analytics'</span>, <span class="str">'marketing'</span>],
@@ -884,7 +884,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>createCSP</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">createCSP</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createCSP</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">csp</span> = <span class="fn">createCSP</span>({
   <span class="attr">directives</span>: {
@@ -905,7 +905,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>createRUM</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">createRUM</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createRUM</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">rum</span> = <span class="fn">createRUM</span>({
   <span class="attr">onVital</span>: (<span class="var">metric</span>) <span class="op">=&gt;</span> <span class="fn">sendToAnalytics</span>(<span class="var">metric</span>),
@@ -922,7 +922,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>createOtelTracer</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">createOtelTracer</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">createOtelTracer</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="fn">createOtelTracer</span>({
   <span class="attr">endpoint</span>:    <span class="str">'https://otel-collector.example.com/v1/traces'</span>,
@@ -941,7 +941,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>render() and fireEvent</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">render</span>, <span class="fn">fireEvent</span>, <span class="fn">waitFor</span> } <span class="kw">from</span> <span class="str">'@drishti/testing'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">render</span>, <span class="fn">fireEvent</span>, <span class="fn">waitFor</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/testing'</span>;
 <span class="kw">import</span> { <span class="type">Counter</span> } <span class="kw">from</span> <span class="str">'./Counter'</span>;
 <span class="kw">import</span> { <span class="fn">describe</span>, <span class="fn">it</span>, <span class="fn">expect</span> } <span class="kw">from</span> <span class="str">'vitest'</span>;
 
@@ -970,7 +970,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>auditA11y and assertA11y</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">render</span>, <span class="fn">auditA11y</span>, <span class="fn">assertA11y</span> } <span class="kw">from</span> <span class="str">'@drishti/testing'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">render</span>, <span class="fn">auditA11y</span>, <span class="fn">assertA11y</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/testing'</span>;
 <span class="kw">import</span> { <span class="type">LoginForm</span> } <span class="kw">from</span> <span class="str">'./LoginForm'</span>;
 
 <span class="fn">it</span>(<span class="str">'passes WCAG 2.2'</span>, <span class="kw">async</span> () <span class="op">=&gt;</span> {
@@ -993,8 +993,8 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>takeSnapshot and assertVisualMatch</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">render</span>, <span class="fn">assertVisualMatch</span> } <span class="kw">from</span> <span class="str">'@drishti/testing'</span>;
-<span class="kw">import</span> { <span class="type">Button</span> } <span class="kw">from</span> <span class="str">'@drishti/components'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">render</span>, <span class="fn">assertVisualMatch</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/testing'</span>;
+<span class="kw">import</span> { <span class="type">Button</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/components'</span>;
 
 <span class="fn">it</span>(<span class="str">'button matches baseline'</span>, <span class="kw">async</span> () <span class="op">=&gt;</span> {
   <span class="kw">const</span> { <span class="var">el</span> } = <span class="fn">render</span>(() <span class="op">=&gt;</span> <span class="type">Button</span>({ <span class="attr">label</span>: <span class="str">'Submit'</span> }));
@@ -1011,8 +1011,8 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>expectSignal</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">expectSignal</span> } <span class="kw">from</span> <span class="str">'@drishti/testing'</span>;
-<span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">expectSignal</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/testing'</span>;
+<span class="kw">import</span> { <span class="fn">signal</span>, <span class="fn">computed</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">count</span>  = <span class="fn">signal</span>(<span class="num">0</span>);
 <span class="kw">const</span> <span class="var">double</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">count</span>() <span class="op">*</span> <span class="num">2</span>);
@@ -1033,7 +1033,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>generateVercelConfig</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">generateVercelConfig</span>, <span class="fn">generateVercelJson</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">generateVercelConfig</span>, <span class="fn">generateVercelJson</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">config</span> = <span class="fn">generateVercelConfig</span>({
   <span class="attr">ssr</span>:     <span class="kw">true</span>,
@@ -1058,7 +1058,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>generateNetlifyConfig</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">generateNetlifyConfig</span>, <span class="fn">generateNetlifyToml</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">generateNetlifyConfig</span>, <span class="fn">generateNetlifyToml</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">cfg</span> = <span class="fn">generateNetlifyConfig</span>({ <span class="attr">ssr</span>: <span class="kw">true</span>, <span class="attr">edge</span>: <span class="kw">true</span> });
 <span class="fn">generateNetlifyToml</span>(<span class="var">cfg</span>); <span class="cmt">// writes netlify.toml</span></code></pre>
@@ -1073,7 +1073,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>generateCloudflareConfig</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">generateCloudflareConfig</span>, <span class="fn">generateWranglerToml</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">generateCloudflareConfig</span>, <span class="fn">generateWranglerToml</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">cfg</span> = <span class="fn">generateCloudflareConfig</span>({
   <span class="attr">kvBindings</span>:  [<span class="str">'SESSION'</span>, <span class="str">'CACHE'</span>],
@@ -1091,7 +1091,7 @@ console.<span class="fn">log</span>(<span class="var">fullName</span>()); <span 
       </div>
 
       <h2>createEdgeHandler</h2>
-      <pre><code><span class="kw">import</span> { <span class="fn">detectPlatform</span>, <span class="fn">createEdgeHandler</span> } <span class="kw">from</span> <span class="str">'@drishti/runtime'</span>;
+      <pre><code><span class="kw">import</span> { <span class="fn">detectPlatform</span>, <span class="fn">createEdgeHandler</span> } <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
 
 <span class="kw">const</span> <span class="var">platform</span> = <span class="fn">detectPlatform</span>();
 <span class="cmt">// → 'vercel' | 'netlify' | 'cloudflare' | 'deno' | 'node'</span>
