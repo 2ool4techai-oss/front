@@ -203,3 +203,55 @@ export type { CSPHandle, CSPOptions, CSPDirectives } from './csp.js';
 // ── Cloudflare D1/KV Signals ──────────────────────────────────────────
 export { createD1Signal, createKVSignal } from './cloudflare.js';
 export type { D1SignalHandle, D1SignalOptions, D1Database, KVSignalHandle, KVSignalOptions, KVNamespace } from './cloudflare.js';
+
+// ── AI Component Generation ───────────────────────────────────────────
+export { generate, generateSync } from './generate.js';
+export type { GenerateOptions, GenerateResult } from './generate.js';
+
+// ── Signal Permissions ────────────────────────────────────────────────
+export { withPermissions, getAuditLog, clearAuditLog, setAIAgent, getAIAgent, PermissionError } from './permissions.js';
+export type { AIAccessLevel, SignalPermissions, WrappedSignal, AuditEntry } from './permissions.js';
+
+// ── Voice Signals ─────────────────────────────────────────────────────
+export { createVoiceSignal, voiceControl } from './voice.js';
+export type { VoiceSignalOptions, VoiceSignal } from './voice.js';
+
+// ── Natural Language Queries ──────────────────────────────────────────
+export { drQuery, registerQueryable, getQueryRegistry, queryLocally } from './nlquery.js';
+export type { NLQueryResult, NLQueryOptions } from './nlquery.js';
+
+// ── Semantic Signals ──────────────────────────────────────────────────
+export { semanticSignal, describeAppState, getSemanticRegistry } from './semantic.js';
+export type { SemanticMeta, SemanticSignalType } from './semantic.js';
+
+// ── Offline-First Signals ─────────────────────────────────────────────
+export { offlineSignal, isOnline, onceOnline } from './offline.js';
+export type { OfflineSignalOptions, OfflineSignalType } from './offline.js';
+
+// ── Predictive Routing ────────────────────────────────────────────────
+export { createPredictiveRouter } from './predictive.js';
+export type { PredictiveOptions, PredictiveRouter } from './predictive.js';
+
+// ── AI Test Generation ────────────────────────────────────────────────
+export { generateTestsForComponent, generateSignalTests } from './testgen.js';
+export type { TestSpec } from './testgen.js';
+
+// ── Screen Schema / UI State Capture ─────────────────────────────────
+export { captureScreenSchema, registerSchemaSignal, restoreFromSchema, schemaToPrompt } from './schema.js';
+export type { ScreenSchema } from './schema.js';
+
+// ── AI Audit Trail ────────────────────────────────────────────────────
+export { createAITrace, globalTrace } from './aitrace.js';
+export type { AITraceEntry, AITrace, AITraceOptions } from './aitrace.js';
+
+// ── Signal-based Code Splitting ───────────────────────────────────────
+export { lazySignal, splitOn, prefetchWhen } from './lazysplit.js';
+export type { LazySignalOptions, LazyStatus, LazySignalType } from './lazysplit.js';
+
+// ── Multi-Modal Input ─────────────────────────────────────────────────
+export { createMultiModalInput, adaptToModality } from './multimodal.js';
+export type { InputModality, MultiModalOptions, MultiModalInput } from './multimodal.js';
+
+// ── Cross-Session Adaptive Signals ────────────────────────────────────
+export { adaptiveSignal, createLearningProfile } from './crosssession.js';
+export type { LearningProfile, CrossSessionOptions, LearningProfileStore, AdaptiveSignalType } from './crosssession.js';

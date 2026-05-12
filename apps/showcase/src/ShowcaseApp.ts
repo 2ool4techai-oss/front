@@ -263,6 +263,10 @@ export function ShowcaseApp(): HTMLElement {
     PerformanceSection(),
     CollabSection(),
     AdaptiveUISection(),
+    AIGenerateSection(),
+    VoiceSignalSection(),
+    PermissionsSection(),
+    MultiModalSection(),
     FooterSection(),
   );
 
@@ -1226,11 +1230,237 @@ function AdaptiveUISection(): HTMLElement {
 }
 
 // ── Footer ─────────────────────────────────────────────────────────────
+// ── AI Generate Section ────────────────────────────────────────────────
+function AIGenerateSection(): HTMLElement {
+  const section = h('section', { class: 'section', id: 'ai-generate' },
+    h('h2', { class: 'section-title' }, '🪄 AI Component Generation'),
+    h('p', { class: 'section-desc' },
+      'Type a description and DRISHTI generates a live reactive component — no build step, no boilerplate.',
+    ),
+  );
+
+  const inputEl = document.createElement('input');
+  inputEl.type = 'text';
+  inputEl.placeholder = 'e.g. "a counter with increment and decrement" …';
+  inputEl.value = 'a counter with increment and decrement';
+  inputEl.style.cssText = 'width:100%;padding:10px 14px;border:1.5px solid #6366f1;border-radius:8px;font-size:15px;font-family:inherit;background:#18181b;color:#e2e8f0;box-sizing:border-box;outline:none';
+
+  const preview = h('div', { style: 'min-height:80px;padding:16px;background:#18181b;border-radius:10px;border:1px solid #2d2d3f;margin-top:12px;display:flex;align-items:center;justify-content:center' });
+  const codeEl  = h('pre', { style: 'background:#0f0f1a;padding:14px;border-radius:8px;overflow:auto;font-size:12px;color:#a5b4fc;margin-top:10px;max-height:140px' });
+
+  import('@nexoraaidrishti/runtime').then(({ generateSync }) => {
+    const render = () => {
+      const desc = inputEl.value.trim() || 'counter';
+      const result = generateSync(desc);
+      preview.innerHTML = '';
+      try { preview.appendChild(result.component()); } catch { preview.textContent = 'Preview unavailable in this browser.'; }
+      codeEl.textContent = result.code.trim().slice(0, 400) + (result.code.length > 400 ? '\n…' : '');
+    };
+    inputEl.addEventListener('input', () => render());
+    render();
+  });
+
+  const demos = h('div', { style: 'display:flex;flex-wrap:wrap;gap:8px;margin:12px 0' });
+  ['counter', 'todo list', 'form with name and email', 'toggle switch', 'range slider'].forEach(desc => {
+    const btn = h('button', {
+      style: 'padding:5px 12px;border-radius:20px;border:1px solid #4f46e5;background:transparent;color:#a5b4fc;cursor:pointer;font-size:13px',
+      onclick: () => { inputEl.value = desc; inputEl.dispatchEvent(new Event('input')); },
+    }, desc);
+    demos.appendChild(btn);
+  });
+
+  section.appendChild(h('div', { class: 'demo-box' },
+    h('p', { style: 'font-size:13px;color:#94a3b8;margin:0 0 8px' }, 'Try a preset:'),
+    demos,
+    inputEl,
+    preview,
+    h('p', { style: 'font-size:12px;color:#64748b;margin:6px 0 4px' }, 'Generated code:'),
+    codeEl,
+  ));
+  return section;
+}
+
+// ── Voice Signal Section ───────────────────────────────────────────────
+function VoiceSignalSection(): HTMLElement {
+  const section = h('section', { class: 'section', id: 'voice-signal' },
+    h('h2', { class: 'section-title' }, '🎤 Voice Signals'),
+    h('p', { class: 'section-desc' },
+      'Web Speech API as first-class reactive signals. Transcript auto-updates the UI with zero wiring.',
+    ),
+  );
+
+  const statusEl  = h('span', { style: 'font-size:13px;color:#64748b' }, 'Status: idle');
+  const transEl   = h('p',   { style: 'min-height:40px;font-size:18px;color:#e2e8f0;margin:10px 0;padding:10px;background:#18181b;border-radius:8px;border:1px solid #2d2d3f' }, 'Transcript will appear here…');
+  const historyEl = h('ul',  { style: 'list-style:none;padding:0;margin:0;max-height:140px;overflow:auto' });
+
+  let voiceSig: any = null;
+  const startBtn = h('button', { class: 'demo-btn', style: 'background:#22c55e', onclick: () => {
+    if (!voiceSig?.supported) { transEl.textContent = '⚠️ SpeechRecognition not supported in this browser (try Chrome).'; return; }
+    voiceSig.start();
+  } }, '▶ Start');
+  const stopBtn = h('button', { class: 'demo-btn', style: 'background:#ef4444;margin-left:8px', onclick: () => voiceSig?.stop() }, '■ Stop');
+
+  import('@nexoraaidrishti/runtime').then(({ createVoiceSignal, effect }) => {
+    voiceSig = createVoiceSignal({ lang: 'en-US', continuous: true });
+    if (!voiceSig.supported) statusEl.textContent = 'Status: unsupported (Chrome/Edge only)';
+
+    effect(() => {
+      transEl.textContent = voiceSig.transcript() || 'Transcript will appear here…';
+      statusEl.textContent = voiceSig.listening() ? 'Status: 🔴 listening…' : 'Status: idle';
+    });
+
+    voiceSig.onFinal?.((text: string) => {
+      const li = h('li', { style: 'padding:4px 0;border-bottom:1px solid #2d2d3f;font-size:13px;color:#94a3b8' }, `"${text}"`);
+      historyEl.prepend(li);
+    });
+  });
+
+  section.appendChild(h('div', { class: 'demo-box' },
+    h('div', { style: 'display:flex;align-items:center;gap:12px;margin-bottom:10px' }, startBtn, stopBtn, statusEl),
+    transEl,
+    h('p', { style: 'font-size:12px;color:#64748b;margin:8px 0 4px' }, 'Recognised phrases:'),
+    historyEl,
+    h('pre', { style: 'background:#0f0f1a;padding:12px;border-radius:8px;font-size:12px;color:#a5b4fc;margin-top:10px' },
+      `const voice = createVoiceSignal({ lang: 'en-US' });\n// voice.transcript() — reactive signal\n// voice.listening()  — boolean signal\nvoice.start();`,
+    ),
+  ));
+  return section;
+}
+
+// ── Permissions Section ────────────────────────────────────────────────
+function PermissionsSection(): HTMLElement {
+  const section = h('section', { class: 'section', id: 'permissions' },
+    h('h2', { class: 'section-title' }, '🔒 Signal Permissions'),
+    h('p', { class: 'section-desc' },
+      'Fine-grained access control on any signal. Restrict AI agents from reading sensitive state or writing critical values.',
+    ),
+  );
+
+  const logEl = h('ul', { style: 'list-style:none;padding:0;margin:0;max-height:200px;overflow:auto;font-size:13px' });
+  const addLog = (msg: string, color = '#94a3b8') => {
+    const li = h('li', { style: `padding:4px 0;border-bottom:1px solid #2d2d3f;color:${color}` }, msg);
+    logEl.prepend(li);
+  };
+
+  import('@nexoraaidrishti/runtime').then(({ signal, withPermissions, setAIAgent, clearAuditLog, getAuditLog }) => {
+    clearAuditLog();
+
+    const salary    = signal(95000);
+    const theme     = signal('dark');
+
+    const guardedSalary = withPermissions(salary, { aiAccess: 'none',      audit: true });
+    const guardedTheme  = withPermissions(theme,  { aiAccess: 'read-only', audit: true });
+
+    const demoBtn = (label: string, color: string, fn: () => void) =>
+      h('button', { class: 'demo-btn', style: `background:${color};margin:4px`, onclick: () => { fn(); } }, label);
+
+    const btns = [
+      demoBtn('AI reads salary (blocked)', '#ef4444', () => {
+        setAIAgent('ai-agent');
+        try { guardedSalary(); addLog('❌ AI read salary — should not reach here', '#f87171'); }
+        catch (e: any) { addLog(`🛡 Blocked: ${e.message}`, '#fbbf24'); }
+        setAIAgent(null);
+      }),
+      demoBtn('Human reads salary (allowed)', '#22c55e', () => {
+        const v = guardedSalary();
+        addLog(`✅ Human read salary: ₹${v.toLocaleString()}`, '#4ade80');
+      }),
+      demoBtn('AI reads theme (allowed)', '#3b82f6', () => {
+        setAIAgent('ai-agent');
+        const v = guardedTheme();
+        addLog(`✅ AI read theme: "${v}"`, '#60a5fa');
+        setAIAgent(null);
+      }),
+      demoBtn('AI writes theme (blocked)', '#ef4444', () => {
+        setAIAgent('ai-agent');
+        try { guardedTheme.set('light'); addLog('❌ AI wrote theme — should not reach here', '#f87171'); }
+        catch (e: any) { addLog(`🛡 Blocked write: ${e.message}`, '#fbbf24'); }
+        setAIAgent(null);
+      }),
+      demoBtn('Show audit log', '#8b5cf6', () => {
+        const entries = getAuditLog();
+        addLog(`📋 Audit log: ${entries.length} entries`, '#c4b5fd');
+        entries.slice(-3).forEach(e => addLog(`  ${e.type} by ${e.actor ?? 'human'} at ${new Date(e.ts).toLocaleTimeString()}`, '#818cf8'));
+      }),
+    ];
+
+    section.querySelector('.demo-box')?.appendChild(
+      h('div', { style: 'display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px' }, ...btns),
+    );
+    addLog('Signals initialised with permissions');
+  });
+
+  section.appendChild(h('div', { class: 'demo-box' },
+    h('p', { style: 'font-size:13px;color:#94a3b8;margin:0 0 8px' }, 'Try the access control buttons:'),
+    logEl,
+    h('pre', { style: 'background:#0f0f1a;padding:12px;border-radius:8px;font-size:12px;color:#a5b4fc;margin-top:10px' },
+      `const salary = withPermissions(signal(95000), {\n  aiAccess: 'none',      // AI cannot read\n});\nconst theme = withPermissions(signal('dark'), {\n  aiAccess: 'read-only', // AI can read, not write\n  audit: true,           // full audit trail\n});`,
+    ),
+  ));
+  return section;
+}
+
+// ── Multi-Modal Input Section ──────────────────────────────────────────
+function MultiModalSection(): HTMLElement {
+  const section = h('section', { class: 'section', id: 'multimodal' },
+    h('h2', { class: 'section-title' }, '🖐 Multi-Modal Input'),
+    h('p', { class: 'section-desc' },
+      'Detect touch, mouse, keyboard, or voice — and adapt the entire UI reactively to the active input mode.',
+    ),
+  );
+
+  const modeEl = h('div', { style: 'font-size:48px;text-align:center;padding:20px;transition:all .3s' }, '🖱️');
+  const labelEl = h('p', { style: 'text-align:center;font-size:16px;color:#94a3b8;margin:0' }, 'mouse');
+  const descEl  = h('p', { style: 'text-align:center;font-size:13px;color:#64748b;margin:4px 0 0' }, 'Interact with the page to change mode');
+
+  const modeIcons: Record<string, string> = {
+    mouse: '🖱️', touch: '👆', keyboard: '⌨️', voice: '🎤', pen: '✏️',
+  };
+  const modeDesc: Record<string, string> = {
+    mouse:    'Mouse detected — showing hover states, tooltips, and pointer-optimised layouts.',
+    touch:    'Touch detected — larger tap targets, swipe gestures, bottom nav.',
+    keyboard: 'Keyboard detected — showing focus rings, shortcut hints, tabbing order.',
+    voice:    'Voice detected — microphone UI, transcript display, command suggestions.',
+    pen:      'Pen/stylus detected — drawing canvas, pressure sensitivity enabled.',
+  };
+
+  const btns = h('div', { style: 'display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px' });
+
+  import('@nexoraaidrishti/runtime').then(({ createMultiModalInput, effect }) => {
+    const m = createMultiModalInput({ autoDetect: true });
+
+    effect(() => {
+      const mode = m.modality();
+      modeEl.textContent = modeIcons[mode] ?? '❓';
+      labelEl.textContent = mode;
+      descEl.textContent  = modeDesc[mode] ?? '';
+    });
+
+    (['mouse','touch','keyboard','voice','pen'] as const).forEach(mode => {
+      const btn = h('button', {
+        class: 'demo-btn',
+        style: 'padding:6px 14px;font-size:13px',
+        onclick: () => m.setModality(mode),
+      }, modeIcons[mode] + ' ' + mode);
+      btns.appendChild(btn);
+    });
+  });
+
+  section.appendChild(h('div', { class: 'demo-box' },
+    modeEl, labelEl, descEl, btns,
+    h('pre', { style: 'background:#0f0f1a;padding:12px;border-radius:8px;font-size:12px;color:#a5b4fc;margin-top:16px' },
+      `const m = createMultiModalInput({ autoDetect: true });\n// m.modality() → 'touch' | 'mouse' | 'keyboard' | 'voice' | 'pen'\nconst buttonSize = adaptToModality(m, {\n  touch: '48px', mouse: '32px', keyboard: '36px',\n});`,
+    ),
+  ));
+  return section;
+}
+
+// ── Footer ─────────────────────────────────────────────────────────────
 function FooterSection(): HTMLElement {
   return h('footer', { class: 'showcase-footer' },
     h('p', {}, h('strong', {}, 'DRISHTI'), ' — The AI-Native Frontend Framework'),
     h('p', { style: 'margin-top: 8px' },
-      '974 tests · 17 packages · MIT License · ',
+      '631 tests · 54 test files · 16 Tier 1-3 features · MIT License · ',
       h('a', { href: 'https://github.com/2ool4techai-oss/front' }, 'GitHub'),
     ),
   );
