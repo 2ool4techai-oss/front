@@ -14,14 +14,14 @@ importers:
 
   apps/demo:
     dependencies:
-      '@drishti/components':
+      '@nexoraaidrishti/components':
         specifier: workspace:*
         version: link:../../packages/components
-      '@drishti/runtime':
+      '@nexoraaidrishti/runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
     devDependencies:
-      '@drishti/compiler':
+      '@nexoraaidrishti/compiler':
         specifier: workspace:*
         version: link:../../packages/compiler
       typescript:
@@ -33,10 +33,10 @@ importers:
 
   apps/docs:
     dependencies:
-      '@drishti/components':
+      '@nexoraaidrishti/components':
         specifier: workspace:*
         version: link:../../packages/components
-      '@drishti/runtime':
+      '@nexoraaidrishti/runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
     devDependencies:
@@ -49,10 +49,10 @@ importers:
 
   apps/showcase:
     dependencies:
-      '@drishti/components':
+      '@nexoraaidrishti/components':
         specifier: workspace:*
         version: link:../../packages/components
-      '@drishti/runtime':
+      '@nexoraaidrishti/runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
     devDependencies:
@@ -65,10 +65,10 @@ importers:
 
   apps/todo:
     dependencies:
-      '@drishti/components':
+      '@nexoraaidrishti/components':
         specifier: workspace:*
         version: link:../../packages/components
-      '@drishti/runtime':
+      '@nexoraaidrishti/runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
     devDependencies:
@@ -81,7 +81,7 @@ importers:
 
   packages/bench:
     dependencies:
-      '@drishti/runtime':
+      '@nexoraaidrishti/runtime':
         specifier: workspace:*
         version: link:../runtime
       tinybench:
@@ -127,7 +127,7 @@ importers:
 
   packages/components:
     dependencies:
-      '@drishti/runtime':
+      '@nexoraaidrishti/runtime':
         specifier: workspace:*
         version: link:../runtime
     devDependencies:
@@ -155,7 +155,7 @@ importers:
 
   packages/devtools:
     dependencies:
-      '@drishti/runtime':
+      '@nexoraaidrishti/runtime':
         specifier: workspace:*
         version: link:../runtime
     devDependencies:
@@ -222,7 +222,7 @@ importers:
 
   packages/ssr:
     dependencies:
-      '@drishti/runtime':
+      '@nexoraaidrishti/runtime':
         specifier: workspace:*
         version: link:../runtime
     devDependencies:
@@ -244,7 +244,7 @@ importers:
 
   packages/testing:
     dependencies:
-      '@drishti/runtime':
+      '@nexoraaidrishti/runtime':
         specifier: workspace:*
         version: link:../runtime
     devDependencies:
