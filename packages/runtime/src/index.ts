@@ -352,9 +352,8 @@ export {
 } from './device-signals.js';
 export type { BatteryInfo, NetworkInfo, GeoInfo, GeoSignalHandle, OrientationInfo, ClipboardHandle, WakeLockHandle, ViewportInfo } from './device-signals.js';
 
-// ── Reactive i18n ─────────────────────────────────────────────────────
-export { createI18n } from './i18n.js';
-export type { I18nOptions, I18nHandle, Translations, LocaleCode } from './i18n.js';
+// ── Reactive i18n (additional types) ─────────────────────────────────
+export type { I18nHandle, Translations, LocaleCode } from './i18n.js';
 
 // ── Auth / Session Signals ────────────────────────────────────────────
 export { createAuthSignal } from './auth-signal.js';
