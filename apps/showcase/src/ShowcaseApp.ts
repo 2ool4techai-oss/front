@@ -296,7 +296,7 @@ function NavBar(): HTMLElement {
       h('a', { href: '#collab' }, 'Collab'),
       h('a', { href: '#adaptive' }, 'Adaptive'),
     ),
-    h('span', { class: 'nav-badge' }, 'v0.3.0'),
+    h('span', { class: 'nav-badge' }, 'v0.3.1'),
   );
 }
 
