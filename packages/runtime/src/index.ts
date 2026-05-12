@@ -339,8 +339,8 @@ export type { RiveSignalOptions, RiveHandle, RiveInput } from './rive-signal.js'
 // ── Streaming Signals (SSE / WebSocket / ReadableStream) ──────────────
 export { sseSignal } from './sse-signal.js';
 export type { SSESignalOptions, SSEHandle } from './sse-signal.js';
-export { wsSignal } from './ws-signal.js';
-export type { WSSignalOptions, WSHandle } from './ws-signal.js';
+export { wsSignal } from './ws-signal-new.js';
+export type { WSHandle } from './ws-signal-new.js';
 export { streamSignal } from './stream-signal.js';
 export type { StreamSignalOptions, StreamHandle } from './stream-signal.js';
 
