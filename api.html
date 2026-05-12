@@ -510,6 +510,315 @@
       </div>
     </section>
 
+    <!-- ── AI Generate ──────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-generate">
+      <h2 class="api-group-title">AI Generate — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">generate</span>(<span class="var">opts</span>: <span class="type">GenerateOptions</span>): <span class="type">Promise</span><span class="op">&lt;</span><span class="type">GenerateResult</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Generates a UI component from a natural-language prompt using an LLM backend. Returns structured HTML and signal bindings. <code>opts.prompt</code> describes the component; <code>opts.signals</code> maps existing signals to inject into the generated component.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">generateSync</span>(<span class="var">opts</span>: <span class="type">GenerateOptions</span>): <span class="type">GenerateResult</span></div>
+        <div class="api-desc">Synchronous variant of <code>generate()</code> for use in contexts where async is not available. Uses a cached LLM response or a local template fallback. Throws if no matching template is found and no cache entry exists.</div>
+      </div>
+    </section>
+
+    <!-- ── Voice Signals ────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-voice">
+      <h2 class="api-group-title">Voice Signals — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createVoiceSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">initial</span>: <span class="type">T</span>, <span class="var">opts</span>?): <span class="type">VoiceSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a signal that can be controlled by voice commands via the Web Speech API. <code>opts.commands</code> maps spoken phrases to signal values. Returns a standard signal augmented with <code>.start()</code>, <code>.stop()</code>, and <code>.supported</code>.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">voiceControl</span>(<span class="var">target</span>: <span class="type">Signal</span><span class="op">&lt;</span><span class="type">string</span><span class="op">&gt;</span>, <span class="var">opts</span>?): <span class="type">VoiceHandle</span></div>
+        <div class="api-desc">Attaches voice transcription to an existing string signal. Continuously writes recognized speech into the signal. <code>opts.lang</code> sets the BCP 47 language tag. Returns a handle with <code>start()</code>, <code>stop()</code>, and reactive <code>listening()</code> signal.</div>
+      </div>
+    </section>
+
+    <!-- ── Signal Permissions ────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-permissions">
+      <h2 class="api-group-title">Signal Permissions — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">withPermissions</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">sig</span>: <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>, <span class="var">policy</span>: <span class="type">PermissionPolicy</span>): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Wraps a signal with role-based access control. <code>policy.read</code> and <code>policy.write</code> accept arrays of role strings. Unauthorized reads return <code>undefined</code>; unauthorized writes throw <code>PermissionError</code>. All access attempts are recorded in the audit log.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">getAuditLog</span>(): <span class="type">AuditEntry[]</span></div>
+        <div class="api-desc">Returns all recorded permission audit events. Each entry includes <code>timestamp</code>, <code>label</code>, <code>action</code> (<code>'read' | 'write'</code>), <code>role</code>, and <code>allowed</code> boolean.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">class</span> <span class="type">PermissionError</span> <span class="kw">extends</span> <span class="type">Error</span></div>
+        <div class="api-desc">Thrown when a write is attempted on a permission-guarded signal by an unauthorized role. Contains <code>signal</code>, <code>role</code>, and <code>action</code> properties for structured error handling.</div>
+      </div>
+    </section>
+
+    <!-- ── NL Queries ────────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-nlquery">
+      <h2 class="api-group-title">NL Queries — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">drQuery</span>(<span class="var">query</span>: <span class="type">string</span>): <span class="type">unknown</span></div>
+        <div class="api-desc">Executes a natural-language query against all registered queryable signals. Returns the first matching result. Queries support patterns like <code>"named Alice"</code>, <code>"count greater than 5"</code>, and <code>"status is active"</code>.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">registerQueryable</span>(<span class="var">label</span>: <span class="type">string</span>, <span class="var">sig</span>: <span class="type">Signal</span><span class="op">&lt;</span><span class="kw">unknown</span><span class="op">&gt;</span>): <span class="type">void</span></div>
+        <div class="api-desc">Registers a signal with the NL query registry under a human-readable label. Registered signals can be queried via <code>drQuery()</code> and <code>queryLocally()</code>.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">queryLocally</span>(<span class="var">data</span>: <span class="type">unknown[]</span>, <span class="var">query</span>: <span class="type">string</span>): <span class="type">unknown[]</span></div>
+        <div class="api-desc">Runs a natural-language filter against an in-memory array. Supports name matching (<code>"named X"</code>), numeric comparisons, and status filters without an external LLM call.</div>
+      </div>
+    </section>
+
+    <!-- ── Semantic Signals ──────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-semantic">
+      <h2 class="api-group-title">Semantic Signals — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">semanticSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">initial</span>: <span class="type">T</span>, <span class="var">description</span>: <span class="type">string</span>): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a signal with a semantic description for AI agents. The description is stored in the semantic registry and returned by <code>describeAppState()</code> for LLM consumption. Semantically described signals help AI agents understand intent without reading source code.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">describeAppState</span>(): <span class="type">string</span></div>
+        <div class="api-desc">Returns a human-readable summary of all semantically registered signals and their current values, formatted as a prose description suitable for inclusion in an LLM system prompt.</div>
+      </div>
+    </section>
+
+    <!-- ── AI Trace ──────────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-aitrace">
+      <h2 class="api-group-title">AI Trace — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createAITrace</span>(<span class="var">opts</span>?): <span class="type">AITrace</span></div>
+        <div class="api-desc">Creates a structured audit trail for AI agent actions. Records every agent decision, signal write, and tool call with timestamps, agent ID, confidence scores, and reasoning. Exports to JSON or OpenTelemetry spans.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="var">globalTrace</span>: <span class="type">AITrace</span></div>
+        <div class="api-desc">A pre-created global <code>AITrace</code> instance that is active as soon as the runtime loads. Any AI agent can log to it without creating their own trace instance.</div>
+      </div>
+    </section>
+
+    <!-- ── Screen Schema ─────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-schema">
+      <h2 class="api-group-title">Screen Schema — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">captureScreenSchema</span>(): <span class="type">ScreenSchema</span></div>
+        <div class="api-desc">Captures a structural schema of the current rendered UI — all interactive elements, their roles, labels, and bound signal values — without capturing pixel data. The schema is safe to send to an LLM.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">schemaToPrompt</span>(<span class="var">schema</span>: <span class="type">ScreenSchema</span>): <span class="type">string</span></div>
+        <div class="api-desc">Converts a <code>ScreenSchema</code> into a compact, structured text description suitable for inclusion in an LLM prompt. Describes all interactive elements and their current state.</div>
+      </div>
+    </section>
+
+    <!-- ── Predictive Routing ────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-predictive">
+      <h2 class="api-group-title">Predictive Routing — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createPredictiveRouter</span>(<span class="var">routes</span>: <span class="type">RouteConfig[]</span>, <span class="var">opts</span>?): <span class="type">PredictiveRouter</span></div>
+        <div class="api-desc">Extends the standard router with ML-based route prefetching. Tracks navigation patterns and prefetches the most likely next routes. <code>opts.prefetchThreshold</code> controls the minimum confidence (0–1) before prefetching. Prefetched routes load instantly.</div>
+      </div>
+    </section>
+
+    <!-- ── Offline Signals ───────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-offline">
+      <h2 class="api-group-title">Offline Signals — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">offlineSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">key</span>: <span class="type">string</span>, <span class="var">initial</span>: <span class="type">T</span>): <span class="type">OfflineSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a signal that persists offline writes to IndexedDB and replays them when the connection is restored. Writes made while offline are queued and applied in order on reconnection. Exposes a <code>.pending()</code> reactive signal with the count of queued writes.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">isOnline</span>(): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">boolean</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Returns a reactive signal that tracks <code>navigator.onLine</code>. Updates automatically when the browser goes online or offline.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">onceOnline</span>(<span class="var">fn</span>: () <span class="op">=&gt;</span> <span class="type">void</span>): <span class="type">void</span></div>
+        <div class="api-desc">Calls <code>fn</code> immediately if online, or defers it until the next time the browser comes online. The callback fires at most once.</div>
+      </div>
+    </section>
+
+    <!-- ── Cross-Session Adaptive ────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-crosssession">
+      <h2 class="api-group-title">Cross-Session Adaptive — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">adaptiveSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">key</span>: <span class="type">string</span>, <span class="var">initial</span>: <span class="type">T</span>): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a signal whose value is persisted across browser sessions and updated by ML-based personalization. Each time the user interacts, the stored preference is updated. On the next session, the signal initializes to the learned preference.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createLearningProfile</span>(<span class="var">opts</span>?): <span class="type">LearningProfile</span></div>
+        <div class="api-desc">Creates a user learning profile that tracks interaction patterns across signals. Exposes <code>recommend(key)</code> which returns the most likely preferred value for a signal based on history.</div>
+      </div>
+    </section>
+
+    <!-- ── Decay Signals ─────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-decay">
+      <h2 class="api-group-title">Decay Signals — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createDecaySignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">initial</span>: <span class="type">T</span>, <span class="var">opts</span>: <span class="type">DecayOptions</span>): <span class="type">DecaySignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a signal that automatically resets to a default value after a configurable idle period. <code>opts.resetTo</code> is the value to decay back to. <code>opts.afterMs</code> is the idle timeout. <code>opts.onDecay</code> is an optional callback. Useful for ephemeral UI state like notifications or hover highlights.</div>
+      </div>
+    </section>
+
+    <!-- ── Context Profiles ──────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-context-profile">
+      <h2 class="api-group-title">Context Profiles — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createContextProfile</span>(<span class="var">name</span>: <span class="type">string</span>, <span class="var">conditions</span>: <span class="type">ContextConditions</span>): <span class="type">ContextProfile</span></div>
+        <div class="api-desc">Defines a named context (e.g., <code>'mobile'</code>, <code>'night'</code>, <code>'slow-connection'</code>) with detection conditions. When the conditions are met, the profile activates and all signals bound to it via <code>useContextAdaptiveSignal()</code> switch to their profile-specific values.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">useContextAdaptiveSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">defaults</span>: <span class="type">Record</span><span class="op">&lt;</span><span class="type">string</span>, <span class="type">T</span><span class="op">&gt;</span>): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a signal that automatically returns a different value based on the active context profile. <code>defaults</code> maps profile names to values. The <code>'default'</code> key is used when no profile matches.</div>
+      </div>
+    </section>
+
+    <!-- ── Attention Tracking ────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-attention">
+      <h2 class="api-group-title">Attention Tracking — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createAttentionTracker</span>(<span class="var">opts</span>?): <span class="type">AttentionTracker</span></div>
+        <div class="api-desc">Tracks user attention using the Page Visibility API and IntersectionObserver. Exposes reactive <code>focusedMs()</code>, <code>blurredMs()</code>, <code>isVisible()</code>, and <code>attentionScore()</code> signals. Useful for analytics, adaptive content loading, and pausing animations when the tab is not visible.</div>
+      </div>
+    </section>
+
+    <!-- ── Preference Merge ──────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-preference">
+      <h2 class="api-group-title">Preference Merge — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">preferenceSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">key</span>: <span class="type">string</span>, <span class="var">defaults</span>: <span class="type">T</span>, <span class="var">sources</span>: <span class="type">PreferenceSource[]</span>): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Merges preferences from multiple sources (URL params, localStorage, user profile API, system defaults) with configurable priority ordering. The merged value is reactive — when any source updates, the signal recomputes the merged preference.</div>
+      </div>
+    </section>
+
+    <!-- ── Multi-Modal ───────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-multimodal">
+      <h2 class="api-group-title">Multi-Modal Input — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createMultiModalInput</span>(<span class="var">opts</span>?): <span class="type">MultiModalHandle</span></div>
+        <div class="api-desc">Creates an input handler that normalizes keyboard, touch, pointer, and gamepad events into a unified reactive stream. Exposes signals for <code>activeModality()</code>, <code>lastInput()</code>, and per-modality event streams.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">adaptToModality</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">values</span>: <span class="type">ModalityMap</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Returns a signal whose value adapts to the current input modality. <code>values.keyboard</code>, <code>values.touch</code>, and <code>values.pointer</code> define the value for each modality. The signal switches automatically as the user changes input method.</div>
+      </div>
+    </section>
+
+    <!-- ── Lazy Split ────────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-lazysplit">
+      <h2 class="api-group-title">Lazy Signal Split — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">lazySignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">loader</span>: () <span class="op">=&gt;</span> <span class="type">Promise</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span> | <span class="kw">undefined</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a signal whose initial value is loaded asynchronously. The signal is <code>undefined</code> until the loader resolves. Useful for code-split signal modules that are expensive to initialize.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">prefetchWhen</span>(<span class="var">condition</span>: () <span class="op">=&gt;</span> <span class="type">boolean</span>, <span class="var">loader</span>): <span class="type">void</span></div>
+        <div class="api-desc">Triggers prefetching of a lazy signal module when a condition becomes true. Use with hover or proximity signals to preload heavy modules before the user navigates to them.</div>
+      </div>
+    </section>
+
+    <!-- ── Signal Integrity ──────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-integrity">
+      <h2 class="api-group-title">Signal Integrity — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createIntegritySignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">initial</span>: <span class="type">T</span>, <span class="var">opts</span>: <span class="type">IntegrityOptions</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a signal that verifies data integrity on every write using a hash or custom verifier. <code>opts.hash</code> computes a hash of the value; <code>opts.verify</code> checks the hash against the value. Throws <code>IntegrityError</code> if verification fails.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">class</span> <span class="type">IntegrityError</span> <span class="kw">extends</span> <span class="type">Error</span></div>
+        <div class="api-desc">Thrown by <code>createIntegritySignal</code> when a write fails integrity verification. Contains <code>expected</code> and <code>actual</code> hash properties.</div>
+      </div>
+    </section>
+
+    <!-- ── Private Signals ──────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-private">
+      <h2 class="api-group-title">Private Signals — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">privateSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">initial</span>: <span class="type">T</span>, <span class="var">opts</span>?): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a signal marked as private. Private signals are excluded from <code>_getDevSignals()</code> output, AI agent discovery, audit logs, and OTel traces. Use for passwords, tokens, and other sensitive ephemeral values.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">isPrivateSignal</span>(<span class="var">sig</span>: <span class="type">Signal</span><span class="op">&lt;</span><span class="kw">unknown</span><span class="op">&gt;</span>): <span class="type">boolean</span></div>
+        <div class="api-desc">Returns <code>true</code> if the given signal was created with <code>privateSignal()</code> or marked with <code>markAsPrivate()</code>. Use in dev tools and audit systems to gate logging.</div>
+      </div>
+    </section>
+
+    <!-- ── Rate Limiting ────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-ratelimit">
+      <h2 class="api-group-title">Rate-Limited Signals — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">rateLimitSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">initial</span>: <span class="type">T</span>, <span class="var">opts</span>: <span class="type">RateLimitOptions</span>): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a signal that enforces a maximum write frequency. <code>opts.maxWrites</code> and <code>opts.windowMs</code> define the rate limit (e.g. 10 writes per second). Exceeding the limit throws <code>RateLimitError</code>. Useful for protecting AI inference signals from excessive polling.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">class</span> <span class="type">RateLimitError</span> <span class="kw">extends</span> <span class="type">Error</span></div>
+        <div class="api-desc">Thrown when a rate-limited signal receives more writes than its configured rate allows within the window. Contains <code>limit</code>, <code>windowMs</code>, and <code>retryAfterMs</code> properties.</div>
+      </div>
+    </section>
+
+    <!-- ── XSS Guard ─────────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-xssguard">
+      <h2 class="api-group-title">XSS Guard — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">xssGuardSignal</span>(<span class="var">initial</span>: <span class="type">string</span>, <span class="var">opts</span>?): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">string</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a string signal that automatically sanitizes all written values. HTML tags, script injections, and dangerous attributes are stripped or escaped on every write. <code>opts.mode</code> controls the sanitization level: <code>'strip'</code> (default) removes all tags; <code>'escape'</code> HTML-encodes them.</div>
+      </div>
+    </section>
+
+    <!-- ── Anomaly Detection ─────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-anomaly">
+      <h2 class="api-group-title">Anomaly Detection — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">anomalySignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">initial</span>: <span class="type">T</span>, <span class="var">opts</span>: <span class="type">AnomalyOptions</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>): <span class="type">AnomalySignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a signal that detects anomalous values using configurable detection strategies (z-score, IQR, threshold, or custom). Exposes <code>.anomalies()</code> as a reactive array of flagged writes. <code>opts.onAnomaly</code> is called with the value and detection metadata for alerting.</div>
+      </div>
+    </section>
+
+    <!-- ── Type Coerce ───────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-coerce">
+      <h2 class="api-group-title">Type Coercion — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">coercedSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">initial</span>: <span class="type">T</span>, <span class="var">coerce</span>: (<span class="var">v</span>: <span class="kw">unknown</span>) <span class="op">=&gt;</span> <span class="type">T</span>): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a signal that runs a coercion function on every write. The coercion function receives the raw written value and must return a value of type <code>T</code>. Useful for signals that receive data from external sources (forms, URLs, APIs) that may not be correctly typed.</div>
+      </div>
+    </section>
+
+    <!-- ── Dead Signal Detector ──────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-deadsignal">
+      <h2 class="api-group-title">Dead Signal Detector — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">createDeadSignalDetector</span>(<span class="var">opts</span>?): <span class="type">DeadSignalDetector</span></div>
+        <div class="api-desc">Creates a detector that monitors registered signals for zero reads and zero writes after a grace period. Calls <code>opts.onDead(label, ageMs)</code> for each stale signal on a configurable interval. No-ops in production when <code>opts.devOnly</code> is true (default).</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">watchedSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">initial</span>: <span class="type">T</span>, <span class="var">label</span>: <span class="type">string</span>, <span class="var">detector</span>: <span class="type">DeadSignalDetector</span>): <span class="type">Signal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates a standard signal that is automatically registered with a <code>DeadSignalDetector</code>. All reads and writes are tracked without requiring manual hook wiring.</div>
+      </div>
+    </section>
+
+    <!-- ── Circular Guard ────────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-circular">
+      <h2 class="api-group-title">Circular Dependency Guard — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">guardedComputed</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">fn</span>: () <span class="op">=&gt;</span> <span class="type">T</span>, <span class="var">label</span>?: <span class="type">string</span>): <span class="type">ComputedSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">A drop-in replacement for <code>computed()</code> that detects circular dependencies at runtime and throws <code>CircularDependencyError</code> with a full dependency chain trace instead of hanging or stack-overflowing.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">detectCycles</span>(<span class="var">signals</span>: <span class="type">Signal[]</span>): <span class="type">string[][]</span></div>
+        <div class="api-desc">Statically analyses a set of signals and computeds for circular dependencies without executing them. Returns an array of cycle paths (each path is an array of signal labels). Empty array means no cycles detected.</div>
+      </div>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">class</span> <span class="type">CircularDependencyError</span> <span class="kw">extends</span> <span class="type">Error</span></div>
+        <div class="api-desc">Thrown by <code>guardedComputed()</code> when a circular dependency is detected. The <code>cycle</code> property contains the ordered array of signal labels forming the circular chain.</div>
+      </div>
+    </section>
+
+    <!-- ── Bounded Signals ───────────────────────────────────────── -->
+    <section class="docs-section api-group" id="api-bounded">
+      <h2 class="api-group-title">Bounded Array Signals — <code>@nexoraaidrishti/runtime</code></h2>
+      <div class="api-entry">
+        <div class="api-sig"><span class="kw">function</span> <span class="fn">boundedSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span>(<span class="var">initial</span>: <span class="type">T[]</span>, <span class="var">opts</span>: <span class="type">BoundedOptions</span>): <span class="type">BoundedSignal</span><span class="op">&lt;</span><span class="type">T</span><span class="op">&gt;</span></div>
+        <div class="api-desc">Creates an array signal with a maximum capacity. When the array exceeds <code>opts.maxLength</code>, the oldest items are evicted. <code>opts.onEvict</code> is called with evicted items for logging or archival. Exposes <code>.push()</code>, <code>.pop()</code>, and <code>.clear()</code> helper methods alongside the standard signal interface.</div>
+      </div>
+    </section>
+
   </main>
 </div><!-- .docs-layout -->
 
