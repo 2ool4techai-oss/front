@@ -1,6 +1,6 @@
 {
   "name": "@nexoraaidrishti/cli",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "type": "module",
   "bin": { "dr": "./dist/bin.js" },
   "main": "./dist/index.js",
