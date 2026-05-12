@@ -1,6 +1,121 @@
 import { signal } from './signal.js';
 import type { Signal } from './types.js';
 
+// ── workerSignal ────────────────────────────────────────────────────────
+
+export interface WorkerSignalOptions<TInput, TOutput> {
+  worker: Worker | (() => Worker);
+  transfer?: (input: TInput) => Transferable[];
+  timeout?: number;
+  onError?: (err: ErrorEvent | Error) => void;
+  serialize?: (v: TInput) => unknown;
+  deserialize?: (v: unknown) => TOutput;
+}
+
+export interface WorkerSignalHandle<TInput, TOutput> {
+  result: () => TOutput | undefined;
+  loading: () => boolean;
+  error: () => Error | null;
+  run: (input: TInput) => void;
+  terminate: () => void;
+}
+
+export function workerSignal<TInput = unknown, TOutput = unknown>(
+  opts: WorkerSignalOptions<TInput, TOutput>,
+): WorkerSignalHandle<TInput, TOutput> {
+  const resultSig = signal<TOutput | undefined>(undefined);
+  const loadingSig = signal<boolean>(false);
+  const errorSig = signal<Error | null>(null);
+
+  const worker: Worker = typeof opts.worker === 'function' ? opts.worker() : opts.worker;
+
+  const serialize = opts.serialize ?? ((v: TInput) => v as unknown);
+  const deserialize = opts.deserialize ?? ((v: unknown) => v as TOutput);
+  const timeoutMs = opts.timeout ?? 30_000;
+
+  let timeoutTimer: ReturnType<typeof setTimeout> | null = null;
+
+  const clearTimer = () => {
+    if (timeoutTimer !== null) {
+      clearTimeout(timeoutTimer);
+      timeoutTimer = null;
+    }
+  };
+
+  worker.addEventListener('message', (e: MessageEvent) => {
+    const msg = e.data as { type: string; payload?: unknown; message?: string };
+    if (msg.type === 'result') {
+      clearTimer();
+      resultSig.set(deserialize(msg.payload));
+      loadingSig.set(false);
+    } else if (msg.type === 'error') {
+      clearTimer();
+      errorSig.set(new Error(msg.message ?? 'Worker error'));
+      loadingSig.set(false);
+    }
+  });
+
+  worker.onerror = (e: ErrorEvent) => {
+    clearTimer();
+    errorSig.set(new Error(e.message ?? 'Worker error'));
+    loadingSig.set(false);
+    opts.onError?.(e);
+  };
+
+  return {
+    result: () => resultSig(),
+    loading: () => loadingSig(),
+    error: () => errorSig(),
+
+    run(input: TInput): void {
+      loadingSig.set(true);
+      errorSig.set(null);
+
+      const payload = serialize(input);
+      const transferables = opts.transfer ? opts.transfer(input) : [];
+
+      if (timeoutMs > 0) {
+        clearTimer();
+        timeoutTimer = setTimeout(() => {
+          timeoutTimer = null;
+          const err = new Error(`Worker timed out after ${timeoutMs}ms`);
+          errorSig.set(err);
+          loadingSig.set(false);
+          opts.onError?.(err);
+        }, timeoutMs);
+      }
+
+      if (transferables.length > 0) {
+        worker.postMessage({ type: 'run', payload }, transferables);
+      } else {
+        worker.postMessage({ type: 'run', payload });
+      }
+    },
+
+    terminate(): void {
+      clearTimer();
+      worker.terminate();
+    },
+  };
+}
+
+// ── createInlineWorker ──────────────────────────────────────────────────
+
+export function createInlineWorker(fn: (input: unknown) => unknown): Worker {
+  const code = `self.onmessage = async function(e) {
+  try {
+    const fn = ${fn.toString()};
+    const result = await Promise.resolve(fn(e.data.payload));
+    self.postMessage({ type: 'result', payload: result });
+  } catch (err) {
+    self.postMessage({ type: 'error', message: err instanceof Error ? err.message : String(err) });
+  }
+};`;
+  const blob = new Blob([code], { type: 'application/javascript' });
+  const url = URL.createObjectURL(blob);
+  return new Worker(url);
+}
+
 export interface WorkerSignalOptions<TInput, TOutput> {
   onError?: (err: ErrorEvent) => void;
   timeout?: number;

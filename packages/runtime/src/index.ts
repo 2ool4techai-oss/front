@@ -307,3 +307,71 @@ export type { CircularGuardOptions, GuardedComputed } from './circular-guard.js'
 // ── Bounded Array Signals ─────────────────────────────────────────────
 export { boundedSignal } from './bounded-signal.js';
 export type { BoundedOptions, BoundedSignal } from './bounded-signal.js';
+
+// ── Spring & Animation Signals ────────────────────────────────────────
+export { springSignal, springVector2D } from './spring-signal.js';
+export type { SpringOptions, SpringSignal, SpringVectorOptions } from './spring-signal.js';
+
+// ── Gesture Signals ───────────────────────────────────────────────────
+export { gestureSignal } from './gesture-signal.js';
+export type { GestureOptions, GestureState, GestureHandle } from './gesture-signal.js';
+
+// ── Scroll Progress Signals ───────────────────────────────────────────
+export { scrollProgressSignal, windowScrollSignal } from './scroll-signal.js';
+export type { ScrollProgressHandle } from './scroll-signal.js';
+
+// ── FLIP Layout Animations ────────────────────────────────────────────
+export { createFlip } from './flip-signal.js';
+export type { FlipOptions, FlipHandle } from './flip-signal.js';
+
+// ── Generate Animation ────────────────────────────────────────────────
+export { generateAnimation, generateAnimationSync } from './generate-animation.js';
+export type { AnimationPreset, GenerateAnimationOptions, AnimationResult } from './generate-animation.js';
+
+// ── Lottie Signal ─────────────────────────────────────────────────────
+export { lottieSignal } from './lottie-signal.js';
+export type { LottieSignalOptions, LottieHandle, LottieAdapter } from './lottie-signal.js';
+
+// ── Rive Signal ───────────────────────────────────────────────────────
+export { riveSignal } from './rive-signal.js';
+export type { RiveSignalOptions, RiveHandle, RiveInput } from './rive-signal.js';
+
+// ── Streaming Signals (SSE / WebSocket / ReadableStream) ──────────────
+export { sseSignal } from './sse-signal.js';
+export type { SSESignalOptions, SSEHandle } from './sse-signal.js';
+export { wsSignal } from './ws-signal.js';
+export type { WSSignalOptions, WSHandle } from './ws-signal.js';
+export { streamSignal } from './stream-signal.js';
+export type { StreamSignalOptions, StreamHandle } from './stream-signal.js';
+
+// ── Device & Sensor Signals ───────────────────────────────────────────
+export {
+  batterySignal, networkSignal, geolocationSignal, orientationSignal,
+  clipboardSignal, wakeLockSignal, prefersDarkSignal, prefersReducedMotionSignal,
+  viewportSignal,
+} from './device-signals.js';
+export type { BatteryInfo, NetworkInfo, GeoInfo, GeoSignalHandle, OrientationInfo, ClipboardHandle, WakeLockHandle, ViewportInfo } from './device-signals.js';
+
+// ── Reactive i18n ─────────────────────────────────────────────────────
+export { createI18n } from './i18n.js';
+export type { I18nOptions, I18nHandle, Translations, LocaleCode } from './i18n.js';
+
+// ── Auth / Session Signals ────────────────────────────────────────────
+export { createAuthSignal } from './auth-signal.js';
+export type { User, Session, AuthSignalOptions, AuthHandle } from './auth-signal.js';
+
+// ── MCP Server for UI ─────────────────────────────────────────────────
+export { createMCPServer } from './mcp-server.js';
+export type { MCPServerOptions, MCPHandle, MCPTool, MCPRequest, MCPResponse } from './mcp-server.js';
+
+// ── Web Worker Signals ────────────────────────────────────────────────
+export { workerSignal, createInlineWorker } from './worker-signal.js';
+export type { WorkerSignalOptions, WorkerSignalHandle } from './worker-signal.js';
+
+// ── Signal Graph Debugger ─────────────────────────────────────────────
+export { createSignalGraph } from './signal-graph.js';
+export type { SignalNode, SignalGraph, GraphAnalysis, SignalGraphHandle } from './signal-graph.js';
+
+// ── AI Accessibility Agent ────────────────────────────────────────────
+export { createA11yAgent } from './a11y-agent.js';
+export type { A11yViolation, A11yReport, A11yAgentOptions, A11yAgentHandle } from './a11y-agent.js';

@@ -1,60 +1,39 @@
 import { signal, computed } from './signal.js';
-import type { Signal, ComputedSignal } from './types.js';
+import type { ComputedSignal } from './types.js';
 
 // ── Types ──────────────────────────────────────────────────────────────
 
-export type Locale         = string;
-export type Messages       = Record<string, string>;
-export type MessageCatalog = Record<Locale, Messages>;
+export type Translations = Record<string, string | Record<string, string>>;
+export type LocaleCode = string; // 'en', 'fr', 'de', 'ja', etc.
 
 export interface I18nOptions {
-  locale:          Locale;
-  fallbackLocale?: Locale;
-  messages:        MessageCatalog;
-  numberFormats?:  Record<Locale, Intl.NumberFormatOptions>;
-  dateFormats?:    Record<Locale, Intl.DateTimeFormatOptions>;
+  locale: LocaleCode;
+  messages: Record<LocaleCode, Translations>;
+  fallbackLocale?: LocaleCode;
 }
 
-export interface I18nInstance {
-  readonly locale:     Signal<Locale>;
-  setLocale(l: Locale): void;
-  /** Translate key with optional interpolation vars and plural count */
-  t(key: string, vars?: Record<string, unknown>): string;
-  /** Reactive computed translation — re-evaluates when locale changes */
-  rt(key: string, vars?: Record<string, unknown>): ComputedSignal<string>;
-  /** Format a number in the current locale */
-  n(value: number, opts?: Intl.NumberFormatOptions): string;
-  /** Format a date in the current locale */
-  d(date: Date | number, opts?: Intl.DateTimeFormatOptions): string;
-  /** Relative time (e.g. "3 days ago") */
-  r(value: number, unit: Intl.RelativeTimeFormatUnit): string;
-}
-
-// ── Interpolation ──────────────────────────────────────────────────────
-// Replaces {key} placeholders; handles plurals via pipe: "one item | {count} items"
-function interpolate(template: string, vars: Record<string, unknown> = {}): string {
-  // Plural form: "singular | plural" — chosen by vars.count
-  if (template.includes(' | ')) {
-    const count = Number(vars['count'] ?? 0);
-    const forms = template.split(' | ');
-    // Intl.PluralRules selects the right form index for the locale,
-    // but we don't have locale here, so use simple 1 = first, else last
-    const idx = count === 1 ? 0 : Math.min(forms.length - 1, 1);
-    template = forms[idx] ?? template;
-  }
-  return template.replace(/\{(\w+)\}/g, (_, k) => {
-    const v = vars[k];
-    return v !== undefined ? String(v) : `{${k}}`;
-  });
+export interface I18nHandle {
+  locale: { (): LocaleCode };
+  t: (key: string, params?: Record<string, string | number>) => string;
+  setLocale: (locale: LocaleCode) => void;
+  rt: (key: string, params?: Record<string, string | number>) => ComputedSignal<string>;
+  n: (value: number, options?: Intl.NumberFormatOptions) => string;
+  d: (value: Date, options?: Intl.DateTimeFormatOptions) => string;
+  r: (value: number, unit: Intl.RelativeTimeFormatUnit) => string;
 }
 
 // ── Resolve ────────────────────────────────────────────────────────────
-// Supports dot-notation: 'nav.home' => messages['nav.home'] or messages.nav.home
-function resolve(messages: Messages, key: string): string | undefined {
-  if (key in messages) return messages[key];
-  // dot-notation fallback
+// Supports dot-notation: 'nav.home' => translations.nav.home
+// But also supports literal dot-keys stored as 'nav.home' directly
+function resolve(translations: Translations, key: string): string | undefined {
+  // First check literal key match
+  if (key in translations) {
+    const val = translations[key];
+    return typeof val === 'string' ? val : undefined;
+  }
+  // dot-notation traversal
   const parts = key.split('.');
-  let node: unknown = messages;
+  let node: unknown = translations;
   for (const p of parts) {
     if (typeof node !== 'object' || node === null) return undefined;
     node = (node as Record<string, unknown>)[p];
@@ -62,92 +41,77 @@ function resolve(messages: Messages, key: string): string | undefined {
   return typeof node === 'string' ? node : undefined;
 }
 
+// ── Interpolation & Pluralization ──────────────────────────────────────
+// Supports single-brace {name} style
+// Pluralization: 'singular | plural' selected by params.count
+function interpolate(
+  template: string,
+  params: Record<string, string | number> = {},
+): string {
+  // Pluralization: templates like '{count} item | {count} items'
+  if (template.includes(' | ')) {
+    const count = params['count'];
+    if (count !== undefined) {
+      const parts = template.split(' | ');
+      const idx = Number(count) === 1 ? 0 : 1;
+      template = parts[idx] ?? parts[0];
+    }
+  }
+
+  return template.replace(/\{(\w+)\}/g, (_, k) => {
+    const v = params[k];
+    return v !== undefined ? String(v) : `{${k}}`;
+  });
+}
+
 // ── createI18n ─────────────────────────────────────────────────────────
-export function createI18n(opts: I18nOptions): I18nInstance {
-  const _locale   = signal<Locale>(opts.locale);
-  const _messages = opts.messages;
-  const _fallback = opts.fallbackLocale;
+export function createI18n(opts: I18nOptions): I18nHandle {
+  const { locale: initialLocale, messages, fallbackLocale } = opts;
 
-  const translate = (key: string, vars?: Record<string, unknown>): string => {
-    const loc = _locale.peek();
-    const msgs = _messages[loc] ?? {};
-    const fbMsgs = _fallback ? (_messages[_fallback] ?? {}) : {};
+  const _locale = signal<LocaleCode>(initialLocale);
+  const _messages = signal<Record<LocaleCode, Translations>>(messages);
 
-    const raw = resolve(msgs, key) ?? resolve(fbMsgs, key) ?? key;
-    return interpolate(raw, vars);
-  };
+  const _t = (key: string, params?: Record<string, string | number>): string => {
+    const loc = _locale();
+    const store = _messages();
+    const locTranslations = store[loc] ?? {};
+    const raw =
+      resolve(locTranslations, key) ??
+      (fallbackLocale ? resolve(store[fallbackLocale] ?? {}, key) : undefined);
 
-  const _pluralRules = new Map<Locale, Intl.PluralRules>();
-  const pluralRules = (loc: Locale): Intl.PluralRules => {
-    if (!_pluralRules.has(loc)) _pluralRules.set(loc, new Intl.PluralRules(loc));
-    return _pluralRules.get(loc)!;
-  };
-
-  // Enhanced translate with proper plural rules from Intl
-  const translatePlural = (key: string, vars?: Record<string, unknown>): string => {
-    const loc = _locale.peek();
-    const msgs = _messages[loc] ?? {};
-    const fbMsgs = _fallback ? (_messages[_fallback] ?? {}) : {};
-    const raw = resolve(msgs, key) ?? resolve(fbMsgs, key) ?? key;
-
-    if (!raw.includes(' | ') || !vars?.['count']) {
-      return interpolate(raw, vars);
+    if (raw === undefined) {
+      return key;
     }
 
-    const count  = Number(vars['count']);
-    const forms  = raw.split(' | ');
-    const pr     = pluralRules(loc);
-    const form   = pr.select(count); // 'zero'|'one'|'two'|'few'|'many'|'other'
-
-    let chosen: string;
-    if (forms.length === 2) {
-      // Common "singular | plural" pattern: 'one' → forms[0], everything else → forms[1]
-      chosen = form === 'one' ? forms[0]! : forms[1]!;
-    } else {
-      const ORDER: Intl.LDMLPluralRule[] = ['zero', 'one', 'two', 'few', 'many', 'other'];
-      const idx = Math.min(Math.max(0, ORDER.indexOf(form)), forms.length - 1);
-      chosen = forms[idx] ?? forms[forms.length - 1] ?? raw;
-    }
-    return interpolate(chosen, vars);
+    return interpolate(raw, params);
   };
-
-  const _nfCache = new Map<string, Intl.NumberFormat>();
-  const _dtCache = new Map<string, Intl.DateTimeFormat>();
-  const _rtCache = new Map<string, Intl.RelativeTimeFormat>();
-
-  const nfKey = (loc: string, o: Intl.NumberFormatOptions) => `${loc}:${JSON.stringify(o)}`;
 
   return {
-    locale:    _locale,
-    setLocale: (l: Locale) => _locale.set(l),
+    locale: _locale,
 
-    t: (key, vars) => translatePlural(key, vars),
+    t: _t,
 
-    rt: (key, vars) => computed(() => {
-      _locale(); // track locale changes
-      return translatePlural(key, vars);
-    }),
-
-    n: (value, opts = {}) => {
-      const loc = _locale.peek();
-      const merged = { ...(opts.style === undefined && (opts as Record<string, unknown>).preset
-        ? {} : {}), ...opts };
-      const k = nfKey(loc, merged);
-      if (!_nfCache.has(k)) _nfCache.set(k, new Intl.NumberFormat(loc, merged));
-      return _nfCache.get(k)!.format(value);
+    setLocale: (locale: LocaleCode) => {
+      _locale.set(locale);
     },
 
-    d: (date, opts = {}) => {
-      const loc = _locale.peek();
-      const k   = `${loc}:${JSON.stringify(opts)}`;
-      if (!_dtCache.has(k)) _dtCache.set(k, new Intl.DateTimeFormat(loc, opts));
-      return _dtCache.get(k)!.format(date instanceof Date ? date : new Date(date));
+    rt: (key: string, params?: Record<string, string | number>): ComputedSignal<string> => {
+      return computed(() => _t(key, params));
     },
 
-    r: (value, unit) => {
+    n: (value: number, options?: Intl.NumberFormatOptions): string => {
       const loc = _locale.peek();
-      if (!_rtCache.has(loc)) _rtCache.set(loc, new Intl.RelativeTimeFormat(loc, { numeric: 'auto' }));
-      return _rtCache.get(loc)!.format(value, unit);
+      return new Intl.NumberFormat(loc, options).format(value);
+    },
+
+    d: (value: Date, options?: Intl.DateTimeFormatOptions): string => {
+      const loc = _locale.peek();
+      return new Intl.DateTimeFormat(loc, options).format(value);
+    },
+
+    r: (value: number, unit: Intl.RelativeTimeFormatUnit): string => {
+      const loc = _locale.peek();
+      return new Intl.RelativeTimeFormat(loc, { numeric: 'auto' }).format(value, unit);
     },
   };
 }
