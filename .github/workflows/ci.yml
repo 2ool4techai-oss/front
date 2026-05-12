@@ -64,11 +64,18 @@ jobs:
           node-version: '22'
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - name: Deploy website
+      - name: Build showcase
+        run: pnpm --filter drishti-showcase build
+      - name: Assemble deploy directory
+        run: |
+          mkdir -p _deploy/showcase
+          cp -r apps/www/. _deploy/
+          cp -r apps/showcase/dist/. _deploy/showcase/
+      - name: Deploy website + showcase
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./apps/www
+          publish_dir: ./_deploy
 
   lint:
     name: Lint

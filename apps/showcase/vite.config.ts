@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
+  base: '/front/showcase/',
   resolve: {
     alias: {
       '@drishti/runtime':    resolve(__dirname, '../../packages/runtime/src/index.ts'),
