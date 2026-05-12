@@ -6,7 +6,7 @@
   <title>DRISHTI — AI-Native Frontend Framework</title>
   <meta name="description" content="The first frontend framework built for the AI era. Fine-grained signals, zero virtual DOM, LLM streaming, and AI agent control.">
   <meta property="og:title" content="DRISHTI — AI-Native Frontend Framework">
-  <meta property="og:description" content="974 tests. 17 packages. Built for AI agents and humans alike.">
+  <meta property="og:description" content="810 tests. 67 test files. 29 novel features. Built for AI agents and humans alike.">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -362,8 +362,23 @@
       </div>
       <div class="feature-card">
         <span class="feature-icon">🔒</span>
-        <h3 class="feature-title">Production Ready</h3>
-        <p class="feature-desc">HIPAA PII scrubbing, CSP nonces, GDPR consent, OTel tracing, RUM, error tracking. Ship with confidence from day one.</p>
+        <h3 class="feature-title">Security-Native Signals</h3>
+        <p class="feature-desc">XSS guard, rate limiting, HMAC integrity, PII auto-redaction — all in the signal layer. <code>privateSignal()</code>, <code>xssGuardSignal()</code>, <code>anomalySignal()</code> ship ready.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">⏳</span>
+        <h3 class="feature-title">Adaptive That Forgets</h3>
+        <p class="feature-desc">Decaying preference signals. Confidence halves over time — stale choices never lock the UI. Context-aware profiles switch automatically between mobile/desktop/morning/evening.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔧</span>
+        <h3 class="feature-title">Self-Healing &amp; Auto-Fix</h3>
+        <p class="feature-desc">Type coercion, bounded arrays, circular dependency detection, dead signal scanning. Catches bad patterns at runtime — before they become bugs in production.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🎤</span>
+        <h3 class="feature-title">Voice + Multi-Modal</h3>
+        <p class="feature-desc"><code>createVoiceSignal()</code> turns Web Speech into a reactive signal. <code>createMultiModalInput()</code> detects touch/keyboard/voice and adapts layout automatically.</p>
       </div>
     </div>
   </div>
@@ -374,8 +389,8 @@
   <div class="container">
     <div class="section-header">
       <div class="section-label">Ecosystem</div>
-      <h2 id="packages-heading" class="section-title">12 Official Packages</h2>
-      <p class="section-desc">Everything from the runtime core to CLI, Figma plugin, mobile adapters, and production tooling.</p>
+      <h2 id="packages-heading" class="section-title">12 Official Packages · 29 Novel Features</h2>
+      <p class="section-desc">Everything from the runtime core to CLI, Figma plugin, mobile adapters, and production tooling. 810 tests across 67 test files.</p>
     </div>
 
     <div class="packages-grid">
@@ -454,9 +469,12 @@
       <div class="ai-feature-list">
         <div class="ai-feature-item">Read the entire app state with a single call to <code>_getDevSignals()</code></div>
         <div class="ai-feature-item">Write to any signal directly — UI updates instantly, no REST API needed</div>
-        <div class="ai-feature-item">Observe every state change in real time with <code>_setSignalWriteHook</code></div>
-        <div class="ai-feature-item">Understand user intent with <code>createIntentEngine()</code></div>
-        <div class="ai-feature-item">Stream LLM responses directly into reactive signals with <code>createLLMStream()</code></div>
+        <div class="ai-feature-item">Generate components from a description: <code>generateSync('a counter')</code></div>
+        <div class="ai-feature-item">Natural-language queries: <code>drQuery('show active users over 30')</code></div>
+        <div class="ai-feature-item">Full audit trail: <code>globalTrace</code> records every AI read, write, and generate</div>
+        <div class="ai-feature-item">Block AI from sensitive fields: <code>withPermissions(sig, { aiAccess: 'none' })</code></div>
+        <div class="ai-feature-item">Auto-redact PII from LLM prompts: <code>privateSignal(email, { category: 'email' })</code></div>
+        <div class="ai-feature-item">Capture UI state for LLMs: <code>captureScreenSchema()</code> → compact JSON</div>
       </div>
     </div>
     <div class="ai-code">

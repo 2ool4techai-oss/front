@@ -255,3 +255,55 @@ export type { InputModality, MultiModalOptions, MultiModalInput } from './multim
 // ── Cross-Session Adaptive Signals ────────────────────────────────────
 export { adaptiveSignal, createLearningProfile } from './crosssession.js';
 export type { LearningProfile, CrossSessionOptions, LearningProfileStore, AdaptiveSignalType } from './crosssession.js';
+
+// ── Decaying Preference Signals ───────────────────────────────────────
+export { createDecaySignal } from './decay.js';
+export type { DecayOptions, DecayEntry, DecaySignal } from './decay.js';
+
+// ── Context-Aware Profiles ────────────────────────────────────────────
+export { createContextProfile, useContextAdaptiveSignal } from './context-profile.js';
+export type { Context, TimeSlot, DeviceClass, NetworkClass, ContextProfileOptions, ContextProfile } from './context-profile.js';
+
+// ── Attention Tracking ────────────────────────────────────────────────
+export { createAttentionTracker } from './attention.js';
+export type { AttentionOptions, AttentionEntry, AttentionTracker } from './attention.js';
+
+// ── Explicit + Behavioral Preference Merge ────────────────────────────
+export { preferenceSignal } from './preference.js';
+export type { PreferenceOptions, PreferenceSignal } from './preference.js';
+
+// ── Signal Integrity (HMAC tamper detection) ──────────────────────────
+export { createIntegritySignal, IntegrityError } from './signal-integrity.js';
+export type { IntegrityOptions, IntegritySignal } from './signal-integrity.js';
+
+// ── Private / PII Signals ─────────────────────────────────────────────
+export { privateSignal, isPrivateSignal, markAsPrivate, getPrivateSignals } from './private-signal.js';
+export type { PIICategory, PrivateSignalOptions, PrivateSignal } from './private-signal.js';
+
+// ── Rate-Limited Signals ──────────────────────────────────────────────
+export { rateLimitSignal, RateLimitError } from './rate-limit-signal.js';
+export type { RateLimitOptions, RateLimitedSignal } from './rate-limit-signal.js';
+
+// ── XSS Guard Signals ─────────────────────────────────────────────────
+export { xssGuardSignal } from './xss-guard.js';
+export type { XSSGuardOptions, XSSGuardSignal } from './xss-guard.js';
+
+// ── Anomaly Detection Signals ─────────────────────────────────────────
+export { anomalySignal } from './anomaly.js';
+export type { AnomalyOptions, AnomalyRule, AnomalyEvent, AnomalySignal } from './anomaly.js';
+
+// ── Type-Coercing Signals ─────────────────────────────────────────────
+export { coercedSignal } from './type-coerce.js';
+export type { CoerceOptions, CoerceTarget, CoercedSignal } from './type-coerce.js';
+
+// ── Dead Signal Detector ──────────────────────────────────────────────
+export { createDeadSignalDetector, watchedSignal } from './dead-signal.js';
+export type { DeadSignalOptions, DeadSignalReport, DeadSignalDetector } from './dead-signal.js';
+
+// ── Circular Dependency Guard ─────────────────────────────────────────
+export { guardedComputed, detectCycles, CircularDependencyError } from './circular-guard.js';
+export type { CircularGuardOptions, GuardedComputed } from './circular-guard.js';
+
+// ── Bounded Array Signals ─────────────────────────────────────────────
+export { boundedSignal } from './bounded-signal.js';
+export type { BoundedOptions, BoundedSignal } from './bounded-signal.js';

@@ -267,6 +267,9 @@ export function ShowcaseApp(): HTMLElement {
     VoiceSignalSection(),
     PermissionsSection(),
     MultiModalSection(),
+    DecaySignalSection(),
+    SecuritySignalSection(),
+    AutoFixSection(),
     FooterSection(),
   );
 
@@ -1455,12 +1458,206 @@ function MultiModalSection(): HTMLElement {
   return section;
 }
 
+// ── Decay Signal Section ───────────────────────────────────────────────
+function DecaySignalSection(): HTMLElement {
+  const section = h('section', { class: 'section', id: 'decay-signal' },
+    h('h2', { class: 'section-title' }, '⏳ Decaying Preferences'),
+    h('p', { class: 'section-desc' },
+      'Preferences that forget. Confidence in a learned value halves over time — stale choices never lock the UI in the past.',
+    ),
+  );
+
+  const barEls: Record<string, HTMLElement> = {};
+  const confEls: Record<string, HTMLElement> = {};
+  const box = h('div', { class: 'demo-box' });
+
+  const choices = ['Electronics 🔌', 'Fashion 👗', 'Books 📚', 'Sports 🏋️'];
+
+  import('@nexoraaidrishti/runtime').then(({ createDecaySignal }) => {
+    const favSignal = createDecaySignal({ initial: choices[0]!, halfLife: 8000 });
+
+    const updateBars = () => {
+      for (const choice of choices) {
+        const conf = favSignal.confidence(choice);
+        const pct = Math.round(conf * 100);
+        if (barEls[choice]) barEls[choice]!.style.width = `${pct}%`;
+        if (confEls[choice]) confEls[choice]!.textContent = `${pct}%`;
+      }
+    };
+
+    const grid = h('div', { style: 'display:flex;flex-direction:column;gap:10px;margin-bottom:14px' });
+
+    for (const choice of choices) {
+      const bar = h('div', { style: 'height:100%;background:linear-gradient(90deg,#6366f1,#a5b4fc);border-radius:4px;width:0%;transition:width .4s' });
+      barEls[choice] = bar;
+      const pctLabel = h('span', { style: 'font-size:12px;color:#94a3b8;min-width:36px;text-align:right' }, '0%');
+      confEls[choice] = pctLabel;
+
+      const row = h('div', { style: 'display:flex;align-items:center;gap:10px' },
+        h('button', {
+          class: 'demo-btn',
+          style: 'min-width:150px;font-size:13px',
+          onclick: () => { favSignal.reinforce(choice, 0.25); updateBars(); },
+        }, choice),
+        h('div', { style: 'flex:1;background:#1e1e2e;border-radius:4px;height:10px;overflow:hidden' }, bar),
+        pctLabel,
+      );
+      grid.appendChild(row);
+    }
+
+    const decayBtn = h('button', {
+      class: 'demo-btn',
+      style: 'background:#f59e0b;margin-right:8px',
+      onclick: () => { favSignal.decay(); updateBars(); },
+    }, '⏩ Fast-decay (simulate 1 week)');
+
+    const resetBtn = h('button', {
+      class: 'demo-btn',
+      style: 'background:#475569',
+      onclick: () => { favSignal.reset(); updateBars(); },
+    }, '↺ Reset');
+
+    const infoEl = h('p', { style: 'font-size:13px;color:#94a3b8;margin:10px 0 0' },
+      'Click a category to reinforce it. Use "Fast-decay" to simulate time passing — old choices fade.',
+    );
+
+    box.appendChild(grid);
+    box.appendChild(h('div', { style: 'margin-top:10px' }, decayBtn, resetBtn));
+    box.appendChild(infoEl);
+    box.appendChild(h('pre', { style: 'background:#0f0f1a;padding:12px;border-radius:8px;font-size:12px;color:#a5b4fc;margin-top:12px' },
+      `const fav = createDecaySignal({\n  initial: 'Electronics',\n  halfLife: 7 * 24 * 60 * 60 * 1000,  // 7 days\n});\nfav.reinforce('Books');    // +0.2 confidence\nfav.confidence('Books');   // 0.2\n// After 7 days without reinforcement → 0.1`,
+    ));
+    updateBars();
+  });
+
+  section.appendChild(box);
+  return section;
+}
+
+// ── Security Signal Section ────────────────────────────────────────────
+function SecuritySignalSection(): HTMLElement {
+  const section = h('section', { class: 'section', id: 'security-signals' },
+    h('h2', { class: 'section-title' }, '🛡 Security-Native Signals'),
+    h('p', { class: 'section-desc' },
+      'XSS guard, rate limiting, PII auto-redaction, and anomaly detection — all baked into the signal layer.',
+    ),
+  );
+
+  const log = h('ul', { style: 'list-style:none;padding:0;margin:0;max-height:220px;overflow:auto;font-size:13px' });
+  const addLog = (msg: string, color = '#94a3b8') => {
+    const li = h('li', { style: `padding:5px 0;border-bottom:1px solid #1e1e2e;color:${color}` }, msg);
+    log.prepend(li);
+  };
+
+  import('@nexoraaidrishti/runtime').then(({ xssGuardSignal, rateLimitSignal, privateSignal, anomalySignal }) => {
+    const comment  = xssGuardSignal('Hello world');
+    const clicks   = rateLimitSignal(0, { maxWrites: 3, windowMs: 3000, mode: 'drop' });
+    const email    = privateSignal('user@company.com', { category: 'email' });
+    const score    = anomalySignal(50, { builtInRules: { suddenJump: true, impossibleValue: { min: 0, max: 100 } } });
+
+    const btns = [
+      h('button', { class: 'demo-btn', style: 'background:#ef4444', onclick: () => {
+        const xss = '<img src=x onerror="alert(1)"> Normal text';
+        comment.set(xss);
+        if (comment.wasSanitized()) addLog(`🧹 XSS stripped: "${comment()}"`, '#fbbf24');
+      }}, 'XSS inject attempt'),
+
+      h('button', { class: 'demo-btn', style: 'background:#f59e0b', onclick: () => {
+        for (let i = 0; i < 5; i++) clicks.set(clicks() + 1);
+        addLog(`🚦 Rate limit: ${clicks.writeCount()} writes in window | limited: ${clicks.isLimited()}`,
+          clicks.isLimited() ? '#f87171' : '#4ade80');
+      }}, 'Rapid-fire clicks (rate limit)'),
+
+      h('button', { class: 'demo-btn', style: 'background:#8b5cf6', onclick: () => {
+        addLog(`🔒 email raw: ${email()}`, '#c4b5fd');
+        addLog(`🔒 email redacted: ${email.redacted()}`, '#818cf8');
+      }}, 'PII: email signal'),
+
+      h('button', { class: 'demo-btn', style: 'background:#22c55e', onclick: () => {
+        score.set(999);
+        if (score.isAnomaly()) addLog(`⚠️ Anomaly! score jumped to 999 (impossible, max=100)`, '#f87171');
+        else addLog('No anomaly detected', '#4ade80');
+      }}, 'Anomaly: impossible value'),
+    ];
+
+    section.querySelector('.demo-box')!.appendChild(
+      h('div', { style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px' }, ...btns),
+    );
+    addLog('Security signals ready — try the attacks above');
+  });
+
+  section.appendChild(h('div', { class: 'demo-box' }, log,
+    h('pre', { style: 'background:#0f0f1a;padding:12px;border-radius:8px;font-size:12px;color:#a5b4fc;margin-top:12px' },
+      `const comment = xssGuardSignal('');         // auto-strips XSS\nconst api     = rateLimitSignal(0, { maxWrites: 5, windowMs: 1000 });\nconst email   = privateSignal(val, { category: 'email' });\nconst score   = anomalySignal(50, { builtInRules: { suddenJump: true } });`,
+    ),
+  ));
+  return section;
+}
+
+// ── Auto-Fix Section ───────────────────────────────────────────────────
+function AutoFixSection(): HTMLElement {
+  const section = h('section', { class: 'section', id: 'auto-fix' },
+    h('h2', { class: 'section-title' }, '🔧 Auto-Fix & Dev Hygiene'),
+    h('p', { class: 'section-desc' },
+      'DRISHTI catches bad signal usage at runtime: type coercion, unbounded growth, circular dependencies, and dead signals.',
+    ),
+  );
+
+  const log = h('ul', { style: 'list-style:none;padding:0;margin:0;max-height:220px;overflow:auto;font-size:13px' });
+  const addLog = (msg: string, color = '#94a3b8') => {
+    const li = h('li', { style: `padding:5px 0;border-bottom:1px solid #1e1e2e;color:${color}` }, msg);
+    log.prepend(li);
+  };
+
+  import('@nexoraaidrishti/runtime').then(({ coercedSignal, boundedSignal, detectCycles, createDeadSignalDetector }) => {
+    const age    = coercedSignal(0, { target: 'number', onCoerce: (from, to) => addLog(`🔄 Coerced: "${from}" → ${to}`, '#fbbf24') });
+    const items  = boundedSignal<string>([], { maxSize: 3, strategy: 'drop-oldest', onBound: (dropped) => addLog(`✂️ Bounded: dropped "${dropped.join('", "')}"`, '#f59e0b') });
+    const detector = createDeadSignalDetector({ devOnly: false, gracePeriodMs: 0 });
+
+    const btns = [
+      h('button', { class: 'demo-btn', style: 'background:#3b82f6', onclick: () => {
+        (age as any).set('forty-two');
+        addLog(`✅ age signal now: ${age()}`, '#4ade80');
+      }}, 'Coerce "forty-two" → number'),
+
+      h('button', { class: 'demo-btn', style: 'background:#f59e0b', onclick: () => {
+        items.push(`item-${Date.now() % 1000}`);
+        addLog(`📦 items: [${items().join(', ')}] (max 3)`, '#94a3b8');
+      }}, 'Push to bounded array'),
+
+      h('button', { class: 'demo-btn', style: 'background:#ef4444', onclick: () => {
+        const graph = new Map([['A', ['B']], ['B', ['C']], ['C', ['A']]]);
+        const cycles = detectCycles(graph);
+        addLog(`🔄 Circular: ${cycles.map(c => c.join('→')).join(', ')}`, '#f87171');
+      }}, 'Detect circular deps'),
+
+      h('button', { class: 'demo-btn', style: 'background:#8b5cf6', onclick: () => {
+        detector.register('orphan-signal');
+        const dead = detector.scan();
+        addLog(`💀 Dead signals: ${dead.map(d => d.label).join(', ') || 'none'}`, '#c4b5fd');
+      }}, 'Scan for dead signals'),
+    ];
+
+    section.querySelector('.demo-box')!.appendChild(
+      h('div', { style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px' }, ...btns),
+    );
+    addLog('Dev hygiene tools ready');
+  });
+
+  section.appendChild(h('div', { class: 'demo-box' }, log,
+    h('pre', { style: 'background:#0f0f1a;padding:12px;border-radius:8px;font-size:12px;color:#a5b4fc;margin-top:12px' },
+      `const age   = coercedSignal(0, { target: 'number' });   // auto-coerces\nconst items = boundedSignal([], { maxSize: 100 });        // never leaks\ndetectCycles(depGraph);                                   // circular check\ncreateDeadSignalDetector({ devOnly: true });              // hygiene scan`,
+    ),
+  ));
+  return section;
+}
+
 // ── Footer ─────────────────────────────────────────────────────────────
 function FooterSection(): HTMLElement {
   return h('footer', { class: 'showcase-footer' },
     h('p', {}, h('strong', {}, 'DRISHTI'), ' — The AI-Native Frontend Framework'),
     h('p', { style: 'margin-top: 8px' },
-      '631 tests · 54 test files · 16 Tier 1-3 features · MIT License · ',
+      '810 tests · 67 test files · 29 novel features · MIT License · ',
       h('a', { href: 'https://github.com/2ool4techai-oss/front' }, 'GitHub'),
     ),
   );
