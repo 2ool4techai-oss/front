@@ -179,8 +179,34 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); over
 .collab-user-count { text-align: center; margin-bottom: 16px; font-size: 0.85rem; color: var(--muted); }
 .collab-user-count strong { color: var(--green); }
 
-/* Footer */
-.showcase-footer { text-align: center; padding: 60px 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.875rem; }
+/* Adaptive UI */
+.adaptive-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media(max-width:700px) { .adaptive-grid { grid-template-columns: 1fr; } }
+.adaptive-buttons { display: flex; flex-direction: column; gap: 10px; }
+.adaptive-btn {
+  padding: 12px 20px; border-radius: 10px; font-family: var(--sans); font-weight: 700;
+  cursor: pointer; border: 2px solid transparent; transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  text-align: left; position: relative; overflow: hidden;
+}
+.adaptive-btn .ab-label { display: block; font-size: 0.9rem; }
+.adaptive-btn .ab-meta  { font-size: 0.72rem; font-weight: 400; opacity: 0.7; margin-top: 2px; display: block; }
+.adaptive-btn.size-sm  { font-size: 0.8rem;  padding: 8px 14px;  }
+.adaptive-btn.size-md  { font-size: 0.9rem;  padding: 12px 20px; }
+.adaptive-btn.size-lg  { font-size: 1rem;    padding: 16px 26px; }
+.adaptive-btn.size-xl  { font-size: 1.15rem; padding: 20px 32px; box-shadow: 0 0 30px rgba(99,102,241,0.35); }
+.adaptive-btn.hot  { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border-color: transparent; }
+.adaptive-btn.warm { background: rgba(99,102,241,0.15); color: var(--accent); border-color: rgba(99,102,241,0.35); }
+.adaptive-btn.cool { background: var(--card); color: var(--muted); border-color: var(--border); }
+.adaptive-btn.cold { background: transparent; color: var(--muted); border-color: rgba(255,255,255,0.05); opacity: 0.5; }
+.heat-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.heat-label { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); width: 100px; flex-shrink: 0; }
+.heat-bar-outer { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+.heat-bar-inner { height: 100%; border-radius: 3px; transition: width 0.5s cubic-bezier(0.16,1,0.3,1); }
+.heat-count { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); width: 28px; text-align: right; }
+.adaptive-insight { margin-top: 16px; padding: 12px 16px; border-radius: 10px; background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2); font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+.adaptive-insight strong { color: var(--accent); }
+.adaptive-reset { margin-top: 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-family: var(--sans); transition: all 0.15s; }
+.adaptive-reset:hover { border-color: var(--accent); color: var(--accent); } text-align: center; padding: 60px 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.875rem; }
 .showcase-footer strong { color: var(--text); }
 .showcase-footer a { color: var(--accent); text-decoration: none; }
 .showcase-footer a:hover { text-decoration: underline; }
@@ -223,6 +249,7 @@ export function ShowcaseApp(): HTMLElement {
     AIStreamSection(),
     PerformanceSection(),
     CollabSection(),
+    AdaptiveUISection(),
     FooterSection(),
   );
 
@@ -247,6 +274,7 @@ function NavBar(): HTMLElement {
       h('a', { href: '#ai' }, 'AI'),
       h('a', { href: '#performance' }, 'Performance'),
       h('a', { href: '#collab' }, 'Collab'),
+      h('a', { href: '#adaptive' }, 'Adaptive'),
     ),
     h('span', { class: 'nav-badge' }, 'v0.1.0'),
   );
@@ -953,6 +981,174 @@ function CollabSection(): HTMLElement {
             u.name,
           ),
         ),
+      ),
+    ),
+  );
+
+  return section;
+}
+
+// ── Adaptive UI ───────────────────────────────────────────────────────
+function AdaptiveUISection(): HTMLElement {
+  interface ActionDef { id: string; label: string; desc: string; }
+
+  const actions: ActionDef[] = [
+    { id: 'deploy',   label: '🚀 Deploy',         desc: 'Push to production' },
+    { id: 'invite',   label: '👥 Invite Team',     desc: 'Add collaborators'  },
+    { id: 'export',   label: '📦 Export Data',     desc: 'Download CSV/JSON'  },
+    { id: 'settings', label: '⚙️ Settings',        desc: 'Configure workspace'},
+    { id: 'archive',  label: '🗄️ Archive',         desc: 'Move to archive'    },
+    { id: 'delete',   label: '🗑️ Delete',          desc: 'Remove permanently' },
+  ];
+
+  const clicks = signal<Record<string, number>>(
+    Object.fromEntries(actions.map(a => [a.id, 0]))
+  );
+  const total  = computed(() => Object.values(clicks()).reduce((s, v) => s + v, 0));
+  const insight = signal('Click buttons to teach the UI what matters to you.');
+
+  const HEAT_LEVELS = ['cold', 'cool', 'warm', 'hot'] as const;
+  const SIZE_LEVELS = ['size-sm', 'size-md', 'size-lg', 'size-xl'] as const;
+
+  function getHeat(id: string): string {
+    const t = total();
+    if (t === 0) return 'cool';
+    const max = Math.max(...Object.values(clicks()));
+    if (max === 0) return 'cool';
+    const ratio = clicks()[id] / max;
+    if (ratio > 0.75) return HEAT_LEVELS[3];
+    if (ratio > 0.4)  return HEAT_LEVELS[2];
+    if (ratio > 0.1)  return HEAT_LEVELS[1];
+    return HEAT_LEVELS[0];
+  }
+
+  function getSize(id: string): string {
+    const t = total();
+    if (t === 0) return SIZE_LEVELS[1];
+    const max = Math.max(...Object.values(clicks()));
+    if (max === 0) return SIZE_LEVELS[1];
+    const ratio = clicks()[id] / max;
+    if (ratio > 0.75) return SIZE_LEVELS[3];
+    if (ratio > 0.4)  return SIZE_LEVELS[2];
+    if (ratio > 0.1)  return SIZE_LEVELS[1];
+    return SIZE_LEVELS[0];
+  }
+
+  function updateInsight(): void {
+    const sorted = [...actions].sort((a, b) => clicks()[b.id] - clicks()[a.id]);
+    const top = sorted[0];
+    const t = total();
+    if (t === 0) { insight.set('Click buttons to teach the UI what matters to you.'); return; }
+    if (t < 3)   { insight.set(`Learning… keep clicking to see the UI adapt in real time.`); return; }
+    const least = sorted[sorted.length - 1];
+    insight.set(
+      `You use "${top.label}" most — it's now larger and more prominent. ` +
+      `"${least.label}" is fading away. The UI is learning your workflow.`
+    );
+  }
+
+  function handleClick(id: string): void {
+    const cur = { ...clicks() };
+    cur[id] = (cur[id] ?? 0) + 1;
+    clicks.set(cur);
+    updateInsight();
+  }
+
+  // Build button elements
+  const btnEls: Record<string, HTMLElement> = {};
+  actions.forEach(a => {
+    const btn = h('button', {
+      class: `adaptive-btn ${getSize(a.id)} ${getHeat(a.id)}`,
+      onclick: () => handleClick(a.id),
+    },
+      h('span', { class: 'ab-label' }, a.label),
+      h('span', { class: 'ab-meta'  }, a.desc),
+    );
+    btnEls[a.id] = btn;
+  });
+
+  // Reactive style updates
+  effect(() => {
+    actions.forEach(a => {
+      const el = btnEls[a.id];
+      if (!el) return;
+      const heat = getHeat(a.id);
+      const size = getSize(a.id);
+      el.className = `adaptive-btn ${size} ${heat}`;
+    });
+  });
+
+  // Heat bars
+  const barEls: Record<string, HTMLElement> = {};
+  const countEls: Record<string, HTMLElement> = {};
+  const heatColors: Record<string, string> = {
+    deploy: '#6366f1', invite: '#8b5cf6', export: '#10b981',
+    settings: '#f59e0b', archive: '#64748b', delete: '#ef4444',
+  };
+
+  const heatRows = actions.map(a => {
+    const bar   = h('div', { class: 'heat-bar-inner', style: `background:${heatColors[a.id]};width:0%` });
+    const count = h('span', { class: 'heat-count' }, '0');
+    barEls[a.id]   = bar;
+    countEls[a.id] = count;
+    return h('div', { class: 'heat-bar-row' },
+      h('span', { class: 'heat-label' }, a.label),
+      h('div',  { class: 'heat-bar-outer' }, bar),
+      count,
+    );
+  });
+
+  effect(() => {
+    const c = clicks();
+    const max = Math.max(...Object.values(c), 1);
+    actions.forEach(a => {
+      const pct = Math.round((c[a.id] / max) * 100);
+      if (barEls[a.id])   barEls[a.id].style.width = `${pct}%`;
+      if (countEls[a.id]) countEls[a.id].textContent = String(c[a.id]);
+    });
+  });
+
+  const insightEl = h('div', { class: 'adaptive-insight' },
+    () => insight(),
+  );
+
+  const section = h('section', { class: 'section section-bg-alt', id: 'adaptive' },
+    h('div', { class: 'section-header' },
+      h('div', { class: 'section-tag' }, 'ADAPTIVE UI'),
+      h('h2', { class: 'section-title' }, 'UI That Learns You'),
+      h('p', { class: 'section-sub' },
+        'Components observe your behavior and reshape themselves. The more you use something, the more prominent it becomes — automatically.',
+      ),
+    ),
+    h('div', { class: 'adaptive-grid' },
+      h('div', { class: 'card card-glow' },
+        h('div', { style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;' },
+          h('strong', { style: 'font-size:0.9rem;' }, 'Your Actions'),
+          h('span', { class: 'live-indicator' },
+            h('span', { class: 'live-dot' }),
+            () => `${total()} interactions`,
+          ),
+        ),
+        h('div', { class: 'adaptive-buttons' },
+          ...actions.map(a => btnEls[a.id]),
+        ),
+      ),
+      h('div', { class: 'card card-glow' },
+        h('div', { style: 'margin-bottom:16px;' },
+          h('strong', { style: 'font-size:0.9rem;' }, 'Behavior Heatmap'),
+          h('p', { style: 'font-size:0.78rem;color:var(--muted);margin-top:6px;' },
+            'Usage frequency drives size, color, and prominence in real time.',
+          ),
+        ),
+        ...heatRows,
+        insightEl,
+        h('button', {
+          class: 'adaptive-reset',
+          onclick: () => {
+            clicks.set(Object.fromEntries(actions.map(a => [a.id, 0])));
+            insight.set('Click buttons to teach the UI what matters to you.');
+          },
+        }, '↺ Reset learning'),
       ),
     ),
   );
