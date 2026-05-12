@@ -29,7 +29,7 @@
       <a href="https://github.com/2ool4techai-oss/front" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" role="menuitem">GitHub &rarr;</a>
     </div>
     <div class="nav-actions">
-      <span class="nav-version">v0.1.0</span>
+      <span class="nav-version">v0.2.0</span>
       <button class="nav-mobile-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
@@ -40,7 +40,7 @@
 <!-- ── Page Hero ─────────────────────────────────────────────── -->
 <div class="page-hero">
   <h1>Examples</h1>
-  <p>8 complete, production-quality examples — from a simple counter to real-time collaboration and AI streaming.</p>
+  <p>15 complete, production-quality examples — from a simple counter to real-time collaboration and AI streaming.</p>
 </div>
 
 <!-- ── Examples Grid ─────────────────────────────────────────── -->
@@ -763,6 +763,496 @@
 }
 
 <span class="fn">mountApp</span>(<span class="type">CollabDoc</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
+    </div>
+  </article>
+
+
+  <!-- ── Example 9: Decay Signal — Auto-Reset Notifications ──────── -->
+  <article class="example-card" id="ex-decay">
+    <div class="example-header">
+      <div class="example-num">Example 09</div>
+      <h2 class="example-title">Decay Signal — Auto-Reset Notifications</h2>
+      <p class="example-desc"><code>createDecaySignal</code> for ephemeral UI state that automatically resets after an idle timeout. Demonstrates toast notifications that dismiss themselves.</p>
+    </div>
+    <div class="example-body">
+      <pre><code><span class="kw">import</span> {
+  <span class="fn">createDecaySignal</span>, <span class="fn">signal</span>, <span class="fn">computed</span>,
+  <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">each</span>, <span class="fn">mountApp</span>,
+} <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="cmt">// Notification message decays back to null after 3 seconds of no writes</span>
+<span class="kw">const</span> <span class="var">notification</span> = <span class="fn">createDecaySignal</span><span class="op">&lt;</span><span class="type">string</span> | <span class="kw">null</span><span class="op">&gt;</span>(<span class="kw">null</span>, {
+  <span class="attr">resetTo</span>: <span class="kw">null</span>,
+  <span class="attr">afterMs</span>: <span class="num">3000</span>,
+  <span class="attr">onDecay</span>: () <span class="op">=&gt;</span> console.<span class="fn">log</span>(<span class="str">'Toast dismissed'</span>),
+});
+
+<span class="cmt">// Hover highlight also decays — resets 500ms after mouse leaves</span>
+<span class="kw">const</span> <span class="var">hoveredId</span> = <span class="fn">createDecaySignal</span><span class="op">&lt;</span><span class="type">string</span> | <span class="kw">null</span><span class="op">&gt;</span>(<span class="kw">null</span>, {
+  <span class="attr">resetTo</span>: <span class="kw">null</span>,
+  <span class="attr">afterMs</span>: <span class="num">500</span>,
+});
+
+<span class="kw">const</span> <span class="var">items</span> = <span class="fn">signal</span>([
+  { <span class="attr">id</span>: <span class="str">'a'</span>, <span class="attr">label</span>: <span class="str">'Save document'</span> },
+  { <span class="attr">id</span>: <span class="str">'b'</span>, <span class="attr">label</span>: <span class="str">'Publish changes'</span> },
+  { <span class="attr">id</span>: <span class="str">'c'</span>, <span class="attr">label</span>: <span class="str">'Send invite'</span> },
+]);
+
+<span class="kw">function</span> <span class="fn">notify</span>(<span class="var">msg</span>: <span class="type">string</span>) {
+  <span class="var">notification</span>.<span class="fn">set</span>(<span class="var">msg</span>); <span class="cmt">// decay timer resets on each write</span>
+}
+
+<span class="kw">function</span> <span class="fn">DecayApp</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'decay-app'</span> },
+
+    <span class="cmt">// Toast — visible only while notification is non-null</span>
+    <span class="fn">show</span>(
+      () <span class="op">=&gt;</span> <span class="var">notification</span>() <span class="op">!==</span> <span class="kw">null</span>,
+      () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'toast toast-success'</span> },
+        () <span class="op">=&gt;</span> <span class="var">notification</span>()
+      ),
+    ),
+
+    <span class="cmt">// Action list — hover highlights decay automatically</span>
+    <span class="fn">h</span>(<span class="str">'ul'</span>, { <span class="attr">class</span>: <span class="str">'action-list'</span> },
+      <span class="fn">each</span>(() <span class="op">=&gt;</span> <span class="var">items</span>(), <span class="var">i</span> <span class="op">=&gt;</span> <span class="var">i</span>.id, (<span class="var">item</span>) <span class="op">=&gt;</span>
+        <span class="fn">h</span>(<span class="str">'li'</span>, {
+          <span class="attr">class</span>: () <span class="op">=&gt;</span> <span class="var">hoveredId</span>() <span class="op">===</span> <span class="var">item</span>.id ? <span class="str">'action-item highlighted'</span> : <span class="str">'action-item'</span>,
+          <span class="attr">onmouseenter</span>: () <span class="op">=&gt;</span> <span class="var">hoveredId</span>.<span class="fn">set</span>(<span class="var">item</span>.id),
+          <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="fn">notify</span>(<span class="str">`✓ </span>${<span class="var">item</span>.label}<span class="str"> completed`</span>),
+        }, <span class="var">item</span>.label)
+      )
+    ),
+  );
+}
+
+<span class="fn">mountApp</span>(<span class="type">DecayApp</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
+    </div>
+  </article>
+
+  <!-- ── Example 10: Security — XSS Guard + Rate Limiting ─────────── -->
+  <article class="example-card" id="ex-security">
+    <div class="example-header">
+      <div class="example-num">Example 10</div>
+      <h2 class="example-title">Security — XSS Guard + Rate Limiting</h2>
+      <p class="example-desc"><code>xssGuardSignal</code> for automatic input sanitization combined with <code>rateLimitSignal</code> to throttle writes. Shows production-grade security primitives.</p>
+    </div>
+    <div class="example-body">
+      <pre><code><span class="kw">import</span> {
+  <span class="fn">xssGuardSignal</span>, <span class="fn">rateLimitSignal</span>, <span class="fn">RateLimitError</span>,
+  <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span>,
+} <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="cmt">// User-supplied HTML is stripped of all tags automatically</span>
+<span class="kw">const</span> <span class="var">comment</span> = <span class="fn">xssGuardSignal</span>(<span class="str">''</span>, { <span class="attr">mode</span>: <span class="str">'strip'</span> });
+
+<span class="cmt">// AI inference endpoint: max 5 calls per 10 seconds</span>
+<span class="kw">const</span> <span class="var">inferenceInput</span> = <span class="fn">rateLimitSignal</span>(<span class="str">''</span>, {
+  <span class="attr">maxWrites</span>: <span class="num">5</span>,
+  <span class="attr">windowMs</span>: <span class="num">10_000</span>,
+});
+
+<span class="kw">const</span> <span class="var">rateLimitError</span> = <span class="fn">signal</span><span class="op">&lt;</span><span class="type">string</span> | <span class="kw">null</span><span class="op">&gt;</span>(<span class="kw">null</span>);
+
+<span class="kw">function</span> <span class="fn">sendToAI</span>(<span class="var">text</span>: <span class="type">string</span>) {
+  <span class="kw">try</span> {
+    <span class="var">inferenceInput</span>.<span class="fn">set</span>(<span class="var">text</span>);
+    <span class="var">rateLimitError</span>.<span class="fn">set</span>(<span class="kw">null</span>);
+    <span class="cmt">// proceed with AI call...</span>
+  } <span class="kw">catch</span> (<span class="var">e</span>) {
+    <span class="kw">if</span> (<span class="var">e</span> <span class="kw">instanceof</span> <span class="type">RateLimitError</span>) {
+      <span class="var">rateLimitError</span>.<span class="fn">set</span>(<span class="str">`Rate limited. Retry in </span>${<span class="var">e</span>.retryAfterMs}<span class="str">ms`</span>);
+    }
+  }
+}
+
+<span class="kw">function</span> <span class="fn">SecurityApp</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'security-demo'</span> },
+
+    <span class="cmt">// XSS-guarded comment box</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'section'</span> },
+      <span class="fn">h</span>(<span class="str">'label'</span>, {}, <span class="str">'Comment (XSS-sanitized):'</span>),
+      <span class="fn">h</span>(<span class="str">'textarea'</span>, {
+        <span class="attr">oninput</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">comment</span>.<span class="fn">set</span>((<span class="var">e</span>.target <span class="kw">as</span> <span class="type">HTMLTextAreaElement</span>).value),
+        <span class="attr">placeholder</span>: <span class="str">'Try pasting &lt;script&gt;alert(1)&lt;/script&gt;...'</span>,
+      }),
+      <span class="fn">h</span>(<span class="str">'p'</span>, { <span class="attr">class</span>: <span class="str">'sanitized-output'</span> },
+        <span class="str">'Stored value: '</span>, () <span class="op">=&gt;</span> <span class="var">comment</span>()
+      ),
+    ),
+
+    <span class="cmt">// Rate-limited AI input</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'section'</span> },
+      <span class="fn">h</span>(<span class="str">'label'</span>, {}, <span class="str">'AI Query (max 5/10s):'</span>),
+      <span class="fn">h</span>(<span class="str">'input'</span>, {
+        <span class="attr">placeholder</span>: <span class="str">'Type a query...'</span>,
+        <span class="attr">oninput</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="fn">sendToAI</span>((<span class="var">e</span>.target <span class="kw">as</span> <span class="type">HTMLInputElement</span>).value),
+      }),
+      <span class="fn">show</span>(
+        () <span class="op">=&gt;</span> <span class="var">rateLimitError</span>() <span class="op">!==</span> <span class="kw">null</span>,
+        () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'p'</span>, { <span class="attr">class</span>: <span class="str">'error'</span> }, () <span class="op">=&gt;</span> <span class="var">rateLimitError</span>()),
+      ),
+    ),
+  );
+}
+
+<span class="fn">mountApp</span>(<span class="type">SecurityApp</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
+    </div>
+  </article>
+
+  <!-- ── Example 11: Offline-First Sync ──────────────────────────── -->
+  <article class="example-card" id="ex-offline">
+    <div class="example-header">
+      <div class="example-num">Example 11</div>
+      <h2 class="example-title">Offline-First Sync</h2>
+      <p class="example-desc"><code>offlineSignal</code> and <code>isOnline</code> for writes that queue to IndexedDB when offline and replay automatically on reconnection. Full offline-first data model.</p>
+    </div>
+    <div class="example-body">
+      <pre><code><span class="kw">import</span> {
+  <span class="fn">offlineSignal</span>, <span class="fn">isOnline</span>, <span class="fn">onceOnline</span>,
+  <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">each</span>, <span class="fn">mountApp</span>,
+} <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="cmt">// Writes while offline are queued in IndexedDB and replayed on reconnect</span>
+<span class="kw">const</span> <span class="var">notes</span> = <span class="fn">offlineSignal</span><span class="op">&lt;</span>{ <span class="attr">id</span>: <span class="type">string</span>; <span class="attr">text</span>: <span class="type">string</span> }[]<span class="op">&gt;</span>(<span class="str">'notes'</span>, []);
+<span class="kw">const</span> <span class="var">online</span> = <span class="fn">isOnline</span>();         <span class="cmt">// reactive Signal&lt;boolean&gt;</span>
+<span class="kw">const</span> <span class="var">pending</span> = <span class="var">notes</span>.<span class="fn">pending</span>();  <span class="cmt">// count of queued offline writes</span>
+
+<span class="kw">const</span> <span class="var">draft</span> = <span class="fn">signal</span>(<span class="str">''</span>);
+<span class="kw">const</span> <span class="var">noteCount</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">notes</span>().<span class="var">length</span>);
+
+<span class="kw">function</span> <span class="fn">addNote</span>() {
+  <span class="kw">const</span> <span class="var">text</span> = <span class="var">draft</span>().<span class="fn">trim</span>();
+  <span class="kw">if</span> (!<span class="var">text</span>) <span class="kw">return</span>;
+  <span class="var">notes</span>.<span class="fn">set</span>([...<span class="var">notes</span>(), { <span class="attr">id</span>: <span class="type">Date</span>.<span class="fn">now</span>().<span class="fn">toString</span>(), <span class="attr">text</span> }]);
+  <span class="var">draft</span>.<span class="fn">set</span>(<span class="str">''</span>);
+}
+
+<span class="cmt">// Run a sync once the browser comes back online</span>
+<span class="fn">onceOnline</span>(() <span class="op">=&gt;</span> console.<span class="fn">log</span>(<span class="str">'Back online — replaying queued writes'</span>));
+
+<span class="kw">function</span> <span class="fn">OfflineApp</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'offline-app'</span> },
+
+    <span class="cmt">// Connection status banner</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, {
+      <span class="attr">class</span>: () <span class="op">=&gt;</span> <span class="var">online</span>() ? <span class="str">'status-bar online'</span> : <span class="str">'status-bar offline'</span>,
+    },
+      () <span class="op">=&gt;</span> <span class="var">online</span>()
+        ? <span class="str">`Online · </span>${<span class="var">noteCount</span>()}<span class="str"> notes synced`</span>
+        : <span class="str">`Offline · </span>${<span class="var">pending</span>()}<span class="str"> writes queued`</span>,
+    ),
+
+    <span class="cmt">// Note input</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'input-row'</span> },
+      <span class="fn">h</span>(<span class="str">'input'</span>, {
+        <span class="attr">value</span>: <span class="var">draft</span>,
+        <span class="attr">oninput</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">draft</span>.<span class="fn">set</span>((<span class="var">e</span>.target <span class="kw">as</span> <span class="type">HTMLInputElement</span>).value),
+        <span class="attr">onkeydown</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">e</span>.key <span class="op">===</span> <span class="str">'Enter'</span> <span class="op">&amp;&amp;</span> <span class="fn">addNote</span>(),
+        <span class="attr">placeholder</span>: <span class="str">'Write a note (works offline)...'</span>,
+      }),
+      <span class="fn">h</span>(<span class="str">'button'</span>, { <span class="attr">class</span>: <span class="str">'btn btn-primary'</span>, <span class="attr">onclick</span>: <span class="fn">addNote</span> }, <span class="str">'Add'</span>),
+    ),
+
+    <span class="cmt">// Notes list</span>
+    <span class="fn">each</span>(() <span class="op">=&gt;</span> <span class="var">notes</span>(), <span class="var">n</span> <span class="op">=&gt;</span> <span class="var">n</span>.id, (<span class="var">note</span>) <span class="op">=&gt;</span>
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'note-item'</span> }, <span class="var">note</span>.text)
+    ),
+  );
+}
+
+<span class="fn">mountApp</span>(<span class="type">OfflineApp</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
+    </div>
+  </article>
+
+  <!-- ── Example 12: Voice Commands ──────────────────────────────── -->
+  <article class="example-card" id="ex-voice">
+    <div class="example-header">
+      <div class="example-num">Example 12</div>
+      <h2 class="example-title">Voice Commands</h2>
+      <p class="example-desc"><code>createVoiceSignal</code> maps spoken phrases to signal values via the Web Speech API. Demonstrates hands-free UI control with reactive voice state.</p>
+    </div>
+    <div class="example-body">
+      <pre><code><span class="kw">import</span> {
+  <span class="fn">createVoiceSignal</span>, <span class="fn">voiceControl</span>,
+  <span class="fn">signal</span>, <span class="fn">computed</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span>,
+} <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="cmt">// Command signal — spoken phrases map to discrete values</span>
+<span class="kw">const</span> <span class="var">mode</span> = <span class="fn">createVoiceSignal</span>(<span class="str">'view'</span>, {
+  <span class="attr">commands</span>: {
+    <span class="str">'edit mode'</span>: <span class="str">'edit'</span>,
+    <span class="str">'view mode'</span>: <span class="str">'view'</span>,
+    <span class="str">'preview mode'</span>: <span class="str">'preview'</span>,
+  },
+  <span class="attr">lang</span>: <span class="str">'en-US'</span>,
+});
+
+<span class="cmt">// Transcription signal — continuous speech-to-text</span>
+<span class="kw">const</span> <span class="var">searchQuery</span> = <span class="fn">signal</span>(<span class="str">''</span>);
+<span class="kw">const</span> <span class="var">voiceHandle</span> = <span class="fn">voiceControl</span>(<span class="var">searchQuery</span>, { <span class="attr">lang</span>: <span class="str">'en-US'</span> });
+
+<span class="kw">const</span> <span class="var">isListening</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">voiceHandle</span>.<span class="fn">listening</span>());
+<span class="kw">const</span> <span class="var">voiceSupported</span> = <span class="var">mode</span>.supported;
+
+<span class="kw">function</span> <span class="fn">VoiceApp</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'voice-app'</span> },
+
+    <span class="fn">show</span>(
+      () <span class="op">=&gt;</span> !<span class="var">voiceSupported</span>,
+      () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'p'</span>, { <span class="attr">class</span>: <span class="str">'warning'</span> }, <span class="str">'Web Speech API not supported in this browser.'</span>),
+    ),
+
+    <span class="cmt">// Mode indicator</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'mode-display'</span> },
+      <span class="str">'Current mode: '</span>,
+      <span class="fn">h</span>(<span class="str">'strong'</span>, {}, () <span class="op">=&gt;</span> <span class="var">mode</span>()),
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'voice-hint'</span> }, <span class="str">'Say "edit mode", "view mode", or "preview mode"'</span>),
+    ),
+
+    <span class="cmt">// Voice search</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'voice-search'</span> },
+      <span class="fn">h</span>(<span class="str">'button'</span>, {
+        <span class="attr">class</span>: () <span class="op">=&gt;</span> <span class="var">isListening</span>() ? <span class="str">'btn btn-danger'</span> : <span class="str">'btn btn-primary'</span>,
+        <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">isListening</span>() ? <span class="var">voiceHandle</span>.<span class="fn">stop</span>() : <span class="var">voiceHandle</span>.<span class="fn">start</span>(),
+      }, () <span class="op">=&gt;</span> <span class="var">isListening</span>() ? <span class="str">'⏹ Stop listening'</span> : <span class="str">'🎤 Start voice search'</span>),
+      <span class="fn">h</span>(<span class="str">'p'</span>, { <span class="attr">class</span>: <span class="str">'transcript'</span> },
+        <span class="str">'Heard: '</span>, () <span class="op">=&gt;</span> <span class="var">searchQuery</span>() || <span class="str">'(nothing yet)'</span>
+      ),
+    ),
+
+    <span class="cmt">// Mode controls — also work as regular buttons</span>
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'controls'</span> },
+      [<span class="str">'view'</span>, <span class="str">'edit'</span>, <span class="str">'preview'</span>].<span class="fn">map</span>((<span class="var">m</span>) <span class="op">=&gt;</span>
+        <span class="fn">h</span>(<span class="str">'button'</span>, {
+          <span class="attr">class</span>: () <span class="op">=&gt;</span> <span class="var">mode</span>() <span class="op">===</span> <span class="var">m</span> ? <span class="str">'btn btn-primary'</span> : <span class="str">'btn btn-ghost'</span>,
+          <span class="attr">onclick</span>: () <span class="op">=&gt;</span> <span class="var">mode</span>.<span class="fn">set</span>(<span class="var">m</span>),
+        }, <span class="var">m</span>)
+      ),
+    ),
+  );
+}
+
+<span class="fn">mountApp</span>(<span class="type">VoiceApp</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
+    </div>
+  </article>
+
+  <!-- ── Example 13: Anomaly Detection Dashboard ──────────────────── -->
+  <article class="example-card" id="ex-anomaly">
+    <div class="example-header">
+      <div class="example-num">Example 13</div>
+      <h2 class="example-title">Anomaly Detection Dashboard</h2>
+      <p class="example-desc"><code>anomalySignal</code> monitors a time-series metric and flags statistical outliers in real time. Shows z-score detection with a reactive anomaly log.</p>
+    </div>
+    <div class="example-body">
+      <pre><code><span class="kw">import</span> {
+  <span class="fn">anomalySignal</span>, <span class="fn">signal</span>, <span class="fn">computed</span>,
+  <span class="fn">h</span>, <span class="fn">each</span>, <span class="fn">mountApp</span>,
+} <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="cmt">// Detect anomalies using z-score — flags values &gt; 2.5 std devs from mean</span>
+<span class="kw">const</span> <span class="var">latencyMs</span> = <span class="fn">anomalySignal</span>(<span class="num">0</span>, {
+  <span class="attr">strategy</span>: <span class="str">'zscore'</span>,
+  <span class="attr">threshold</span>: <span class="num">2.5</span>,
+  <span class="attr">windowSize</span>: <span class="num">50</span>,
+  <span class="attr">onAnomaly</span>: (<span class="var">value</span>, <span class="var">meta</span>) <span class="op">=&gt;</span> {
+    console.<span class="fn">warn</span>(<span class="str">`Anomalous latency: </span>${<span class="var">value</span>}<span class="str">ms (z=</span>${<span class="var">meta</span>.z.<span class="fn">toFixed</span>(<span class="num">2</span>)}<span class="str">)`</span>);
+  },
+});
+
+<span class="kw">const</span> <span class="var">anomalies</span> = <span class="var">latencyMs</span>.<span class="fn">anomalies</span>();  <span class="cmt">// reactive AnomalyEvent[]</span>
+<span class="kw">const</span> <span class="var">anomalyCount</span> = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">anomalies</span>().<span class="var">length</span>);
+<span class="kw">const</span> <span class="var">lastAnomaly</span>  = <span class="fn">computed</span>(() <span class="op">=&gt;</span> <span class="var">anomalies</span>()[<span class="var">anomalies</span>().<span class="var">length</span> <span class="op">-</span> <span class="num">1</span>]);
+
+<span class="cmt">// Simulate incoming telemetry (mostly normal, occasional spike)</span>
+<span class="fn">setInterval</span>(() <span class="op">=&gt;</span> {
+  <span class="kw">const</span> <span class="var">normal</span> = <span class="num">50</span> <span class="op">+</span> <span class="type">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">20</span>;
+  <span class="kw">const</span> <span class="var">spike</span>  = <span class="type">Math</span>.<span class="fn">random</span>() <span class="op">&lt;</span> <span class="num">0.05</span> ? <span class="num">300</span> <span class="op">+</span> <span class="type">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">200</span> : <span class="num">0</span>;
+  <span class="var">latencyMs</span>.<span class="fn">set</span>(<span class="type">Math</span>.<span class="fn">round</span>(<span class="var">normal</span> <span class="op">+</span> <span class="var">spike</span>));
+}, <span class="num">200</span>);
+
+<span class="kw">function</span> <span class="fn">AnomalyDashboard</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'anomaly-dashboard'</span> },
+
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'metric-row'</span> },
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'metric'</span> },
+        <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'metric-value'</span> }, () <span class="op">=&gt;</span> <span class="str">`</span>${<span class="var">latencyMs</span>()}<span class="str">ms`</span>),
+        <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'metric-label'</span> }, <span class="str">'Current Latency'</span>),
+      ),
+      <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'metric'</span> },
+        <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'metric-value anomaly-count'</span> }, () <span class="op">=&gt;</span> <span class="var">anomalyCount</span>()),
+        <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'metric-label'</span> }, <span class="str">'Anomalies Detected'</span>),
+      ),
+    ),
+
+    <span class="fn">h</span>(<span class="str">'h3'</span>, {}, <span class="str">'Anomaly Log'</span>),
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'anomaly-log'</span> },
+      <span class="fn">each</span>(
+        () <span class="op">=&gt;</span> [...<span class="var">anomalies</span>()].<span class="fn">reverse</span>().<span class="fn">slice</span>(<span class="num">0</span>, <span class="num">10</span>),
+        (<span class="var">a</span>) <span class="op">=&gt;</span> <span class="var">a</span>.timestamp,
+        (<span class="var">a</span>) <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'anomaly-row'</span> },
+          <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'anomaly-value'</span> }, <span class="str">`</span>${<span class="var">a</span>.value}<span class="str">ms`</span>),
+          <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'anomaly-z'</span> }, <span class="str">`z=</span>${<span class="var">a</span>.z.<span class="fn">toFixed</span>(<span class="num">2</span>)}<span class="str">`</span>),
+          <span class="fn">h</span>(<span class="str">'span'</span>, { <span class="attr">class</span>: <span class="str">'anomaly-time'</span> },
+            <span class="kw">new</span> <span class="type">Date</span>(<span class="var">a</span>.timestamp).<span class="fn">toLocaleTimeString</span>()
+          ),
+        )
+      ),
+    ),
+  );
+}
+
+<span class="fn">mountApp</span>(<span class="type">AnomalyDashboard</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
+    </div>
+  </article>
+
+  <!-- ── Example 14: Dead Signal Detector ─────────────────────────── -->
+  <article class="example-card" id="ex-deadsignal">
+    <div class="example-header">
+      <div class="example-num">Example 14</div>
+      <h2 class="example-title">Dead Signal Detector</h2>
+      <p class="example-desc"><code>createDeadSignalDetector</code> and <code>watchedSignal</code> automatically identify signals that are never read or written after a grace period — keeping codebases clean.</p>
+    </div>
+    <div class="example-body">
+      <pre><code><span class="kw">import</span> {
+  <span class="fn">createDeadSignalDetector</span>, <span class="fn">watchedSignal</span>,
+  <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">each</span>, <span class="fn">mountApp</span>,
+} <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="cmt">// Create detector — no-ops in production by default</span>
+<span class="kw">const</span> <span class="var">detector</span> = <span class="fn">createDeadSignalDetector</span>({
+  <span class="attr">graceMs</span>: <span class="num">5_000</span>,        <span class="cmt">// wait 5s before marking as dead</span>
+  <span class="attr">checkIntervalMs</span>: <span class="num">2_000</span>, <span class="cmt">// scan every 2s</span>
+  <span class="attr">devOnly</span>: <span class="kw">true</span>,          <span class="cmt">// no-op outside dev mode</span>
+  <span class="attr">onDead</span>: (<span class="var">label</span>, <span class="var">ageMs</span>) <span class="op">=&gt;</span> {
+    <span class="var">deadLog</span>.<span class="fn">set</span>([...<span class="var">deadLog</span>(), { <span class="var">label</span>, <span class="var">ageMs</span> }]);
+  },
+});
+
+<span class="kw">const</span> <span class="var">deadLog</span> = <span class="fn">signal</span><span class="op">&lt;</span>{ <span class="attr">label</span>: <span class="type">string</span>; <span class="attr">ageMs</span>: <span class="type">number</span> }[]<span class="op">&gt;</span>([]);
+
+<span class="cmt">// Active signal — read in the template, stays alive</span>
+<span class="kw">const</span> <span class="var">activeCount</span> = <span class="fn">watchedSignal</span>(<span class="num">0</span>, <span class="str">'activeCount'</span>, <span class="var">detector</span>);
+
+<span class="cmt">// Orphaned signal — created but never used; will be flagged</span>
+<span class="kw">const</span> <span class="var">_orphaned</span> = <span class="fn">watchedSignal</span>(<span class="str">'stale'</span>, <span class="str">'orphanedFeatureFlag'</span>, <span class="var">detector</span>);
+
+<span class="fn">setInterval</span>(() <span class="op">=&gt;</span> <span class="var">activeCount</span>.<span class="fn">set</span>(<span class="var">c</span> <span class="op">=&gt;</span> <span class="var">c</span> <span class="op">+</span> <span class="num">1</span>), <span class="num">1000</span>);
+
+<span class="kw">function</span> <span class="fn">DeadSignalApp</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'dead-signal-app'</span> },
+
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'live-metric'</span> },
+      <span class="str">'Active count: '</span>,
+      <span class="fn">h</span>(<span class="str">'strong'</span>, {}, () <span class="op">=&gt;</span> <span class="var">activeCount</span>()),
+    ),
+
+    <span class="fn">h</span>(<span class="str">'h3'</span>, {}, <span class="str">'Dead Signals Detected'</span>),
+    <span class="fn">h</span>(<span class="str">'p'</span>, { <span class="attr">class</span>: <span class="str">'hint'</span> },
+      <span class="str">'Wait 5 seconds — "orphanedFeatureFlag" will be flagged as dead.'</span>
+    ),
+    <span class="fn">h</span>(<span class="str">'ul'</span>, { <span class="attr">class</span>: <span class="str">'dead-log'</span> },
+      <span class="fn">each</span>(
+        () <span class="op">=&gt;</span> <span class="var">deadLog</span>(),
+        (<span class="var">d</span>) <span class="op">=&gt;</span> <span class="var">d</span>.label,
+        (<span class="var">d</span>) <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'li'</span>, { <span class="attr">class</span>: <span class="str">'dead-entry'</span> },
+          <span class="fn">h</span>(<span class="str">'code'</span>, {}, <span class="var">d</span>.label),
+          <span class="str">` — unused for </span>${(<span class="var">d</span>.ageMs / <span class="num">1000</span>).<span class="fn">toFixed</span>(<span class="num">1</span>)}<span class="str">s`</span>,
+        )
+      ),
+    ),
+  );
+}
+
+<span class="fn">mountApp</span>(<span class="type">DeadSignalApp</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
+    </div>
+  </article>
+
+  <!-- ── Example 15: AI Generate + Screen Schema ──────────────────── -->
+  <article class="example-card" id="ex-aigenerate">
+    <div class="example-header">
+      <div class="example-num">Example 15</div>
+      <h2 class="example-title">AI Generate + Screen Schema</h2>
+      <p class="example-desc"><code>generate()</code> creates a UI component from a natural-language prompt; <code>captureScreenSchema()</code> then feeds the rendered result back to an LLM for accessibility review.</p>
+    </div>
+    <div class="example-body">
+      <pre><code><span class="kw">import</span> {
+  <span class="fn">generate</span>, <span class="fn">captureScreenSchema</span>, <span class="fn">schemaToPrompt</span>,
+  <span class="fn">signal</span>, <span class="fn">h</span>, <span class="fn">show</span>, <span class="fn">mountApp</span>,
+} <span class="kw">from</span> <span class="str">'@nexoraaidrishti/runtime'</span>;
+
+<span class="kw">const</span> <span class="var">prompt</span>    = <span class="fn">signal</span>(<span class="str">''</span>);
+<span class="kw">const</span> <span class="var">loading</span>   = <span class="fn">signal</span>(<span class="kw">false</span>);
+<span class="kw">const</span> <span class="var">generated</span> = <span class="fn">signal</span><span class="op">&lt;</span><span class="type">HTMLElement</span> | <span class="kw">null</span><span class="op">&gt;</span>(<span class="kw">null</span>);
+<span class="kw">const</span> <span class="var">review</span>    = <span class="fn">signal</span>(<span class="str">''</span>);
+<span class="kw">const</span> <span class="var">error</span>     = <span class="fn">signal</span>(<span class="str">''</span>);
+
+<span class="kw">async function</span> <span class="fn">generateUI</span>() {
+  <span class="kw">if</span> (!<span class="var">prompt</span>().<span class="fn">trim</span>()) <span class="kw">return</span>;
+  <span class="var">loading</span>.<span class="fn">set</span>(<span class="kw">true</span>);
+  <span class="var">error</span>.<span class="fn">set</span>(<span class="str">''</span>);
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="var">result</span> = <span class="kw">await</span> <span class="fn">generate</span>({ <span class="attr">prompt</span>: <span class="var">prompt</span>() });
+    <span class="var">generated</span>.<span class="fn">set</span>(<span class="var">result</span>.element);
+
+    <span class="cmt">// Capture schema of the generated UI and send to LLM for review</span>
+    <span class="kw">const</span> <span class="var">schema</span> = <span class="fn">captureScreenSchema</span>();
+    <span class="kw">const</span> <span class="var">schemaText</span> = <span class="fn">schemaToPrompt</span>(<span class="var">schema</span>);
+
+    <span class="kw">const</span> <span class="var">reviewResult</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/review'</span>, {
+      <span class="attr">method</span>: <span class="str">'POST'</span>,
+      <span class="attr">body</span>: <span class="type">JSON</span>.<span class="fn">stringify</span>({
+        <span class="attr">system</span>: <span class="str">'Review this UI for accessibility and UX issues.'</span>,
+        <span class="attr">content</span>: <span class="var">schemaText</span>,
+      }),
+    });
+    <span class="kw">const</span> { <span class="var">feedback</span> } = <span class="kw">await</span> <span class="var">reviewResult</span>.<span class="fn">json</span>();
+    <span class="var">review</span>.<span class="fn">set</span>(<span class="var">feedback</span>);
+  } <span class="kw">catch</span> (<span class="var">e</span>) {
+    <span class="var">error</span>.<span class="fn">set</span>((<span class="var">e</span> <span class="kw">as</span> <span class="type">Error</span>).<span class="var">message</span>);
+  } <span class="kw">finally</span> {
+    <span class="var">loading</span>.<span class="fn">set</span>(<span class="kw">false</span>);
+  }
+}
+
+<span class="kw">function</span> <span class="fn">AIGenerateApp</span>() {
+  <span class="kw">return</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'ai-generate-app'</span> },
+
+    <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'prompt-row'</span> },
+      <span class="fn">h</span>(<span class="str">'input'</span>, {
+        <span class="attr">value</span>: <span class="var">prompt</span>,
+        <span class="attr">oninput</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">prompt</span>.<span class="fn">set</span>((<span class="var">e</span>.target <span class="kw">as</span> <span class="type">HTMLInputElement</span>).value),
+        <span class="attr">placeholder</span>: <span class="str">'Describe a UI component...'</span>,
+        <span class="attr">onkeydown</span>: (<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">e</span>.key <span class="op">===</span> <span class="str">'Enter'</span> <span class="op">&amp;&amp;</span> <span class="fn">generateUI</span>(),
+      }),
+      <span class="fn">h</span>(<span class="str">'button'</span>, {
+        <span class="attr">class</span>: <span class="str">'btn btn-primary'</span>,
+        <span class="attr">onclick</span>: <span class="fn">generateUI</span>,
+        <span class="attr">disabled</span>: () <span class="op">=&gt;</span> <span class="var">loading</span>(),
+      }, () <span class="op">=&gt;</span> <span class="var">loading</span>() ? <span class="str">'Generating…'</span> : <span class="str">'Generate'</span>),
+    ),
+
+    <span class="fn">show</span>(() <span class="op">=&gt;</span> !!<span class="var">error</span>(),
+      () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'p'</span>, { <span class="attr">class</span>: <span class="str">'error'</span> }, () <span class="op">=&gt;</span> <span class="var">error</span>())),
+
+    <span class="cmt">// Generated component preview</span>
+    <span class="fn">show</span>(() <span class="op">=&gt;</span> <span class="var">generated</span>() <span class="op">!==</span> <span class="kw">null</span>,
+      () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'generated-preview'</span> },
+        <span class="fn">h</span>(<span class="str">'h3'</span>, {}, <span class="str">'Generated Component'</span>),
+        () <span class="op">=&gt;</span> <span class="var">generated</span>()!,
+      )),
+
+    <span class="cmt">// AI accessibility review</span>
+    <span class="fn">show</span>(() <span class="op">=&gt;</span> !!<span class="var">review</span>(),
+      () <span class="op">=&gt;</span> <span class="fn">h</span>(<span class="str">'div'</span>, { <span class="attr">class</span>: <span class="str">'ai-review'</span> },
+        <span class="fn">h</span>(<span class="str">'h3'</span>, {}, <span class="str">'AI Accessibility Review'</span>),
+        <span class="fn">h</span>(<span class="str">'p'</span>, {}, () <span class="op">=&gt;</span> <span class="var">review</span>()),
+      )),
+  );
+}
+
+<span class="fn">mountApp</span>(<span class="type">AIGenerateApp</span>, document.<span class="fn">getElementById</span>(<span class="str">'app'</span>)<span class="op">!</span>);</code></pre>
     </div>
   </article>
 
