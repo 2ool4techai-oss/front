@@ -116,12 +116,12 @@ export function createInlineWorker(fn: (input: unknown) => unknown): Worker {
   return new Worker(url);
 }
 
-export interface WorkerSignalOptions<TInput, TOutput> {
+export interface CreateWorkerSignalOptions<TInput, TOutput> {
   onError?: (err: ErrorEvent) => void;
   timeout?: number;
 }
 
-export interface WorkerSignalHandle<TInput, TOutput> {
+export interface CreateWorkerSignalHandle<TInput, TOutput> {
   readonly result:  Signal<TOutput | undefined>;
   readonly loading: Signal<boolean>;
   readonly error:   Signal<unknown>;
@@ -131,8 +131,8 @@ export interface WorkerSignalHandle<TInput, TOutput> {
 
 export function createWorkerSignal<TInput, TOutput>(
   workerFn: (input: TInput) => TOutput | Promise<TOutput>,
-  opts?: WorkerSignalOptions<TInput, TOutput>,
-): WorkerSignalHandle<TInput, TOutput> {
+  opts?: CreateWorkerSignalOptions<TInput, TOutput>,
+): CreateWorkerSignalHandle<TInput, TOutput> {
   const result  = signal<TOutput | undefined>(undefined);
   const loading = signal<boolean>(false);
   const error   = signal<unknown>(undefined);

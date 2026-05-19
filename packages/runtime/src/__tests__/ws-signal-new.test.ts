@@ -14,7 +14,7 @@ class MockWebSocket {
 
   constructor(url: string, protocols?: string | string[]) {
     this.url = url;
-    this.protocols = protocols;
+    this.protocols = protocols ?? '';
     MockWebSocket.instances.push(this);
   }
 
@@ -61,14 +61,14 @@ describe('wsSignal', () => {
 
   it('status becomes "open" after connection', () => {
     const handle = wsSignal('ws://localhost');
-    MockWebSocket.instances[0].simulateOpen();
+    MockWebSocket.instances[0]!.simulateOpen();
     expect(handle.status()).toBe('open');
     handle.close();
   });
 
   it('receiving a JSON message updates data()', () => {
     const handle = wsSignal<{ msg: string }>('ws://localhost');
-    const ws = MockWebSocket.instances[0];
+    const ws = MockWebSocket.instances[0]!;
     ws.simulateOpen();
     ws.simulateMessage(JSON.stringify({ msg: 'hello' }));
     expect(handle.data()).toEqual({ msg: 'hello' });
@@ -77,7 +77,7 @@ describe('wsSignal', () => {
 
   it('send() serializes objects to JSON', () => {
     const handle = wsSignal('ws://localhost');
-    const ws = MockWebSocket.instances[0];
+    const ws = MockWebSocket.instances[0]!;
     ws.simulateOpen();
     handle.send({ key: 'value' });
     expect(ws.sent).toContain(JSON.stringify({ key: 'value' }));
@@ -86,7 +86,7 @@ describe('wsSignal', () => {
 
   it('send() sends string as-is', () => {
     const handle = wsSignal<string>('ws://localhost');
-    const ws = MockWebSocket.instances[0];
+    const ws = MockWebSocket.instances[0]!;
     ws.simulateOpen();
     handle.send('plain text');
     expect(ws.sent).toContain('plain text');
@@ -120,7 +120,7 @@ describe('wsSignal', () => {
     const handle = wsSignal('ws://localhost');
     // Not yet open (readyState=0)
     handle.send({ queued: true });
-    const ws = MockWebSocket.instances[0];
+    const ws = MockWebSocket.instances[0]!;
     expect(ws.sent).toHaveLength(0);
     ws.simulateOpen();
     expect(ws.sent).toContain(JSON.stringify({ queued: true }));
@@ -129,7 +129,7 @@ describe('wsSignal', () => {
 
   it('reconnects after non-intentional close', () => {
     const handle = wsSignal('ws://localhost', { reconnectMs: 2000, maxRetries: 0 });
-    const ws = MockWebSocket.instances[0];
+    const ws = MockWebSocket.instances[0]!;
     ws.simulateOpen();
     // Simulate server-side close (non-intentional)
     ws.readyState = 3;
@@ -142,7 +142,7 @@ describe('wsSignal', () => {
 
   it('close() prevents reconnect after non-intentional close', () => {
     const handle = wsSignal('ws://localhost', { reconnectMs: 1000 });
-    const ws = MockWebSocket.instances[0];
+    const ws = MockWebSocket.instances[0]!;
     ws.simulateOpen();
     ws.readyState = 3;
     ws.onclose?.();
@@ -154,7 +154,7 @@ describe('wsSignal', () => {
   it('onOpen callback is called', () => {
     const onOpen = vi.fn();
     const handle = wsSignal('ws://localhost', { onOpen });
-    MockWebSocket.instances[0].simulateOpen();
+    MockWebSocket.instances[0]!.simulateOpen();
     expect(onOpen).toHaveBeenCalledOnce();
     handle.close();
   });
@@ -162,14 +162,14 @@ describe('wsSignal', () => {
   it('onError callback is called on error', () => {
     const onError = vi.fn();
     const handle = wsSignal('ws://localhost', { onError });
-    MockWebSocket.instances[0].simulateError();
+    MockWebSocket.instances[0]!.simulateError();
     expect(onError).toHaveBeenCalledOnce();
     handle.close();
   });
 
   it('parseJson=false stores raw string in data()', () => {
     const handle = wsSignal<string>('ws://localhost', { parseJson: false });
-    const ws = MockWebSocket.instances[0];
+    const ws = MockWebSocket.instances[0]!;
     ws.simulateOpen();
     ws.simulateMessage('{"raw":true}');
     expect(handle.data()).toBe('{"raw":true}');

@@ -60,7 +60,7 @@ function buildKey(ctx: Context, dimensions: Array<string>): string {
     .map((dim) => {
       if (dim === 'custom') return undefined;
       if (dim in ctx && dim !== 'custom') {
-        return (ctx as Record<string, unknown>)[dim] as string;
+        return ((ctx as unknown) as Record<string, unknown>)[dim] as string;
       }
       if (ctx.custom && dim in ctx.custom) {
         return ctx.custom[dim];

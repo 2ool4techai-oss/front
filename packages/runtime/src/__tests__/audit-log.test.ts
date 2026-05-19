@@ -38,7 +38,7 @@ describe('createAuditLog', () => {
     log.record({ signalName: 'counter', action: 'read' });
     const entries = log.getEntries();
     expect(entries).toHaveLength(1);
-    expect(entries[0].signalName).toBe('counter');
+    expect(entries[0]!.signalName).toBe('counter');
   });
 
   it('record calls onEntry callback', () => {
@@ -73,7 +73,7 @@ describe('createAuditLog', () => {
     log.record({ signalName: 'z', action: 'watch' });
     const reads = log.getEntries({ action: 'read' });
     expect(reads).toHaveLength(1);
-    expect(reads[0].signalName).toBe('x');
+    expect(reads[0]!.signalName).toBe('x');
   });
 
   it('getEntries filters by sessionId', () => {
@@ -81,7 +81,7 @@ describe('createAuditLog', () => {
     log.record({ signalName: 'b', action: 'write', sessionId: 'sess-B' });
     const results = log.getEntries({ sessionId: 'sess-A' });
     expect(results).toHaveLength(1);
-    expect(results[0].sessionId).toBe('sess-A');
+    expect(results[0]!.sessionId).toBe('sess-A');
   });
 
   it('getEntries filters by agentId', () => {
@@ -89,7 +89,7 @@ describe('createAuditLog', () => {
     log.record({ signalName: 'b', action: 'write', agentId: 'agent-Y' });
     const results = log.getEntries({ agentId: 'agent-X' });
     expect(results).toHaveLength(1);
-    expect(results[0].agentId).toBe('agent-X');
+    expect(results[0]!.agentId).toBe('agent-X');
   });
 
   it('getEntries filters by from/to timestamp', () => {
@@ -106,7 +106,7 @@ describe('createAuditLog', () => {
 
     const results = log.getEntries({ from: now - 100, to: now + 100 });
     expect(results).toHaveLength(1);
-    expect(results[0].signalName).toBe('middle');
+    expect(results[0]!.signalName).toBe('middle');
   });
 
   // ── export ───────────────────────────────────────────────────────────
@@ -157,7 +157,7 @@ describe('createAuditLog', () => {
     l.record({ signalName: 'z', action: 'unwatch' });
     const out = l.export();
     // splunk: should be parseable as a single JSON object (one line)
-    const parsed = JSON.parse(out.split('\n')[0]);
+    const parsed = JSON.parse(out.split('\n')[0]!);
     expect(parsed.signalName).toBe('z');
   });
 
@@ -256,7 +256,7 @@ describe('createAuditLog', () => {
     expect(entries).toHaveLength(3);
     // Oldest ('first') should have been removed
     expect(entries.find(e => e.signalName === 'first')).toBeUndefined();
-    expect(entries[entries.length - 1].signalName).toBe('fourth');
+    expect(entries[entries.length - 1]!.signalName).toBe('fourth');
   });
 
   // ── clear ────────────────────────────────────────────────────────────

@@ -539,7 +539,7 @@ export function diagnose(error: Error, context?: HealingContext): HealSuggestion
     /(\w+)\s+is\s+not\s+a\s+function/.test(msg)
   ) {
     const nameMatch = error.message.match(/(\w+) is not a function/);
-    const name = nameMatch ? nameMatch[1] : 'signal';
+    const name = nameMatch?.[1] ?? 'signal';
 
     suggestions.push({
       id: 'signal-typo',

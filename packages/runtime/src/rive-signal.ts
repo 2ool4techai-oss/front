@@ -50,7 +50,7 @@ export function riveSignal(opts?: RiveSignalOptions): RiveHandle {
     riveInstance = adapter.load({
       src,
       canvas,
-      autoplay: opts?.autoplay,
+      ...(opts?.autoplay !== undefined ? { autoplay: opts.autoplay } : {}),
     });
 
     _playing.set(riveInstance.isPlaying);

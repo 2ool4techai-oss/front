@@ -101,6 +101,6 @@ describe('adaptiveSignal', () => {
     s.set('y'); s.set('y');
     const freqs = s.frequencies();
     expect(Array.isArray(freqs)).toBe(true);
-    expect(freqs[0].frequency).toBeGreaterThanOrEqual(freqs[freqs.length - 1]?.frequency ?? 0);
+    expect(freqs[0]!.frequency).toBeGreaterThanOrEqual(freqs[freqs.length - 1]?.frequency ?? 0);
   });
 });

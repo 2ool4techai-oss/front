@@ -151,7 +151,7 @@ export async function generateAnimation(
   }
 
   // Natural language prompt
-  if (opts?.ai && opts.ai !== false) {
+  if (opts?.ai) {
     // AI stub — in a real implementation this would call the provider
     // AI would enhance this with custom keyframes based on the prompt
     const fallbackPreset = findClosestPreset(prompt);

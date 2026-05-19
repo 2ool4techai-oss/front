@@ -41,7 +41,7 @@ export function rateLimitSignal<T>(initial: T, opts: RateLimitOptions): RateLimi
 
   function pruneTimestamps(now: number): void {
     const cutoff = now - opts.windowMs;
-    while (timestamps.length > 0 && timestamps[0] < cutoff) {
+    while (timestamps.length > 0 && timestamps[0]! < cutoff) {
       timestamps.shift();
     }
   }

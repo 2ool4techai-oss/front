@@ -54,7 +54,7 @@ function interpolate(
     if (count !== undefined) {
       const parts = template.split(' | ');
       const idx = Number(count) === 1 ? 0 : 1;
-      template = parts[idx] ?? parts[0];
+      template = parts[idx] ?? parts[0] ?? '';
     }
   }
 

@@ -51,7 +51,7 @@ function profileKey(userId?: string): string {
 
 function makeEmptyProfile(userId?: string): LearningProfile {
   return {
-    userId,
+    ...(userId !== undefined ? { userId } : {}),
     preferences: {},
     patterns: [],
     adaptations: {},

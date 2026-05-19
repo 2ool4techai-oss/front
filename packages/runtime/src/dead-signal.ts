@@ -23,7 +23,7 @@ export interface DeadSignalDetector {
 function isDevEnvironment(): boolean {
   // Check Vite-style import.meta.env
   try {
-    const metaEnv = (import.meta as Record<string, unknown>).env as Record<string, unknown> | undefined;
+    const metaEnv = ((import.meta as unknown) as Record<string, unknown>).env as Record<string, unknown> | undefined;
     if (metaEnv !== undefined) {
       // If DEV is explicitly false, we're in production
       if (metaEnv['DEV'] === false) return false;

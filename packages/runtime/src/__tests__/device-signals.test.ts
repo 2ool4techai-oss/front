@@ -35,7 +35,7 @@ describe('batterySignal', () => {
       addEventListener: vi.fn((type: string, fn: () => void) => {
         if (!mockBattery._listeners.has(type)) mockBattery._listeners.set(type, []);
         mockBattery._listeners.get(type)!.push(fn);
-      }),
+      }) as any,
       dispatchEvent(type: string) {
         for (const fn of mockBattery._listeners.get(type) ?? []) fn();
       },
@@ -201,7 +201,7 @@ describe('geolocationSignal', () => {
       watchPositionCallback = success;
       watchPositionError = error;
       return 42; // watch ID
-    });
+    }) as any;
 
     vi.stubGlobal('navigator', {
       onLine: true,
@@ -543,7 +543,7 @@ describe('wakeLockSignal', () => {
     sentinelListeners = new Map();
     releaseMock = vi.fn(async () => {
       for (const fn of sentinelListeners.get('release') ?? []) fn();
-    });
+    }) as any;
 
     const mockSentinel = {
       released: false,

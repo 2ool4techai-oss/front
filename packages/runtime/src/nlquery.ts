@@ -26,7 +26,7 @@ interface RegistryEntry {
 const _queryRegistry = new Map<string, RegistryEntry>();
 
 export function registerQueryable(name: string, sig: any, schema?: object): void {
-  _queryRegistry.set(name, { signal: sig, schema });
+  _queryRegistry.set(name, { signal: sig, ...(schema !== undefined ? { schema } : {}) });
 }
 
 export function getQueryRegistry(): Map<string, RegistryEntry> {
@@ -166,7 +166,7 @@ function parseNLQuery(description: string): ParsedFilter[] {
   for (const { re, field, value, negate } of boolPatterns) {
     if (re.test(lower)) {
       if (typeof value === 'boolean') {
-        filters.push({ type: 'boolean', field, value, negate });
+        filters.push({ type: 'boolean', field, value, negate: negate ?? false });
       } else {
         filters.push({ type: 'string-match', field, value: value as string });
       }

@@ -176,7 +176,7 @@ function runHeadingOrder(root: HTMLElement | Document, enabledRules: Set<string>
   const headings = querySelectorAll(root, 'h1, h2, h3, h4, h5, h6');
   let prevLevel = 0;
   for (const h of headings) {
-    const level = parseInt(h.tagName[1], 10);
+    const level = parseInt(h.tagName[1] ?? '0', 10);
     if (prevLevel > 0 && level > prevLevel + 1) {
       violations.push({
         id: 'heading-order',

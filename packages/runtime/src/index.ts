@@ -48,7 +48,7 @@ export type { QueryResult, QueryOptions, QueryStatus, MutationResult } from './q
 
 // ── i18n ───────────────────────────────────────────────────────────────
 export { createI18n } from './i18n.js';
-export type { I18nInstance, I18nOptions, Locale, Messages, MessageCatalog } from './i18n.js';
+export type { I18nOptions } from './i18n.js';
 
 // ── Persistence ────────────────────────────────────────────────────────
 export { persistSignal, createPersistedStore } from './persist.js';
@@ -310,7 +310,7 @@ export type { BoundedOptions, BoundedSignal } from './bounded-signal.js';
 
 // ── Spring & Animation Signals ────────────────────────────────────────
 export { springSignal, springVector2D } from './spring-signal.js';
-export type { SpringOptions, SpringSignal, SpringVectorOptions } from './spring-signal.js';
+export type { SpringOptions, SpringVectorOptions } from './spring-signal.js';
 
 // ── Gesture Signals ───────────────────────────────────────────────────
 export { gestureSignal } from './gesture-signal.js';
@@ -338,7 +338,7 @@ export type { RiveSignalOptions, RiveHandle, RiveInput } from './rive-signal.js'
 
 // ── Streaming Signals (SSE / WebSocket / ReadableStream) ──────────────
 export { sseSignal } from './sse-signal.js';
-export type { SSESignalOptions, SSEHandle } from './sse-signal.js';
+export type { SSEHandle } from './sse-signal.js';
 export { wsSignal } from './ws-signal-new.js';
 export type { WSHandle } from './ws-signal-new.js';
 export { streamSignal } from './stream-signal.js';
@@ -381,4 +381,4 @@ export type { DAPServer, DAPSession, DAPPermissions, DAPSignalSnapshot, DAPWrite
 
 // ── Enterprise Audit Log ──────────────────────────────────────────────
 export { createAuditLog } from './audit-log.js';
-export type { AuditLog, AuditEntry, AuditLogOptions } from './audit-log.js';
+export type { AuditLog, AuditEntry as AuditLogEntry, AuditLogOptions } from './audit-log.js';

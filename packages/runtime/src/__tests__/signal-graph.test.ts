@@ -39,7 +39,7 @@ describe('createSignalGraph', () => {
     for (let i = 0; i < 10; i++) graph.recordUpdate('n1');
     graph.recordUpdate('n2');
     const analysis = graph.analyze();
-    expect(analysis.hotNodes[0].label).toBe('counter');
+    expect(analysis.hotNodes[0]!.label).toBe('counter');
   });
 
   it('analyze finds isolated nodes', () => {

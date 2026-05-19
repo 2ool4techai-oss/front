@@ -235,7 +235,7 @@ export function createAuthSignal(opts?: AuthSignalOptions): AuthHandle {
       const parts = jwt.split('.');
       if (parts.length < 2) return null;
       try {
-        const decoded = base64urlDecode(parts[1]);
+        const decoded = base64urlDecode(parts[1] ?? '');
         return JSON.parse(decoded) as Record<string, unknown>;
       } catch {
         return null;
@@ -251,13 +251,13 @@ export function createAuthSignal(opts?: AuthSignalOptions): AuthHandle {
       const name = typeof payload.name === 'string' ? payload.name : undefined;
       const exp = typeof payload.exp === 'number' ? payload.exp * 1000 : null;
 
-      const user: User = {
+      const user = {
         id,
         email,
         name,
         roles: Array.isArray(payload.roles) ? (payload.roles as string[]) : [],
         ...userPatch,
-      };
+      } as User;
 
       const session: Session = {
         user,

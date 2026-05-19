@@ -41,7 +41,7 @@ export function registerSchemaSignal<T>(
 ): Signal<T> {
   // Avoid duplicate registrations
   if (!_schemaRegistry.find(e => e.id === id)) {
-    _schemaRegistry.push({ id, label, signal: sig as Signal<unknown>, meta });
+    _schemaRegistry.push({ id, ...(label !== undefined ? { label } : {}), signal: sig as Signal<unknown>, ...(meta !== undefined ? { meta } : {}) });
   }
   return sig;
 }
@@ -125,10 +125,10 @@ function getCurrentRoute(): string | undefined {
 export function captureScreenSchema(): ScreenSchema {
   const signalEntries = _schemaRegistry.map(entry => ({
     id:    entry.id,
-    label: entry.label,
+    ...(entry.label !== undefined ? { label: entry.label } : {}),
     value: entry.signal.peek(),
     type:  typeof entry.signal.peek(),
-    meta:  entry.meta,
+    ...(entry.meta !== undefined ? { meta: entry.meta } : {}),
   }));
 
   let dom: string | undefined;
@@ -138,12 +138,13 @@ export function captureScreenSchema(): ScreenSchema {
     } catch { /* ignore DOM errors */ }
   }
 
+  const route = getCurrentRoute();
   return {
     version:      '1.0',
     timestamp:    Date.now(),
-    route:        getCurrentRoute(),
+    ...(route !== undefined ? { route } : {}),
     signals:      signalEntries,
-    dom,
+    ...(dom !== undefined ? { dom } : {}),
     interactions: getInteractions(),
   };
 }

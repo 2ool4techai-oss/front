@@ -229,7 +229,7 @@ export function createDAPServer(options: DAPServerOptions = {}): DAPServer {
         sessions.delete(sessionId);
         const indices: number[] = [];
         for (let i = watchers.length - 1; i >= 0; i--) {
-          if (watchers[i].sessionId === sessionId) indices.push(i);
+          if (watchers[i]!.sessionId === sessionId) indices.push(i);
         }
         for (const i of indices) watchers.splice(i, 1);
         onAgentDisconnect?.(session);
@@ -279,7 +279,7 @@ export function createDAPServer(options: DAPServerOptions = {}): DAPServer {
 
       const signalMatch = path.match(/^\/dap\/signals\/(.+)$/);
       if (signalMatch) {
-        const name = decodeURIComponent(signalMatch[1]);
+        const name = decodeURIComponent(signalMatch[1]!);
 
         if (request.method === 'GET') {
           const session = getSession();

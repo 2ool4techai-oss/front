@@ -63,7 +63,7 @@ export function createMCPServer(opts?: MCPServerOptions): MCPHandle {
       sig,
       description: exposedOpts?.description ?? `Signal: ${name}`,
       readOnly: exposedOpts?.readOnly ?? false,
-      schema: exposedOpts?.schema,
+      ...(exposedOpts?.schema !== undefined ? { schema: exposedOpts.schema } : {}),
     });
   };
 
@@ -76,7 +76,6 @@ export function createMCPServer(opts?: MCPServerOptions): MCPHandle {
           sig: entry.peek as { (): unknown; set?: (v: unknown) => void },
           description: `Signal: ${entry.label}`,
           readOnly: entry.type === 'computed',
-          schema: undefined,
         });
       }
     }

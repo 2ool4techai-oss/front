@@ -12,7 +12,7 @@ describe('createMCPServer', () => {
   it('tools/list returns exposed signals', async () => {
     const mcp = createMCPServer();
     const count = signal(0);
-    mcp.expose('counter', count, { description: 'A counter' });
+    mcp.expose('counter', count as any, { description: 'A counter' });
     const res = await mcp.handle({ jsonrpc: '2.0', id: 2, method: 'tools/list' });
     const tools = (res.result as { tools: { name: string }[] }).tools;
     expect(tools.some(t => t.name === 'signal_read__counter')).toBe(true);
@@ -22,15 +22,15 @@ describe('createMCPServer', () => {
   it('tools/call reads a signal', async () => {
     const mcp = createMCPServer();
     const count = signal(42);
-    mcp.expose('counter', count);
+    mcp.expose('counter', count as any);
     const res = await mcp.handle({ jsonrpc: '2.0', id: 3, method: 'tools/call', params: { name: 'signal_read__counter', arguments: {} } });
-    expect((res.result as { content: { text: string }[] }).content[0].text).toContain('42');
+    expect((res.result as { content: { text: string }[] }).content[0]!.text).toContain('42');
   });
 
   it('tools/call writes a signal', async () => {
     const mcp = createMCPServer();
     const count = signal(0);
-    mcp.expose('counter', count);
+    mcp.expose('counter', count as any);
     await mcp.handle({ jsonrpc: '2.0', id: 4, method: 'tools/call', params: { name: 'signal_write__counter', arguments: { value: 99 } } });
     expect(count()).toBe(99);
   });
@@ -38,7 +38,7 @@ describe('createMCPServer', () => {
   it('readOnly signals do not get write tool', async () => {
     const mcp = createMCPServer();
     const count = signal(0);
-    mcp.expose('counter', count, { readOnly: true });
+    mcp.expose('counter', count as any, { readOnly: true });
     const res = await mcp.handle({ jsonrpc: '2.0', id: 5, method: 'tools/list' });
     const tools = (res.result as { tools: { name: string }[] }).tools;
     expect(tools.some(t => t.name === 'signal_write__counter')).toBe(false);
@@ -48,7 +48,7 @@ describe('createMCPServer', () => {
   it('snapshot() returns all signal values', () => {
     const mcp = createMCPServer();
     const count = signal(7);
-    mcp.expose('count', count);
+    mcp.expose('count', count as any);
     const snap = mcp.snapshot();
     expect(snap['count']).toBe(7);
   });
@@ -62,7 +62,7 @@ describe('createMCPServer', () => {
   it('resources/list returns signal URIs', async () => {
     const mcp = createMCPServer();
     const count = signal(0);
-    mcp.expose('counter', count);
+    mcp.expose('counter', count as any);
     const res = await mcp.handle({ jsonrpc: '2.0', id: 7, method: 'resources/list' });
     const resources = (res.result as { resources: { uri: string }[] }).resources;
     expect(resources.some(r => r.uri === 'signal://counter')).toBe(true);

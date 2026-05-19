@@ -19,7 +19,7 @@ describe('createAITrace', () => {
     const after = Date.now();
     const entries = t.entries();
     expect(entries).toHaveLength(1);
-    const e = entries[0];
+    const e = entries[0]!;
     expect(e.id).toMatch(/^trace_/);
     expect(e.timestamp).toBeGreaterThanOrEqual(before);
     expect(e.timestamp).toBeLessThanOrEqual(after);
@@ -41,7 +41,7 @@ describe('createAITrace', () => {
       approved: true,
       agentId: 'agent-007',
     });
-    const e = t.entries()[0];
+    const e = t.entries()[0]!;
     expect(e.before).toBe('old@example.com');
     expect(e.after).toBe('new@example.com');
     expect(e.reason).toBe('user edited field');
@@ -55,7 +55,7 @@ describe('createAITrace', () => {
     t.record({ actor: 'ai', action: 'generate', target: 'headline' });
     t.record({ actor: 'ai', action: 'generate', target: 'headline' });
     const [e1, e2] = t.entries();
-    expect(e1.id).not.toBe(e2.id);
+    expect(e1!.id).not.toBe(e2!.id);
   });
 
   it('clear() empties the trace', () => {
@@ -115,7 +115,7 @@ describe('createAITrace', () => {
     const entries = t.entries();
     expect(entries).toHaveLength(3);
     // Oldest entries were dropped — most recent three remain
-    expect(entries[entries.length - 1].target).toBe('sig_4');
+    expect(entries[entries.length - 1]!.target).toBe('sig_4');
   });
 
   it('persist option saves to localStorage', () => {
@@ -134,7 +134,7 @@ describe('createAITrace', () => {
     // Create a new trace with persist — should load from localStorage
     const t2 = createAITrace({ persist: true });
     expect(t2.entries()).toHaveLength(1);
-    expect(t2.entries()[0].target).toBe('profile');
+    expect(t2.entries()[0]!.target).toBe('profile');
   });
 });
 

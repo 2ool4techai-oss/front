@@ -153,7 +153,7 @@ function counterTemplate(description: string): GenerateResult {
     const count = signal(0);
     const container = h('div', { style: { display:'flex', alignItems:'center', gap:'12px', fontFamily:'system-ui,sans-serif', padding:'16px' } },
       h('button', { onClick: () => count.set(count() - 1), style: { padding:'6px 14px', cursor:'pointer', borderRadius:'6px', border:'1px solid #ccc', background:'#f1f5f9', fontSize:'18px' } }, '-'),
-      h('span', { style: { fontSize:'24px', fontWeight:'bold', minWidth:'48px', textAlign:'center' } }, () => String(count())),
+      h('span', { style: { fontSize:'24px', fontWeight:'bold', minWidth:'48px', textAlign:'center' } }, computed(() => String(count()))),
       h('button', { onClick: () => count.set(count() + 1), style: { padding:'6px 14px', cursor:'pointer', borderRadius:'6px', border:'1px solid #ccc', background:'#f1f5f9', fontSize:'18px' } }, '+')
     );
     return container;
@@ -163,7 +163,7 @@ function counterTemplate(description: string): GenerateResult {
     return h('div',
       { style: { display:'flex', alignItems:'center', gap:'12px', fontFamily:'system-ui,sans-serif', padding:'16px' } },
       h('button', { onClick: () => count.set(count() - 1), style: { padding:'6px 14px', cursor:'pointer', borderRadius:'6px', border:'1px solid #ccc', background:'#f1f5f9', fontSize:'18px' } }, '-'),
-      h('span', { style: { fontSize:'24px', fontWeight:'bold', minWidth:'48px', textAlign:'center' } }, () => String(count())),
+      h('span', { style: { fontSize:'24px', fontWeight:'bold', minWidth:'48px', textAlign:'center' } }, computed(() => String(count()))),
       h('button', { onClick: () => count.set(count() + 1), style: { padding:'6px 14px', cursor:'pointer', borderRadius:'6px', border:'1px solid #ccc', background:'#f1f5f9', fontSize:'18px' } }, '+'),
     );
   };
@@ -226,7 +226,7 @@ function todoTemplate(description: string): GenerateResult {
         h('button', { onClick: () => { addItem(); inputEl.value = ''; }, style: { padding:'8px 16px', background:'#3b82f6', color:'#fff', border:'none', borderRadius:'6px', cursor:'pointer', fontWeight:'500' } }, 'Add'),
       ),
       listEl,
-      h('p', { style: { margin:'8px 0 0', fontSize:'12px', color:'#94a3b8' } }, () => `${items().filter(i => !i.done).length} remaining`),
+      h('p', { style: { margin:'8px 0 0', fontSize:'12px', color:'#94a3b8' } }, computed(() => `${items().filter(i => !i.done).length} remaining`)),
     );
   };
   return { code, component, signals: ['items', 'draft'], description };
@@ -266,7 +266,7 @@ function formTemplate(description: string, lower: string): GenerateResult {
       inp.placeholder = f.label;
       inp.style.cssText = 'width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:14px;box-sizing:border-box;font-family:inherit';
       inp.addEventListener('input', () => { fields[f.name]!.set(inp.value); errors[f.name]!.set(''); });
-      const errSpan = h('span', { style: { color:'#ef4444', fontSize:'12px', minHeight:'16px', display:'block' } }, () => errors[f.name]!());
+      const errSpan = h('span', { style: { color:'#ef4444', fontSize:'12px', minHeight:'16px', display:'block' } }, computed(() => errors[f.name]!()));
       return h('div', { style: { display:'flex', flexDirection:'column', gap:'4px' } },
         h('label', { style: { fontSize:'13px', fontWeight:'500', color:'#374151' } }, f.label + (f.required ? ' *' : '')),
         inp,
@@ -296,7 +296,7 @@ function formTemplate(description: string, lower: string): GenerateResult {
       h('h3', { style: { margin:'0 0 4px', fontSize:'16px', fontWeight:'600' } }, 'Form'),
       ...fieldEls,
       h('button', { type:'submit', style: { padding:'10px', background:'#3b82f6', color:'#fff', border:'none', borderRadius:'6px', cursor:'pointer', fontWeight:'600', fontSize:'14px' } }, 'Submit'),
-      h('p', { style: { margin:'0', fontSize:'13px', color:'#22c55e', minHeight:'16px' } }, () => submitted() ? 'Submitted successfully!' : ''),
+      h('p', { style: { margin:'0', fontSize:'13px', color:'#22c55e', minHeight:'16px' } }, computed(() => submitted() ? 'Submitted successfully!' : '')),
     );
   };
   return { code, component, signals: ['fields', 'errors', 'submitted'], description };
@@ -321,7 +321,7 @@ function toggleTemplate(description: string): GenerateResult {
     return h('div',
       { style: { display:'flex', alignItems:'center', gap:'12px', fontFamily:'system-ui,sans-serif', padding:'16px' } },
       track,
-      h('span', { style: { fontSize:'14px', color:'#374151' } }, () => on() ? 'On' : 'Off'),
+      h('span', { style: { fontSize:'14px', color:'#374151' } }, computed(() => on() ? 'On' : 'Off')),
     );
   };
   return { code, component, signals: ['on'], description };
@@ -339,7 +339,7 @@ function inputTemplate(description: string): GenerateResult {
     return h('div',
       { style: { display:'flex', flexDirection:'column', gap:'8px', fontFamily:'system-ui,sans-serif', padding:'16px' } },
       inputEl,
-      h('p', { style: { margin:'0', fontSize:'13px', color:'#64748b' } }, () => value() ? `You typed: ${value()}` : 'Start typing above'),
+      h('p', { style: { margin:'0', fontSize:'13px', color:'#64748b' } }, computed(() => value() ? `You typed: ${value()}` : 'Start typing above')),
     );
   };
   return { code, component, signals: ['value'], description };
@@ -362,7 +362,7 @@ function accordionTemplate(description: string): GenerateResult {
           style: { width:'100%', padding:'12px 16px', background:'none', border:'none', textAlign:'left', cursor:'pointer', display:'flex', justifyContent:'space-between', alignItems:'center', fontSize:'14px', fontWeight:'600' },
         },
         h('span', {}, 'Section'),
-        h('span', { style: { transition:'transform .2s' } }, () => open() ? '▲' : '▼'),
+        h('span', { style: { transition:'transform .2s' } }, computed(() => open() ? '▲' : '▼')),
       ),
       body,
     );
@@ -385,7 +385,7 @@ function sliderTemplate(description: string): GenerateResult {
       { style: { display:'flex', flexDirection:'column', gap:'8px', fontFamily:'system-ui,sans-serif', padding:'16px' } },
       h('div', { style: { display:'flex', justifyContent:'space-between', fontSize:'13px', color:'#374151' } },
         h('span', {}, 'Value'),
-        h('span', { style: { fontWeight:'600' } }, () => String(value())),
+        h('span', { style: { fontWeight:'600' } }, computed(() => String(value()))),
       ),
       sliderEl,
     );

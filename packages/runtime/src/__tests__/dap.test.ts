@@ -203,14 +203,14 @@ describe('createDAPServer', () => {
       const server = createDAPServer();
       server.register('config', makeSignal({ theme: 'dark' }));
       const map = server.exportSignalMap();
-      expect(map['config'].type).toBe('object');
+      expect(map['config']!.type).toBe('object');
     });
 
     it('infers type as boolean', () => {
       const server = createDAPServer();
       server.register('flag', makeSignal(true));
       const map = server.exportSignalMap();
-      expect(map['flag'].type).toBe('boolean');
+      expect(map['flag']!.type).toBe('boolean');
     });
   });
 
@@ -292,7 +292,7 @@ describe('createDAPServer', () => {
       const res = await server.handleRequest(req);
       expect(res.status).toBe(200);
       const body = await res.json() as Record<string, { writable: boolean; type: string }>;
-      expect(body['flag'].type).toBe('boolean');
+      expect(body['flag']!.type).toBe('boolean');
     });
 
     it('GET /dap/sessions returns session list', async () => {
@@ -354,9 +354,9 @@ describe('createDAPServer', () => {
       server.watch(session, ['*'], e => events.push(e));
       await server.write(session, 'score', 10);
       expect(events).toHaveLength(1);
-      expect(events[0].name).toBe('score');
-      expect(events[0].value).toBe(10);
-      expect(events[0].previousValue).toBe(0);
+      expect(events[0]!.name).toBe('score');
+      expect(events[0]!.value).toBe(10);
+      expect(events[0]!.previousValue).toBe(0);
     });
 
     it('callback does not fire for unmatched pattern', async () => {

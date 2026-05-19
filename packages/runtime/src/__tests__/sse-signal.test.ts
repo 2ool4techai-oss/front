@@ -47,7 +47,7 @@ describe('sseSignal', () => {
   it('receiving a JSON message updates data()', () => {
     const handle = sseSignal<{ value: number }>('http://localhost/events');
     const es = MockEventSource.instances[0];
-    es.dispatch(JSON.stringify({ value: 42 }));
+    es!.dispatch(JSON.stringify({ value: 42 }));
     expect(handle.data()).toEqual({ value: 42 });
     handle.close();
   });
@@ -55,7 +55,7 @@ describe('sseSignal', () => {
   it('status() becomes "open" after receiving a message', () => {
     const handle = sseSignal('http://localhost/events');
     const es = MockEventSource.instances[0];
-    es.dispatch(JSON.stringify({ hello: 'world' }));
+    es!.dispatch(JSON.stringify({ hello: 'world' }));
     expect(handle.status()).toBe('open');
     handle.close();
   });
@@ -88,7 +88,7 @@ describe('sseSignal', () => {
   it('retryCount() increments on error', () => {
     const handle = sseSignal('http://localhost/events', { reconnectMs: 5000, maxRetries: 5 });
     const es = MockEventSource.instances[0];
-    es.dispatchError();
+    es!.dispatchError();
     expect(handle.retryCount()).toBe(1);
     handle.close();
   });
@@ -96,7 +96,7 @@ describe('sseSignal', () => {
   it('schedules reconnect after error', () => {
     const handle = sseSignal('http://localhost/events', { reconnectMs: 3000, maxRetries: 0 });
     const es = MockEventSource.instances[0];
-    es.dispatchError();
+    es!.dispatchError();
     expect(MockEventSource.instances).toHaveLength(1);
     vi.advanceTimersByTime(3000);
     expect(MockEventSource.instances).toHaveLength(2);
@@ -106,7 +106,7 @@ describe('sseSignal', () => {
   it('close() prevents reconnect after error', () => {
     const handle = sseSignal('http://localhost/events', { reconnectMs: 1000 });
     const es = MockEventSource.instances[0];
-    es.dispatchError();
+    es!.dispatchError();
     handle.close();
     vi.advanceTimersByTime(5000);
     // Should not have reconnected
@@ -116,7 +116,7 @@ describe('sseSignal', () => {
   it('parseJson=false stores raw string in data()', () => {
     const handle = sseSignal<string>('http://localhost/events', { parseJson: false });
     const es = MockEventSource.instances[0];
-    es.dispatch('{"raw":true}');
+    es!.dispatch('{"raw":true}');
     expect(handle.data()).toBe('{"raw":true}');
     handle.close();
   });
@@ -125,7 +125,7 @@ describe('sseSignal', () => {
     const onError = vi.fn();
     const handle = sseSignal('http://localhost/events', { onError, maxRetries: 1 });
     const es = MockEventSource.instances[0];
-    es.dispatchError();
+    es!.dispatchError();
     expect(onError).toHaveBeenCalledOnce();
     handle.close();
   });
@@ -133,13 +133,13 @@ describe('sseSignal', () => {
   it('stops retrying after maxRetries is reached', () => {
     const handle = sseSignal('http://localhost/events', { reconnectMs: 1000, maxRetries: 2 });
     const es0 = MockEventSource.instances[0];
-    es0.dispatchError(); // retry 1
+    es0!.dispatchError(); // retry 1
     vi.advanceTimersByTime(1000);
     const es1 = MockEventSource.instances[1];
-    es1.dispatchError(); // retry 2
+    es1!.dispatchError(); // retry 2
     vi.advanceTimersByTime(1000);
     const es2 = MockEventSource.instances[2];
-    es2.dispatchError(); // retry 3 — should NOT happen (maxRetries=2 means 2 retries after initial)
+    es2!.dispatchError(); // retry 3 — should NOT happen (maxRetries=2 means 2 retries after initial)
     vi.advanceTimersByTime(1000);
     // After 3 total errors (retryCount=3 > maxRetries=2), no new instance
     expect(MockEventSource.instances).toHaveLength(3);
