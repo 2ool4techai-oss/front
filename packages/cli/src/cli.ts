@@ -1,3 +1,5 @@
+import { detectFramework, analyzeMigration, formatMigrationPlan, generateWrapperCode, generateDAPIntegration } from './migrate.js';
+
 export interface CLICommand {
   name: string;
   description: string;
@@ -132,14 +134,26 @@ export function runCLI(args: string[]): void {
 
     case 'migrate': {
       const from = flags['from'];
-      if (from === 'react') {
-        console.log('Analyzing project... Run @nexoraaidrishti/migrate to transform your code');
-      } else if (from) {
-        console.log(`Analyzing project for migration from ${String(from)}...`);
-        console.log('Run @nexoraaidrishti/migrate to transform your code');
+      if (from && typeof from === 'string') {
+        const framework = from as Parameters<typeof analyzeMigration>[0]['framework'];
+        console.log(`\nAnalyzing ${from} project for DRISHTI migration...\n`);
+        const plan = analyzeMigration({ framework, projectName: positional[0] ?? 'my-app' });
+        console.log(formatMigrationPlan(plan));
+        if (flags['wrapper']) {
+          console.log('\n── Wrapper Code ──────────────────────────────────────────\n');
+          console.log(generateWrapperCode(framework));
+        }
+        if (flags['dap']) {
+          console.log('\n── DAP Integration ───────────────────────────────────────\n');
+          console.log(generateDAPIntegration(framework));
+        }
       } else {
-        console.log('Usage: dr migrate --from <framework>');
-        console.log('Supported frameworks: react, vue, svelte, angular');
+        console.log('Usage: dr migrate --from <framework> [project-name]');
+        console.log('Supported: react, vue, angular, svelte, solid');
+        console.log('');
+        console.log('Options:');
+        console.log('  --wrapper   Print wrapper code to add DRISHTI to your app');
+        console.log('  --dap       Print DAP integration code for AI agent access');
       }
       break;
     }

@@ -132,3 +132,7 @@ export type { RTEHandle, RTEOptions, RTEToolbarItem } from './RichTextEditor.js'
 // ── Collaborative Cursors ──────────────────────────────────────────────
 export { createCollabCursors } from './CollabCursors.js';
 export type { CollabCursorHandle, CollabCursorOptions, CursorUser } from './CollabCursors.js';
+
+// ── AI Copilot ─────────────────────────────────────────────────────────
+export { createCopilot } from './AICopilot.js';
+export type { CopilotHandle, CopilotOptions, CopilotMessage, CopilotAction } from './AICopilot.js';

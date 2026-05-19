@@ -374,3 +374,11 @@ export type { SignalNode, SignalGraph, GraphAnalysis, SignalGraphHandle } from '
 // ── AI Accessibility Agent ────────────────────────────────────────────
 export { createA11yAgent } from './a11y-agent.js';
 export type { A11yViolation, A11yReport, A11yAgentOptions, A11yAgentHandle } from './a11y-agent.js';
+
+// ── DRISHTI Agent Protocol (DAP) ──────────────────────────────────────
+export { createDAPServer } from './dap.js';
+export type { DAPServer, DAPSession, DAPPermissions, DAPSignalSnapshot, DAPWriteResult, DAPWatchEvent, DAPServerOptions } from './dap.js';
+
+// ── Enterprise Audit Log ──────────────────────────────────────────────
+export { createAuditLog } from './audit-log.js';
+export type { AuditLog, AuditEntry, AuditLogOptions } from './audit-log.js';
