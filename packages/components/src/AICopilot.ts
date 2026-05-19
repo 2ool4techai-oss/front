@@ -152,9 +152,9 @@ export function createCopilot(options?: CopilotOptions): CopilotHandle {
     welcomeMessage:
       options?.welcomeMessage ??
       'Hi! I\'m your AI copilot. I can see your app\'s signal state and help you navigate or operate it.',
-    endpoint: options?.endpoint,
-    apiKey: options?.apiKey,
-    onAction: options?.onAction,
+    ...(options?.endpoint !== undefined ? { endpoint: options.endpoint } : {}),
+    ...(options?.apiKey !== undefined ? { apiKey: options.apiKey } : {}),
+    ...(options?.onAction !== undefined ? { onAction: options.onAction } : {}),
   };
 
   let isOpen = false;
@@ -338,7 +338,7 @@ export function createCopilot(options?: CopilotOptions): CopilotHandle {
             role: 'assistant',
             content: data.reply,
             timestamp: Date.now(),
-            actions: data.actions,
+            ...(data.actions !== undefined ? { actions: data.actions } : {}),
           };
         } catch (err) {
           assistantMsg = {
@@ -356,7 +356,7 @@ export function createCopilot(options?: CopilotOptions): CopilotHandle {
           role: 'assistant',
           content: reply,
           timestamp: Date.now(),
-          actions,
+          ...(actions !== undefined ? { actions } : {}),
         };
       }
 
