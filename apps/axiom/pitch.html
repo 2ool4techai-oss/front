@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AXIOM — Investor Pitch Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#05050f;
+  --surface:rgba(255,255,255,0.04);
+  --border:rgba(255,255,255,0.08);
+  --text:#e2e8f0;
+  --muted:#64748b;
+  --primary:#3b82f6;
+  --accent:#8b5cf6;
+  --green:#10b981;
+  --amber:#f59e0b;
+  --red:#f43f5e;
+  --cyan:#06b6d4;
+  --font:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+
+html,body{
+  height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Aurora ── */
+#aurora{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 90% 60% at 10% 40%, hsl(230 70% 18%/.4) 0%,transparent 65%),
+    radial-gradient(ellipse 70% 50% at 85% 15%, hsl(265 70% 14%/.3) 0%,transparent 60%),
+    radial-gradient(ellipse 80% 70% at 50% 90%, hsl(200 70% 12%/.25) 0%,transparent 65%);
+  animation:breathe 14s ease-in-out infinite alternate;
+}
+@keyframes breathe{
+  0%{transform:scale(1) rotate(0deg);opacity:.9}
+  100%{transform:scale(1.05) rotate(.3deg);opacity:1}
+}
+
+/* ── Grid ── */
+#grid{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
+}
+
+/* ── Deck shell ── */
+#deck{
+  position:relative;z-index:2;
+  width:100vw;height:100vh;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ── Slides ── */
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:48px 64px;
+  opacity:0;pointer-events:none;
+  transform:translateX(60px) scale(.97);
+  transition:opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.4,0,.2,1);
+  will-change:transform,opacity;
+}
+.slide.active{
+  opacity:1;pointer-events:all;
+  transform:translateX(0) scale(1);
+}
+.slide.exit-left{
+  opacity:0;
+  transform:translateX(-60px) scale(.97);
+  transition:opacity .4s ease,transform .4s ease;
+}
+
+/* ── Nav ── */
+#nav{
+  position:fixed;bottom:32px;left:50%;transform:translateX(-50%);
+  z-index:100;
+  display:flex;align-items:center;gap:16px;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  border-radius:9999px;
+  padding:10px 20px;
+}
+
+#slide-counter{
+  font-size:.75rem;font-weight:600;
+  color:var(--muted);letter-spacing:.08em;
+  min-width:60px;text-align:center;
+}
+
+.nav-btn{
+  width:36px;height:36px;
+  border:1px solid var(--border);
+  border-radius:50%;
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;
+  transition:background .2s,border-color .2s,transform .15s;
+}
+.nav-btn:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2)}
+.nav-btn:active{transform:scale(.9)}
+
+/* progress dots */
+#dots{display:flex;gap:5px;align-items:center}
+.dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--border);
+  transition:background .3s,transform .3s,width .3s;
+  cursor:pointer;
+}
+.dot.active{background:var(--primary);transform:scale(1.3);width:16px;border-radius:3px}
+
+/* ── Typography utils ── */
+.eyebrow{
+  font-size:.7rem;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--primary);
+  margin-bottom:14px;
+}
+.h1{font-size:clamp(2.8rem,6vw,5rem);font-weight:900;line-height:1.05;letter-spacing:-.03em}
+.h2{font-size:clamp(2rem,4vw,3.2rem);font-weight:800;line-height:1.1;letter-spacing:-.025em}
+.h3{font-size:clamp(1.2rem,2.5vw,1.8rem);font-weight:700;line-height:1.2}
+.lead{font-size:clamp(.95rem,1.8vw,1.2rem);color:#94a3b8;line-height:1.7;max-width:700px}
+.mono{font-family:var(--mono);font-size:.85em}
+
+.gradient-text{
+  background:linear-gradient(135deg,#60a5fa,#a78bfa,#34d399);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.gradient-text-amber{
+  background:linear-gradient(135deg,#f59e0b,#ef4444);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* ── Glass card ── */
+.glass{
+  background:var(--surface);
+  backdrop-filter:blur(20px) saturate(180%);
+  border:1px solid var(--border);
+  border-radius:16px;
+  box-shadow:0 4px 32px rgba(0,0,0,.4);
+}
+
+/* ── Pill badge ── */
+.pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;
+  border-radius:9999px;
+  font-size:.72rem;font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.pill-blue{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.3)}
+.pill-green{background:rgba(16,185,129,.15);color:#34d399;border:1px solid rgba(16,185,129,.3)}
+.pill-amber{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.3)}
+.pill-red{background:rgba(244,63,94,.15);color:#fb7185;border:1px solid rgba(244,63,94,.3)}
+.pill-purple{background:rgba(139,92,246,.15);color:#a78bfa;border:1px solid rgba(139,92,246,.3)}
+
+/* ── Divider ── */
+.divider{width:60px;height:3px;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:2px;margin:20px 0}
+
+/* ── Stat box ── */
+.stat-box{text-align:center;padding:24px 28px}
+.stat-num{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;letter-spacing:-.03em}
+.stat-label{font-size:.75rem;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
+
+/* ── Score bar ── */
+.score-row{display:flex;align-items:center;gap:12px;margin:8px 0}
+.score-label{font-size:.78rem;color:#94a3b8;width:200px;flex-shrink:0}
+.score-track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.4,0,.2,1);width:0}
+.score-val{font-size:.78rem;font-weight:700;width:36px;text-align:right;flex-shrink:0}
+
+/* ── Table ── */
+.axiom-table{width:100%;border-collapse:collapse}
+.axiom-table th{
+  font-size:.65rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);
+  padding:10px 16px;text-align:left;
+  border-bottom:1px solid var(--border);
+}
+.axiom-table td{
+  padding:12px 16px;font-size:.85rem;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.axiom-table tr:last-child td{border-bottom:none}
+.axiom-table tr:hover td{background:rgba(255,255,255,.02)}
+
+/* ── Chain block ── */
+.chain-block{
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:.65rem;
+  color:#64748b;margin:4px 0;
+}
+.chain-hash{
+  background:rgba(0,0,0,.4);border:1px solid var(--border);
+  border-radius:6px;padding:4px 10px;
+  color:#34d399;flex:1;
+}
+.chain-arrow{color:var(--accent);font-size:1rem}
+
+/* ── Leaderboard row ── */
+.lb-row{
+  display:flex;align-items:center;gap:16px;
+  padding:14px 20px;
+  border-bottom:1px solid rgba(255,255,255,.04);
+  transition:background .2s;
+}
+.lb-row:hover{background:rgba(255,255,255,.03)}
+.lb-rank{
+  font-size:1.1rem;font-weight:900;
+  width:32px;flex-shrink:0;text-align:center;
+}
+.lb-name{flex:1}
+.lb-robot{font-weight:700;font-size:.9rem}
+.lb-company{font-size:.7rem;color:var(--muted)}
+.lb-bar-wrap{width:160px;flex-shrink:0}
+.lb-bar-track{height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.lb-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6)}
+.lb-score{font-size:1.1rem;font-weight:800;width:44px;text-align:right;flex-shrink:0}
+
+/* ── Flow diagram ── */
+.flow{display:flex;align-items:center;gap:0;width:100%}
+.flow-node{
+  flex:1;text-align:center;padding:16px 12px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:12px;
+  transition:border-color .3s;
+}
+.flow-node:hover{border-color:var(--primary)}
+.flow-arrow{font-size:1.4rem;color:var(--accent);padding:0 6px;flex-shrink:0}
+.flow-icon{font-size:1.6rem;margin-bottom:6px}
+.flow-title{font-size:.72rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.flow-sub{font-size:.62rem;color:var(--muted)}
+
+/* ── GTM box ── */
+.gtm-step{
+  display:flex;gap:16px;align-items:flex-start;
+  padding:16px 20px;
+  border-left:3px solid transparent;
+  border-radius:0 12px 12px 0;
+  transition:background .3s,border-color .3s;
+}
+.gtm-step:hover{background:rgba(255,255,255,.03);border-left-color:var(--primary)}
+.gtm-num{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;font-weight:800;flex-shrink:0;
+}
+.gtm-body .gtm-title{font-size:.85rem;font-weight:700;margin-bottom:2px}
+.gtm-body .gtm-desc{font-size:.75rem;color:var(--muted);line-height:1.5}
+
+/* ── Timeline ── */
+.timeline-row{display:flex;gap:0;width:100%}
+.tl-phase{
+  flex:1;padding:20px 16px;
+  border-top:3px solid var(--border);
+  transition:border-color .3s;
+}
+.tl-phase:hover{border-top-color:var(--primary)}
+.tl-year{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.tl-title{font-size:.85rem;font-weight:700;margin-bottom:6px}
+.tl-items{list-style:none}
+.tl-items li{font-size:.72rem;color:#94a3b8;padding:2px 0}
+.tl-items li::before{content:'→ ';color:var(--accent)}
+
+/* ── Moat list ── */
+.moat-item{
+  display:flex;gap:14px;align-items:flex-start;padding:14px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.moat-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px}
+.moat-title{font-size:.85rem;font-weight:700;margin-bottom:3px}
+.moat-desc{font-size:.75rem;color:#94a3b8;line-height:1.5}
+
+/* ── Ask card ── */
+.ask-card{
+  border-radius:16px;padding:28px 32px;
+  border:1px solid rgba(59,130,246,.3);
+  background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(139,92,246,.08));
+}
+
+/* ── Glowing CTA ── */
+.cta{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 32px;
+  background:linear-gradient(135deg,#3b82f6,#6366f1);
+  border:none;border-radius:12px;
+  color:#fff;font-weight:700;font-size:1rem;
+  box-shadow:0 0 40px rgba(59,130,246,.35);
+  cursor:pointer;
+  transition:transform .2s,box-shadow .2s;
+}
+.cta:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(59,130,246,.5)}
+
+/* ── Scrollable area within slide ── */
+.scroll-inner{width:100%;max-height:calc(100vh - 180px);overflow-y:auto;padding-right:4px}
+.scroll-inner::-webkit-scrollbar{width:4px}
+.scroll-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+
+/* ── Pulse ring ── */
+@keyframes pulse-ring{
+  0%{transform:scale(1);opacity:.8}
+  100%{transform:scale(1.6);opacity:0}
+}
+.pulse{
+  position:relative;display:inline-block;
+}
+.pulse::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  border:2px solid var(--green);
+  animation:pulse-ring 1.8s ease-out infinite;
+}
+
+/* ── Entry animations ── */
+@keyframes fade-up{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.anim-1{animation:fade-up .6s .1s both}
+.anim-2{animation:fade-up .6s .25s both}
+.anim-3{animation:fade-up .6s .4s both}
+.anim-4{animation:fade-up .6s .55s both}
+.anim-5{animation:fade-up .6s .7s both}
+.anim-6{animation:fade-up .6s .85s both}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .slide{padding:24px 20px}
+  .h1{font-size:2.2rem}
+  .h2{font-size:1.6rem}
+  .lb-bar-wrap{display:none}
+  .flow-arrow{padding:0 2px}
+}
+</style>
+</head>
+<body>
+<div id="aurora"></div>
+<div id="grid"></div>
+
+<div id="deck">
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 1 — TITLE
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s1">
+  <div style="text-align:center;max-width:900px">
+    <div class="anim-1" style="margin-bottom:20px">
+      <span class="pill pill-blue">Seed Round · 2026</span>
+    </div>
+    <div class="anim-2" style="margin-bottom:8px">
+      <span style="font-size:clamp(4rem,10vw,8rem);font-weight:900;letter-spacing:-.05em;background:linear-gradient(135deg,#60a5fa,#a78bfa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1">AXIOM</span>
+    </div>
+    <div class="anim-3" style="font-size:clamp(1rem,2.2vw,1.4rem);color:#94a3b8;margin-bottom:40px;font-weight:300;letter-spacing:.01em">
+      The Trust Layer for Physical AI
+    </div>
+    <div class="anim-4" style="display:inline-block;background:rgba(0,0,0,.5);border:1px solid var(--border);border-radius:12px;padding:16px 32px;font-family:var(--mono);font-size:clamp(.8rem,1.5vw,1rem);color:#34d399;margin-bottom:48px">
+      &ldquo;If it moved, we recorded it.&nbsp;&nbsp;If we recorded it, it cannot be changed.&nbsp;&nbsp;If it cannot be changed, it can be trusted.&rdquo;
+    </div>
+    <div class="anim-5" style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap">
+      <div class="glass" style="padding:16px 28px;text-align:center">
+        <div style="font-size:1.6rem;font-weight:900;color:#60a5fa">$10B+</div>
+        <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Target valuation</div>
+      </div>
+      <div class="glass" style="padding:16px 28px;text-align:center">
+        <div style="font-size:1.6rem;font-weight:900;color:#34d399">$2M</div>
+        <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Seed ask</div>
+      </div>
+      <div class="glass" style="padding:16px 28px;text-align:center">
+        <div style="font-size:1.6rem;font-weight:900;color:#a78bfa">Day&nbsp;1</div>
+        <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Revenue possible</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 2 — THE MOMENT
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s2">
+  <div style="max-width:980px;width:100%">
+    <div class="eyebrow anim-1">The Moment</div>
+    <div class="h2 anim-2" style="margin-bottom:12px">The market has already <span class="gradient-text">decided.</span></div>
+    <div class="lead anim-3" style="margin-bottom:36px">Figure AI is worth $39 billion with almost no revenue. The world has priced in 100,000+ deployed humanoid robots. The hardware race is happening. You cannot stop it. You don't need to.</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px" class="anim-4">
+      <div class="glass stat-box">
+        <div class="stat-num gradient-text">$39B</div>
+        <div class="stat-label">Figure AI valuation</div>
+      </div>
+      <div class="glass stat-box">
+        <div class="stat-num" style="color:#34d399">100K</div>
+        <div class="stat-label">Robots by 2029 (Figure target)</div>
+      </div>
+      <div class="glass stat-box">
+        <div class="stat-num" style="color:#f59e0b">$1.9B</div>
+        <div class="stat-label">Total funding raised by Figure</div>
+      </div>
+      <div class="glass stat-box">
+        <div class="stat-num" style="color:#a78bfa">$50B+</div>
+        <div class="stat-label">Robot insurance market incoming</div>
+      </div>
+    </div>
+    <div class="glass anim-5" style="margin-top:24px;padding:20px 28px;border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.05)">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:1.4rem">⚡</span>
+        <div>
+          <div style="font-weight:700;margin-bottom:2px">The hardware race is being won. Nobody is building the trust infrastructure.</div>
+          <div style="font-size:.8rem;color:#94a3b8">Every robot deployed creates liability. Every enterprise client needs verification. Zero infrastructure exists for either. That gap is AXIOM.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 3 — THE PROBLEM
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s3">
+  <div style="max-width:980px;width:100%">
+    <div class="eyebrow anim-1">The Problem</div>
+    <div class="h2 anim-2" style="margin-bottom:12px">Robot companies say <span class="gradient-text-amber">"trust us."</span><br/>Nobody can verify them.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:28px" class="anim-3">
+      <div class="glass" style="padding:24px">
+        <div style="font-size:1.2rem;margin-bottom:10px">🏭</div>
+        <div style="font-weight:700;margin-bottom:8px">BMW's Reality Today</div>
+        <div style="font-size:.82rem;color:#94a3b8;line-height:1.7">
+          Figure says &ldquo;our robot is safe and tested.&rdquo;<br/>
+          BMW sees a demo video.<br/>
+          BMW cannot verify the test results.<br/>
+          Figure controls its own logs.<br/>
+          Figure can alter those logs.<br/>
+          <span style="color:#fb7185;font-weight:600">Robot injures a worker → lawsuit. Zero neutral evidence.</span>
+        </div>
+      </div>
+      <div class="glass" style="padding:24px">
+        <div style="font-size:1.2rem;margin-bottom:10px">📊</div>
+        <div style="font-weight:700;margin-bottom:8px">What Does Not Exist</div>
+        <div style="font-size:.82rem;line-height:2">
+          <div style="display:flex;gap:8px;align-items:center"><span style="color:#fb7185">✗</span> <span style="color:#94a3b8">Standard robot behavior metric (vs Waymo's disengagement rate)</span></div>
+          <div style="display:flex;gap:8px;align-items:center"><span style="color:#fb7185">✗</span> <span style="color:#94a3b8">Immutable test result record any party can verify</span></div>
+          <div style="display:flex;gap:8px;align-items:center"><span style="color:#fb7185">✗</span> <span style="color:#94a3b8">Independent audit trail from simulation to deployment</span></div>
+          <div style="display:flex;gap:8px;align-items:center"><span style="color:#fb7185">✗</span> <span style="color:#94a3b8">Insurance-grade behavioral data for underwriting</span></div>
+          <div style="display:flex;gap:8px;align-items:center"><span style="color:#fb7185">✗</span> <span style="color:#94a3b8">Safety certification standard (no ISO standard exists yet)</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="glass anim-4" style="margin-top:20px;padding:18px 24px;display:flex;gap:16px;align-items:center;border-color:rgba(244,63,94,.25)">
+      <span style="font-size:2rem">⚠️</span>
+      <div style="font-size:.85rem;color:#94a3b8;line-height:1.6">
+        <strong style="color:var(--text)">The long tail is coming:</strong> The first serious humanoid robot injury in a factory or hospital will trigger regulatory mandates overnight. The company that already owns the verification standard wins everything — with zero competition response time.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 4 — THE INSIGHT
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s4">
+  <div style="max-width:960px;width:100%">
+    <div class="eyebrow anim-1">The Insight</div>
+    <div class="h2 anim-2" style="margin-bottom:10px">Every industry solved this.<br/><span class="gradient-text">All created billion-dollar companies.</span></div>
+    <div class="lead anim-3" style="margin-bottom:28px">Humanoid robotics is exactly where these industries were before the trust infrastructure existed.</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px" class="anim-4">
+      <div class="glass" style="padding:20px 16px;text-align:center">
+        <div style="font-size:1.8rem;margin-bottom:8px">🚗</div>
+        <div style="font-weight:700;font-size:.85rem;margin-bottom:4px">Carfax</div>
+        <div style="font-size:.7rem;color:var(--muted);margin-bottom:8px">Vehicle history reports</div>
+        <div style="font-weight:800;color:#60a5fa">$1B exit</div>
+        <div style="font-size:.65rem;color:var(--muted);margin-top:4px">Sold for $1 billion. Just vehicle history.</div>
+      </div>
+      <div class="glass" style="padding:20px 16px;text-align:center">
+        <div style="font-size:1.8rem;margin-bottom:8px">💳</div>
+        <div style="font-weight:700;font-size:.85rem;margin-bottom:4px">Moody's / S&amp;P</div>
+        <div style="font-size:.7rem;color:var(--muted);margin-bottom:8px">Credit rating agencies</div>
+        <div style="font-weight:800;color:#34d399">$2B+ revenue</div>
+        <div style="font-size:.65rem;color:var(--muted);margin-top:4px">Score numbers. Own the financial standard.</div>
+      </div>
+      <div class="glass" style="padding:20px 16px;text-align:center">
+        <div style="font-size:1.8rem;margin-bottom:8px">🔌</div>
+        <div style="font-weight:700;font-size:.85rem;margin-bottom:4px">UL Certification</div>
+        <div style="font-size:.7rem;color:var(--muted);margin-bottom:8px">Electrical product safety</div>
+        <div style="font-weight:800;color:#a78bfa">Est. 1894</div>
+        <div style="font-size:.65rem;color:var(--muted);margin-top:4px">130 years dominant. Still mandatory.</div>
+      </div>
+      <div class="glass" style="padding:20px 16px;text-align:center">
+        <div style="font-size:1.8rem;margin-bottom:8px">🛣️</div>
+        <div style="font-weight:700;font-size:.85rem;margin-bottom:4px">Waymo Safety Report</div>
+        <div style="font-size:.7rem;color:var(--muted);margin-bottom:8px">Disengagement rate standard</div>
+        <div style="font-weight:800;color:#f59e0b">Industry law</div>
+        <div style="font-size:.65rem;color:var(--muted);margin-top:4px">California mandated it. Everyone reports it.</div>
+      </div>
+    </div>
+    <div class="glass anim-5" style="margin-top:20px;padding:20px 28px;border-color:rgba(139,92,246,.3);background:rgba(139,92,246,.05)">
+      <div style="font-size:.9rem;font-weight:700;margin-bottom:4px">The pattern is always the same:</div>
+      <div style="font-size:.82rem;color:#94a3b8;line-height:1.7">
+        Industry grows → liability follows → trust infrastructure becomes mandatory → the company that defined the standard owns the market permanently.
+        <span style="color:#a78bfa;font-weight:600"> Humanoid robotics is at step one. AXIOM builds step four before anyone else.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 5 — THE SOLUTION
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s5">
+  <div style="max-width:960px;width:100%;text-align:center">
+    <div class="eyebrow anim-1">The Solution</div>
+    <div class="h2 anim-2" style="margin-bottom:10px">AXIOM: Three layers.<br/><span class="gradient-text">One unbreakable truth.</span></div>
+    <div class="lead anim-3" style="margin-bottom:36px;margin-left:auto;margin-right:auto">Not a testing tool. Not a dashboard. The financial and legal infrastructure of the physical AI industry.</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px" class="anim-4">
+      <div class="glass" style="padding:28px 24px;border-color:rgba(59,130,246,.3)">
+        <div style="font-size:2.4rem;margin-bottom:12px">⛓️</div>
+        <div style="font-weight:800;font-size:1rem;margin-bottom:2px;color:#60a5fa">Layer 1: The Chain</div>
+        <div style="font-size:.7rem;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em">Immutable Recording</div>
+        <div style="font-size:.8rem;color:#94a3b8;line-height:1.7">Every robot action — simulation, staging, production — cryptographically recorded. Nobody can alter it. Not even AXIOM.</div>
+      </div>
+      <div class="glass" style="padding:28px 24px;border-color:rgba(139,92,246,.3)">
+        <div style="font-size:2.4rem;margin-bottom:12px">🏅</div>
+        <div style="font-weight:800;font-size:1rem;margin-bottom:2px;color:#a78bfa">Layer 2: The Score</div>
+        <div style="font-size:.7rem;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em">Robot Credit Score</div>
+        <div style="font-size:.8rem;color:#94a3b8;line-height:1.7">Live 0–100 AXIOM Trust Score. Five components. Public leaderboard. Companies compete to improve it. You own the currency.</div>
+      </div>
+      <div class="glass" style="padding:28px 24px;border-color:rgba(16,185,129,.3)">
+        <div style="font-size:2.4rem;margin-bottom:12px">📋</div>
+        <div style="font-weight:800;font-size:1rem;margin-bottom:2px;color:#34d399">Layer 3: The Report</div>
+        <div style="font-size:.7rem;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em">Robot Carfax™</div>
+        <div style="font-size:.8rem;color:#94a3b8;line-height:1.7">Complete verified history. BMW audits Figure's robots independently. No trust required. Chain is the evidence.</div>
+      </div>
+    </div>
+    <div class="anim-5" style="margin-top:28px;font-size:.85rem;color:#64748b">
+      Built on Ethereum L2 (Polygon / Base) · Open SDK · REST API · Enterprise audit portal
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 6 — THE CHAIN (HOW IT WORKS)
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s6">
+  <div style="max-width:960px;width:100%">
+    <div class="eyebrow anim-1">Layer 1 · The Chain</div>
+    <div class="h2 anim-2" style="margin-bottom:10px">One unbroken record.<br/><span class="gradient-text">Simulation → Staging → Production.</span></div>
+    <div class="anim-3" style="margin:24px 0">
+      <div class="flow">
+        <div class="flow-node">
+          <div class="flow-icon">🖥️</div>
+          <div class="flow-title">Simulation</div>
+          <div class="flow-sub">10,000 parallel runs<br/>Isaac Lab / MuJoCo</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="flow-icon">🔗</div>
+          <div class="flow-title">Hash &amp; Chain</div>
+          <div class="flow-sub">SHA-256 record<br/>Ethereum L2</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="flow-icon">🤖</div>
+          <div class="flow-title">Staging</div>
+          <div class="flow-sub">Real robot<br/>Controlled env</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="flow-icon">🔗</div>
+          <div class="flow-title">Same Chain</div>
+          <div class="flow-sub">Continuous record<br/>Unbroken lineage</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="flow-icon">🏭</div>
+          <div class="flow-title">Production</div>
+          <div class="flow-sub">BMW factory floor<br/>Every action logged</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" style="border-color:rgba(59,130,246,.4)">
+          <div class="flow-icon">✅</div>
+          <div class="flow-title">Audit Ready</div>
+          <div class="flow-sub">BMW verifies<br/>independently</div>
+        </div>
+      </div>
+    </div>
+    <div class="glass anim-4" style="padding:16px 20px;margin-bottom:12px">
+      <div style="font-size:.68rem;color:var(--muted);margin-bottom:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Live chain feed — every block is one robot action</div>
+      <div class="chain-block"><span style="color:#60a5fa">Block&nbsp;#48291</span><span class="chain-hash">a3f8c2d1e9b4...7k2m</span><span style="color:#34d399">✓ production · grasp_success · Δ=0.02</span></div>
+      <div class="chain-block"><span style="color:#60a5fa">Block&nbsp;#48290</span><span class="chain-hash">9d7e1f3b2a6c...8p4n</span><span style="color:#f59e0b">⚡ production · near_miss · Δ=0.71</span></div>
+      <div class="chain-block"><span style="color:#60a5fa">Block&nbsp;#48289</span><span class="chain-hash">1c4a8f5d3e9b...2x7q</span><span style="color:#34d399">✓ production · place_success · Δ=0.05</span></div>
+      <div class="chain-block"><span style="color:#60a5fa">Block&nbsp;#48288</span><span class="chain-hash">6e2b9c7f1d4a...5r3t</span><span style="color:#34d399">✓ staging · pick_success · Δ=0.08</span></div>
+    </div>
+    <div class="glass anim-5" style="padding:14px 20px;border-color:rgba(16,185,129,.25);background:rgba(16,185,129,.05);display:flex;gap:12px;align-items:center">
+      <span style="font-size:1.2rem">🔐</span>
+      <div style="font-size:.8rem;color:#94a3b8"><strong style="color:var(--text)">Tamper-proof guarantee:</strong> Each block contains the hash of the previous block. Altering any record invalidates every subsequent block — cryptographically detectable by any third party instantly.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 7 — THE SCORE
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s7">
+  <div style="max-width:960px;width:100%">
+    <div class="eyebrow anim-1">Layer 2 · The Score</div>
+    <div class="h2 anim-2" style="margin-bottom:10px">The robot credit score.<br/><span class="gradient-text">Companies compete to improve it.</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px">
+      <div class="anim-3">
+        <div class="glass" style="padding:24px 28px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <div>
+              <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Figure 03 · AXIOM Trust Score</div>
+              <div style="font-size:3rem;font-weight:900;background:linear-gradient(135deg,#60a5fa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1">94</div>
+            </div>
+            <div style="width:70px;height:70px;border-radius:50%;background:conic-gradient(#3b82f6 94%,rgba(255,255,255,.06) 0);display:flex;align-items:center;justify-content:center">
+              <div style="width:56px;height:56px;border-radius:50%;background:#05050f;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#60a5fa">94%</div>
+            </div>
+          </div>
+          <div class="score-row">
+            <span class="score-label">Test Coverage (20%)</span>
+            <div class="score-track"><div class="score-fill" style="width:98%;background:linear-gradient(90deg,#3b82f6,#6366f1)"></div></div>
+            <span class="score-val" style="color:#60a5fa">98</span>
+          </div>
+          <div class="score-row">
+            <span class="score-label">Production Reliability (30%)</span>
+            <div class="score-track"><div class="score-fill" style="width:91%;background:linear-gradient(90deg,#8b5cf6,#a78bfa)"></div></div>
+            <span class="score-val" style="color:#a78bfa">91</span>
+          </div>
+          <div class="score-row">
+            <span class="score-label">Incident History (25%)</span>
+            <div class="score-track"><div class="score-fill" style="width:96%;background:linear-gradient(90deg,#10b981,#34d399)"></div></div>
+            <span class="score-val" style="color:#34d399">96</span>
+          </div>
+          <div class="score-row">
+            <span class="score-label">Drift Score (15%)</span>
+            <div class="score-track"><div class="score-fill" style="width:89%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div></div>
+            <span class="score-val" style="color:#fbbf24">89</span>
+          </div>
+          <div class="score-row">
+            <span class="score-label">Recovery Score (10%)</span>
+            <div class="score-track"><div class="score-fill" style="width:97%;background:linear-gradient(90deg,#06b6d4,#67e8f9)"></div></div>
+            <span class="score-val" style="color:#67e8f9">97</span>
+          </div>
+        </div>
+      </div>
+      <div class="anim-4">
+        <div style="margin-bottom:14px">
+          <div style="font-weight:700;margin-bottom:8px">Why this score is the business</div>
+          <div style="font-size:.82rem;color:#94a3b8;line-height:1.7">Robot companies obsess over their AXIOM score exactly like app developers obsess over App Store ratings. High score = faster sales. Low score = blocked from deployments.</div>
+        </div>
+        <div class="glass" style="padding:16px 20px;margin-bottom:12px;border-color:rgba(16,185,129,.25)">
+          <div style="font-size:.78rem;line-height:1.8">
+            <div style="color:#34d399;font-weight:600">High AXIOM Score →</div>
+            <div style="color:#94a3b8">• Faster enterprise sales cycle (18 months → 6 months)</div>
+            <div style="color:#94a3b8">• Lower insurance premiums (verified = lower risk)</div>
+            <div style="color:#94a3b8">• Regulatory fast-track approval</div>
+            <div style="color:#94a3b8">• Premium pricing power vs competitors</div>
+          </div>
+        </div>
+        <div class="glass" style="padding:16px 20px;border-color:rgba(244,63,94,.25)">
+          <div style="font-size:.78rem;line-height:1.8">
+            <div style="color:#fb7185;font-weight:600">Low AXIOM Score →</div>
+            <div style="color:#94a3b8">• Enterprise clients refuse deployment</div>
+            <div style="color:#94a3b8">• Insurance rates 3x higher</div>
+            <div style="color:#94a3b8">• Regulatory review required</div>
+            <div style="color:#94a3b8">• Sales cycle doubles</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 8 — THE LEADERBOARD
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s8">
+  <div style="max-width:900px;width:100%">
+    <div class="eyebrow anim-1">Layer 2 · Public Benchmark</div>
+    <div class="h2 anim-2" style="margin-bottom:6px">The leaderboard nobody asked us to publish.<br/><span class="gradient-text">That's how standards are made.</span></div>
+    <div class="lead anim-3" style="margin-bottom:20px;font-size:.9rem">Companies <strong style="color:var(--text)">cannot ignore a public ranking.</strong> Their investors ask. Their customers reference it. Their competitors use it against them. Being absent = zero score = worst ranking.</div>
+    <div class="glass anim-4">
+      <div style="padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)">AXIOM Robot Benchmark Rankings · May 2026</div>
+        <span class="pill pill-green">Live</span>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank" style="color:#f59e0b">🥇</div>
+        <div class="lb-name"><div class="lb-robot">Figure 03</div><div class="lb-company">Figure AI</div></div>
+        <div class="lb-bar-wrap"><div class="lb-bar-track"><div class="lb-bar-fill" style="width:94%"></div></div></div>
+        <div class="lb-score gradient-text">94</div>
+        <span class="pill pill-green" style="margin-left:8px">CERTIFIED</span>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank" style="color:#94a3b8">🥈</div>
+        <div class="lb-name"><div class="lb-robot">Digit v4</div><div class="lb-company">Agility Robotics</div></div>
+        <div class="lb-bar-wrap"><div class="lb-bar-track"><div class="lb-bar-fill" style="width:91%"></div></div></div>
+        <div class="lb-score" style="color:#a78bfa">91</div>
+        <span class="pill pill-green" style="margin-left:8px">CERTIFIED</span>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank" style="color:#cd7f32">🥉</div>
+        <div class="lb-name"><div class="lb-robot">Optimus Gen-3</div><div class="lb-company">Tesla</div></div>
+        <div class="lb-bar-wrap"><div class="lb-bar-track"><div class="lb-bar-fill" style="width:89%"></div></div></div>
+        <div class="lb-score" style="color:#60a5fa">89</div>
+        <span class="pill pill-green" style="margin-left:8px">CERTIFIED</span>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank" style="color:#64748b">4</div>
+        <div class="lb-name"><div class="lb-robot">NEO Beta</div><div class="lb-company">1X Technologies</div></div>
+        <div class="lb-bar-wrap"><div class="lb-bar-track"><div class="lb-bar-fill" style="width:83%"></div></div></div>
+        <div class="lb-score" style="color:#34d399">83</div>
+        <span class="pill pill-amber" style="margin-left:8px">PENDING</span>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank" style="color:#64748b">5</div>
+        <div class="lb-name"><div class="lb-robot">Atlas</div><div class="lb-company">Boston Dynamics</div></div>
+        <div class="lb-bar-wrap"><div class="lb-bar-track"><div class="lb-bar-fill" style="width:79%"></div></div></div>
+        <div class="lb-score" style="color:#94a3b8">79</div>
+        <span class="pill pill-amber" style="margin-left:8px">PENDING</span>
+      </div>
+    </div>
+    <div class="anim-5" style="margin-top:14px;text-align:center;font-size:.75rem;color:#475569">
+      Credit bureaus didn't ask for permission to create credit scores. Neither do we.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 9 — GTM
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s9">
+  <div style="max-width:960px;width:100%">
+    <div class="eyebrow anim-1">Go-To-Market</div>
+    <div class="h2 anim-2" style="margin-bottom:6px">We never cold-call <span class="gradient-text">Figure AI.</span><br/>BMW does it for us.</div>
+    <div class="lead anim-3" style="margin-bottom:28px;font-size:.9rem">Enterprise pull > vendor push. We sell downstream. Adoption comes upstream.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div class="anim-4">
+        <div class="glass" style="padding:20px 24px">
+          <div style="font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px">Traditional SaaS (Wrong)</div>
+          <div style="font-size:.82rem;color:#94a3b8;line-height:2">
+            <div>You → cold call Figure AI</div>
+            <div style="color:#fb7185">→ 18-month sales cycle</div>
+            <div style="color:#fb7185">→ Legal review 6 months</div>
+            <div style="color:#fb7185">→ Maybe a pilot</div>
+            <div style="color:#fb7185">→ Maybe revenue in year 2</div>
+          </div>
+        </div>
+      </div>
+      <div class="anim-5">
+        <div class="glass" style="padding:20px 24px;border-color:rgba(16,185,129,.3)">
+          <div style="font-size:.72rem;font-weight:700;color:#34d399;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px">AXIOM GTM (Right)</div>
+          <div style="font-size:.82rem;line-height:2">
+            <div style="color:#94a3b8">You → approach BMW/Amazon/hospital</div>
+            <div style="color:#34d399">→ BMW mandates AXIOM certification</div>
+            <div style="color:#34d399">→ Figure has no choice. Must comply.</div>
+            <div style="color:#34d399">→ Figure onboards. Pays monthly.</div>
+            <div style="color:#34d399">→ Every new enterprise = new robot customers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="anim-6" style="margin-top:20px">
+      <div class="glass" style="padding:18px 24px">
+        <div style="font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Target first mandate conversations</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <span class="pill pill-blue">🚗 BMW / Mercedes</span>
+          <span class="pill pill-blue">📦 Amazon Fulfillment</span>
+          <span class="pill pill-blue">🏥 Apollo Hospitals</span>
+          <span class="pill pill-blue">🏭 Tata Manufacturing</span>
+          <span class="pill pill-blue">✈️ Defence Contractors</span>
+          <span class="pill pill-purple">🔒 Lloyd's Insurance</span>
+          <span class="pill pill-purple">📊 AXA / Munich Re</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 10 — FREE SDK
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s10">
+  <div style="max-width:920px;width:100%">
+    <div class="eyebrow anim-1">Growth Strategy</div>
+    <div class="h2 anim-2" style="margin-bottom:10px">Free SDK. <span class="gradient-text">Bottom-up adoption.<br/>Top-down revenue.</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:20px">
+      <div class="anim-3">
+        <div class="glass" style="padding:20px 24px">
+          <div style="font-family:var(--mono);font-size:.75rem;color:#64748b;margin-bottom:10px"># Install the free AXIOM SDK</div>
+          <div style="font-family:var(--mono);font-size:.85rem;color:#34d399;margin-bottom:4px">$ pip install axiom-sdk</div>
+          <div style="font-family:var(--mono);font-size:.85rem;color:#60a5fa;margin-bottom:16px">$ npm install @axiom/robot-sdk</div>
+          <div style="border-top:1px solid var(--border);padding-top:14px">
+            <div style="font-family:var(--mono);font-size:.72rem;color:#94a3b8;line-height:1.9">
+              <span style="color:#a78bfa">from</span> axiom_sdk <span style="color:#a78bfa">import</span> AxiomRecorder<br/><br/>
+              recorder = AxiomRecorder(<span style="color:#34d399">"ROBOT-001"</span>)<br/><br/>
+              <span style="color:#64748b"># One line — every action is now</span><br/>
+              <span style="color:#64748b"># on the immutable chain forever</span><br/>
+              recorder.record(action, outcome)
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="anim-4">
+        <div style="margin-bottom:16px">
+          <div style="font-weight:700;margin-bottom:4px">Free forever includes:</div>
+          <div style="font-size:.8rem;color:#94a3b8;line-height:1.9">
+            <div>✓ Unlimited action recording (testnet)</div>
+            <div>✓ Basic AXIOM Trust Score (public)</div>
+            <div>✓ Community leaderboard listing</div>
+            <div>✓ Open source. MIT license.</div>
+          </div>
+        </div>
+        <div class="glass" style="padding:18px 20px;border-color:rgba(59,130,246,.3);margin-bottom:12px">
+          <div style="font-size:.72rem;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Paid tier unlocks</div>
+          <div style="font-size:.78rem;color:#94a3b8;line-height:1.8">
+            <div>→ Private blockchain records ($500–2K/robot/mo)</div>
+            <div>→ Client audit portal (enterprise SLA)</div>
+            <div>→ Insurance marketplace access</div>
+            <div>→ Regulatory compliance reports</div>
+            <div>→ Incident investigation tools</div>
+          </div>
+        </div>
+        <div style="font-size:.78rem;color:#64748b">Stripe / Twilio / HuggingFace model — free to adopt, paid to scale.</div>
+      </div>
+    </div>
+    <div class="anim-5" style="margin-top:20px">
+      <div class="glass" style="padding:14px 24px;display:flex;gap:32px;justify-content:center">
+        <div style="text-align:center"><div style="font-weight:800;color:#60a5fa;font-size:1.1rem">500+</div><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase">Labs adopt Year 1</div></div>
+        <div style="width:1px;background:var(--border)"></div>
+        <div style="text-align:center"><div style="font-weight:800;color:#34d399;font-size:1.1rem">50+</div><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase">Paying companies Year 2</div></div>
+        <div style="width:1px;background:var(--border)"></div>
+        <div style="text-align:center"><div style="font-weight:800;color:#a78bfa;font-size:1.1rem">Standard</div><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase">Industry sets by Year 3</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 11 — BUSINESS MODEL
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s11">
+  <div style="max-width:960px;width:100%">
+    <div class="eyebrow anim-1">Business Model</div>
+    <div class="h2 anim-2" style="margin-bottom:10px">Four revenue streams.<br/><span class="gradient-text">Every robot on earth is a customer.</span></div>
+    <div class="glass anim-3" style="margin-top:20px;overflow:hidden">
+      <table class="axiom-table">
+        <thead>
+          <tr>
+            <th>Buyer</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Scale at 100K robots</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pill pill-blue">🤖 Robot Companies</span></td>
+            <td style="color:#94a3b8">Private chain recording + certification</td>
+            <td style="color:#34d399;font-weight:700">$500–2K /robot/mo</td>
+            <td style="font-weight:700">$600M–2.4B /yr</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-purple">🏭 Enterprise Clients</span></td>
+            <td style="color:#94a3b8">Audit portal, fleet dashboard, SLA</td>
+            <td style="color:#a78bfa;font-weight:700">$50K–500K /yr</td>
+            <td style="font-weight:700">$5M–50M /yr</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-amber">🔒 Insurance Cos.</span></td>
+            <td style="color:#94a3b8">Actuarial data API, risk scoring</td>
+            <td style="color:#fbbf24;font-weight:700">$100K–1M /yr</td>
+            <td style="font-weight:700">$2M–20M /yr</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-green">🏛️ Regulators/Govts</span></td>
+            <td style="color:#94a3b8">Compliance reporting, audit infrastructure</td>
+            <td style="color:#34d399;font-weight:700">Contract</td>
+            <td style="font-weight:700">$5M–50M /yr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px" class="anim-4">
+      <div class="glass stat-box">
+        <div class="stat-num" style="color:#60a5fa">$3M</div>
+        <div class="stat-label">ARR Year 1 target</div>
+      </div>
+      <div class="glass stat-box">
+        <div class="stat-num" style="color:#34d399">$30M</div>
+        <div class="stat-label">ARR Year 3 target</div>
+      </div>
+      <div class="glass stat-box">
+        <div class="stat-num" style="color:#a78bfa">$500M+</div>
+        <div class="stat-label">ARR at full scale</div>
+      </div>
+    </div>
+    <div class="anim-5" style="margin-top:16px;text-align:center;font-size:.78rem;color:#64748b">
+      Recording fee model: 100K robots × 1M actions/day × $0.0001 = $10M/day at scale. Infrastructure-level revenue.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 12 — COMPETITIVE MOAT
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s12">
+  <div style="max-width:960px;width:100%">
+    <div class="eyebrow anim-1">Competitive Moat</div>
+    <div class="h2 anim-2" style="margin-bottom:10px">Four moats.<br/><span class="gradient-text">None of them are technology.</span></div>
+    <div style="margin-top:24px" class="anim-3">
+      <div class="moat-item">
+        <div class="moat-icon">⛓️</div>
+        <div><div class="moat-title">Chain Lock-In (The Deepest)</div><div class="moat-desc">Once robot companies record on our chain, every record references the previous. You cannot migrate history to a competing chain — the chain IS the proof. Switching means losing the entire legal and insurance record of the robot's life.</div></div>
+      </div>
+      <div class="moat-item">
+        <div class="moat-icon">📊</div>
+        <div><div class="moat-title">Standard-Setting (The Most Durable)</div><div class="moat-desc">The first entity to define the benchmark metric owns it permanently. Waymo's disengagement rate is now industry law — not because regulators created it, but because Waymo published it first. We publish the AXIOM score. The market adopts it.</div></div>
+      </div>
+      <div class="moat-item">
+        <div class="moat-icon">🌐</div>
+        <div><div class="moat-title">Network Effect (The Fastest-Growing)</div><div class="moat-desc">More robots record on the chain → richer actuarial data → better trust scores → more enterprise mandates → more robots join. Each new robot makes the platform more valuable for every existing participant.</div></div>
+      </div>
+      <div class="moat-item" style="border-bottom:none">
+        <div class="moat-icon">⚖️</div>
+        <div><div class="moat-title">Regulatory Alignment (The Inevitable)</div><div class="moat-desc">Every government will mandate robot behavior recording before 2030. We want to be the infrastructure before the mandate. When OSHA or EU AI Act references a standard — they reference the one that already exists. That's AXIOM.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 13 — WHY NOW
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s13">
+  <div style="max-width:960px;width:100%">
+    <div class="eyebrow anim-1">Timing</div>
+    <div class="h2 anim-2" style="margin-bottom:10px">The window is <span class="gradient-text">exactly now.</span><br/>Not 2023. Not 2028.</div>
+    <div style="margin-top:28px" class="anim-3">
+      <div class="timeline-row">
+        <div class="tl-phase" style="border-top-color:#475569">
+          <div class="tl-year">2022–2024</div>
+          <div class="tl-title" style="color:#64748b">Too Early</div>
+          <ul class="tl-items">
+            <li>No robots deployed</li>
+            <li>No enterprise demand</li>
+            <li>No urgency</li>
+          </ul>
+        </div>
+        <div class="tl-phase" style="border-top-color:#3b82f6;background:rgba(59,130,246,.04)">
+          <div class="tl-year">2025–2026 ← NOW</div>
+          <div class="tl-title gradient-text">The Window</div>
+          <ul class="tl-items" style="color:#60a5fa">
+            <li>First real deployments</li>
+            <li>No standard yet exists</li>
+            <li>Define before regulate</li>
+            <li>Figure $39B proves market</li>
+          </ul>
+        </div>
+        <div class="tl-phase" style="border-top-color:#475569">
+          <div class="tl-year">2027–2028</div>
+          <div class="tl-title" style="color:#64748b">Fleet Scale</div>
+          <ul class="tl-items">
+            <li>10K+ robots deployed</li>
+            <li>Incidents happen</li>
+            <li>Regulation follows</li>
+            <li>Standard = AXIOM</li>
+          </ul>
+        </div>
+        <div class="tl-phase" style="border-top-color:#475569">
+          <div class="tl-year">2029–2031</div>
+          <div class="tl-title" style="color:#64748b">Regulatory Lock</div>
+          <ul class="tl-items">
+            <li>Mandate issued</li>
+            <li>AXIOM = mandatory</li>
+            <li>Every robot = customer</li>
+            <li>Infrastructure revenue</li>
+          </ul>
+        </div>
+        <div class="tl-phase" style="border-top-color:#475569">
+          <div class="tl-year">2030+</div>
+          <div class="tl-title" style="color:#64748b">IPO / Exit</div>
+          <ul class="tl-items">
+            <li>100M+ robots global</li>
+            <li>$500M+ ARR</li>
+            <li>Bloomberg of physical AI</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="glass anim-4" style="margin-top:24px;padding:18px 28px;border-color:rgba(59,130,246,.3);background:rgba(59,130,246,.05)">
+      <div style="font-size:.85rem;line-height:1.7;color:#94a3b8">
+        <strong style="color:var(--text)">Why not NVIDIA or Google?</strong> They are selling picks and shovels (GPUs, cloud). They need AXIOM to be neutral — one robot company owning the trust standard is a conflict of interest. The world needs an independent layer. That's us.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 14 — THE ASK
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s14">
+  <div style="max-width:900px;width:100%;text-align:center">
+    <div class="eyebrow anim-1">The Ask</div>
+    <div class="h2 anim-2" style="margin-bottom:10px">$2M Seed Round.<br/><span class="gradient-text">Three milestones. 12 months.</span></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:28px 0" class="anim-3">
+      <div class="ask-card">
+        <div style="font-size:1.6rem;margin-bottom:10px">📊</div>
+        <div style="font-weight:800;margin-bottom:6px">Milestone 1</div>
+        <div style="font-size:.75rem;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Month 1–3</div>
+        <div style="font-size:.8rem;color:#94a3b8;line-height:1.7">
+          Publish AXIOM leaderboard using public data. SDK live on GitHub (free). First 100 researchers recording on testnet chain.
+        </div>
+      </div>
+      <div class="ask-card">
+        <div style="font-size:1.6rem;margin-bottom:10px">📝</div>
+        <div style="font-weight:800;margin-bottom:6px">Milestone 2</div>
+        <div style="font-size:.75rem;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Month 4–8</div>
+        <div style="font-size:.8rem;color:#94a3b8;line-height:1.7">
+          Three enterprise LOIs (BMW / Amazon / hospital). One robot company paying for private chain. Mainnet deployed.
+        </div>
+      </div>
+      <div class="ask-card">
+        <div style="font-size:1.6rem;margin-bottom:10px">🚀</div>
+        <div style="font-weight:800;margin-bottom:6px">Milestone 3</div>
+        <div style="font-size:.75rem;font-weight:700;color:#34d399;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Month 9–12</div>
+        <div style="font-size:.8rem;color:#94a3b8;line-height:1.7">
+          $500K ARR. Insurance company as data customer. Series A raise at $20M+ valuation.
+        </div>
+      </div>
+    </div>
+    <div class="glass anim-4" style="padding:20px 28px;margin-bottom:20px">
+      <div style="font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">Use of funds</div>
+      <div style="display:flex;gap:0;height:12px;border-radius:6px;overflow:hidden;margin-bottom:8px">
+        <div style="width:40%;background:linear-gradient(90deg,#3b82f6,#6366f1);border-radius:6px 0 0 6px"></div>
+        <div style="width:30%;background:linear-gradient(90deg,#8b5cf6,#a78bfa)"></div>
+        <div style="width:20%;background:linear-gradient(90deg,#10b981,#34d399)"></div>
+        <div style="width:10%;background:linear-gradient(90deg,#f59e0b,#fbbf24);border-radius:0 6px 6px 0"></div>
+      </div>
+      <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;font-size:.75rem;color:#94a3b8">
+        <span><span style="color:#60a5fa">■</span> 40% Engineering</span>
+        <span><span style="color:#a78bfa">■</span> 30% Enterprise sales</span>
+        <span><span style="color:#34d399">■</span> 20% Regulatory & legal</span>
+        <span><span style="color:#fbbf24">■</span> 10% Operations</span>
+      </div>
+    </div>
+    <div class="anim-5">
+      <button class="cta" onclick="alert('Let\'s build the trust layer for physical AI.')">
+        <span>🤝</span> Let's Build This Together
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 15 — CLOSE
+═══════════════════════════════════════════════════════ -->
+<section class="slide" id="s15">
+  <div style="text-align:center;max-width:800px">
+    <div class="anim-1" style="font-size:clamp(3rem,8vw,6.5rem);font-weight:900;letter-spacing:-.05em;line-height:1;margin-bottom:20px;background:linear-gradient(135deg,#60a5fa,#a78bfa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+      AXIOM
+    </div>
+    <div class="anim-2" style="font-size:clamp(1rem,2.5vw,1.5rem);color:#94a3b8;margin-bottom:40px;line-height:1.6">
+      The algorithm is not the product.<br/>
+      <strong style="color:var(--text)">The trust infrastructure is the product.</strong>
+    </div>
+    <div class="anim-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:40px">
+      <div class="glass" style="padding:16px;font-size:.8rem;color:#94a3b8">
+        <div style="font-size:1.2rem;margin-bottom:6px">⛓️</div>
+        Figure's success<br/><strong style="color:var(--text)">= your revenue</strong>
+      </div>
+      <div class="glass" style="padding:16px;font-size:.8rem;color:#94a3b8">
+        <div style="font-size:1.2rem;margin-bottom:6px">🤖</div>
+        Every robot deployed<br/><strong style="color:var(--text)">= your customer</strong>
+      </div>
+      <div class="glass" style="padding:16px;font-size:.8rem;color:#94a3b8">
+        <div style="font-size:1.2rem;margin-bottom:6px">🏆</div>
+        Industry grows<br/><strong style="color:var(--text)">= your moat deepens</strong>
+      </div>
+    </div>
+    <div class="anim-4" style="font-family:var(--mono);font-size:clamp(.85rem,1.8vw,1.1rem);color:#34d399;background:rgba(0,0,0,.5);border:1px solid rgba(16,185,129,.2);border-radius:12px;padding:20px 32px;margin-bottom:32px;display:inline-block">
+      &ldquo;Their success is your revenue.&rdquo;<br/>
+      &ldquo;That is the perfect software investment in humanoid robotics.&rdquo;
+    </div>
+    <div class="anim-5" style="font-size:.85rem;color:#475569">
+      naveen@axiom.ai &nbsp;·&nbsp; axiom.ai &nbsp;·&nbsp; Deck v1.0 · May 2026
+    </div>
+  </div>
+</section>
+
+</div><!-- /deck -->
+
+<!-- ── Navigation ── -->
+<nav id="nav">
+  <button class="nav-btn" id="prev" title="Previous (←)">‹</button>
+  <div id="dots"></div>
+  <div id="slide-counter">1 / 15</div>
+  <button class="nav-btn" id="next" title="Next (→)">›</button>
+</nav>
+
+<script>
+const TOTAL = 15;
+let current = 1;
+
+const slides = () => document.querySelectorAll('.slide');
+const dotsEl = document.getElementById('dots');
+const counter = document.getElementById('slide-counter');
+
+// Build dots
+for(let i=1;i<=TOTAL;i++){
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===1?' active':'');
+  d.addEventListener('click',()=>goTo(i));
+  dotsEl.appendChild(d);
+}
+
+function goTo(n, direction='right'){
+  if(n<1||n>TOTAL) return;
+  const prev = document.getElementById('s'+current);
+  prev.classList.remove('active');
+  prev.classList.add(direction==='right'?'exit-left':'');
+  setTimeout(()=>prev.classList.remove('exit-left'),450);
+
+  current = n;
+  const next = document.getElementById('s'+current);
+  next.classList.add('active');
+
+  // Reset anim children
+  next.querySelectorAll('[class*="anim-"]').forEach(el=>{
+    el.style.animation='none';
+    el.offsetHeight; // reflow
+    el.style.animation='';
+  });
+
+  counter.textContent = current + ' / ' + TOTAL;
+  document.querySelectorAll('.dot').forEach((d,i)=>{
+    d.classList.toggle('active', i+1===current);
+  });
+
+  // Animate score bars on slide 7
+  if(current===7){
+    setTimeout(()=>{
+      document.querySelectorAll('.score-fill').forEach(b=>{
+        const target = b.style.width;
+        b.style.width = '0';
+        setTimeout(()=>b.style.width=target, 50);
+      });
+    }, 300);
+  }
+}
+
+document.getElementById('next').addEventListener('click',()=>goTo(current+1));
+document.getElementById('prev').addEventListener('click',()=>goTo(current-1,'left'));
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='ArrowDown') goTo(current+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') goTo(current-1,'left');
+  if(e.key==='Home') goTo(1,'left');
+  if(e.key==='End') goTo(TOTAL);
+});
+
+// Touch swipe
+let touchX=0;
+document.addEventListener('touchstart',e=>touchX=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-touchX;
+  if(Math.abs(dx)>50) goTo(dx<0?current+1:current-1, dx<0?'right':'left');
+},{passive:true});
+
+// Init first slide
+document.getElementById('s1').classList.add('active');
+
+// Animate chain blocks on slide 6
+function animateChain(){
+  if(current!==6) return;
+  const blocks=document.querySelectorAll('.chain-block');
+  let i=0;
+  setInterval(()=>{
+    blocks.forEach(b=>b.style.opacity='0.6');
+    if(blocks[i]) blocks[i].style.opacity='1';
+    i=(i+1)%blocks.length;
+  },1800);
+}
+setTimeout(animateChain,2000);
+</script>
+</body>
+</html>
